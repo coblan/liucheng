@@ -1,0 +1,3 @@
+from hello.monkey_organize import get_empgroup
+
+EMPGROUP=get_empgroup
