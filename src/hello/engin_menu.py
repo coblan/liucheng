@@ -19,8 +19,8 @@ class PcMenu(BaseEngine):
 
         organize_menu.pc_menu,
         
-        {'label':'Page Admin','url':page('webpage'),'icon':fa('fa-home'),'visible':can_touch(WebPage)},
-        {'label':'设置','url':page('kv'),'icon':fa('fa-home'),'visible':can_touch(KVModel)},
+        {'label':'通用页面','url':page('webpage'),'icon':fa('fa-home'),'visible':can_touch(WebPage)},
+        {'label':'系统设置','url':page('kv'),'icon':fa('fa-home'),'visible':can_touch(KVModel)},
     ]        
     
 
