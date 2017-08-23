@@ -33,6 +33,12 @@
             node_group:row,
             selected:[],
             can_select:false,
+            show_edit:false,
+            node_kw:{
+                heads:[],
+                row:{},
+                errors:{},
+            }
         },
         mixins:[field_fun],
         computed:{
@@ -62,10 +68,12 @@
         },
         methods:{
             select:function(id){
+                var node=ex.findone(this.node_group.nodes,{pk:id})
                 if(this.can_select){
-                    var node=ex.findone(this.node_group.nodes,{pk:id})
                     this.selected.push(node)
                     $('#'+id+'.node').addClass('selected')
+                }else{
+                    this.edit(node)
                 }
 
             },
@@ -113,24 +121,45 @@
 
                 });
             },
+            edit:function(node){
+                var self=this
+                if (self.node_kw.heads.length==0){
+                    var url=engine_url+'/'+'worknode.edit'+'?pk='+node.pk
+                    ex.get(url,function(resp){
+                        self.node_kw.heads=resp.heads
+                    })
+                }
+                this.node_kw.row=ex.copy(node)
+
+                this.show_edit=true
+            },
+            assure_edit:function(){
+                var self=this
+                show_upload()
+                var post_data=[{fun:'save',row:this.node_kw.row}]
+                ex.post('/_ajax',JSON.stringify(post_data),function(resp){
+                    var node=ex.findone(self.node_group.nodes,{pk:self.node_kw.row.pk})
+                    ex.assign(node,self.node_kw.row)
+                    hide_upload(300)
+                    self.show_edit=false
+                })
+
+            }
         }
 
     }
-    var config = {
+
+    mermaid.initialize({
         startOnLoad: false
-    };
-    mermaid.initialize(config);
+    })
+
     $(function () {
         form_obj = new Vue(form_logic)
         Vue.nextTick(function(){
             mermaid.init({noteMargin: 10}, ".mermaid");
-//            mermaid.initialize()
         })
     })
 
-//    function node_click(id){
-//        alert(id)
-//    }
     $(document).on('click','.nodes .node',function(event){
         var id=$(event.currentTarget).attr('id')
         form_obj.select(id)
@@ -180,6 +209,19 @@
 
         <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
     <!--</div>-->
+
+    <modal v-show="show_edit" @click.native="show_edit=false">
+        <div @click.stop="">
+            <div>
+                <button @click="assure_edit()">确定</button>
+                <button @click="show_edit=false">取消</button>
+            </div>
+            <div  class='field-panel'>
+                <field  v-for='head in node_kw.heads' :key="head.name" :name='head.name' :kw='node_kw'></field>
+            </div>
+        </div>
+
+    </modal>
 
 </div>
 

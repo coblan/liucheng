@@ -15,5 +15,7 @@ def create_node(node_group):
     node = WorkNode.objects.create(node_group=node_group)
     return to_dict(node)
 
-def  save_node_group(node_group):
-    pass
+def save_node_group(node_group):
+    node_group=from_dict(node_group)
+    node_group.save()
+    return {'status':'success'}

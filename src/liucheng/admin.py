@@ -1,5 +1,5 @@
 from django.contrib import admin
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
@@ -46,9 +46,21 @@ class NodeRecordTable(ModelTable):
 class NodeRecordPage(TablePage):
     tableCls=NodeRecordTable
     template='liucheng/liucheng.html'
-    
-    
+
+
+class WorkNodeForm(ModelFields):
+    class Meta:
+        model=WorkNode
+        exclude=[]
+
+class WorkNodeFormPage(FormPage):
+    fieldsCls=WorkNodeForm
+
+
+model_dc[WorkNode]={'fields':WorkNodeForm}
+
 page_dc.update({
     'liucheng':NodeRecordPage,
     'liucheng.edit':NodeRrecordFormPage,
+    'worknode.edit':WorkNodeFormPage,
 })
