@@ -19,9 +19,10 @@ class WorkNode(models.Model):
     status=models.CharField('状态',max_length=30,default='waiting',choices=WORKNODE_STATUS)
     mtime=models.DateTimeField(verbose_name='修改时间',auto_now=True)
     node_group=models.ForeignKey(NodeGroup,verbose_name='节点组',blank=True,null=True)
+    client=models.ForeignKey('BusClient',verbose_name='客户',blank=True,null=True)
 
 class BusClient(models.Model):
-    name=models.CharField('公司名称',max_length=200,blank=True)
+    name=models.CharField('客户名称',max_length=200,blank=True)
     
     def __unicode__(self):
         return self.name

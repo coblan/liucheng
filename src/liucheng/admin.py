@@ -1,5 +1,5 @@
 from django.contrib import admin
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,RowSort
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
@@ -47,6 +47,12 @@ class NodeRecordPage(TablePage):
     tableCls=NodeRecordTable
     template='liucheng/liucheng.html'
 
+class WorkNodeFilter(RowFilter):
+    model=WorkNode
+    names=['status','client']
+    
+class WorkSort(RowSort):
+    names=['mtime']
 
 class WorkNodeForm(ModelFields):
     class Meta:
@@ -56,11 +62,26 @@ class WorkNodeForm(ModelFields):
 class WorkNodeFormPage(FormPage):
     fieldsCls=WorkNodeForm
 
+class WorkNodeTable(ModelTable):
+    model=WorkNode
+    filters=WorkNodeFilter
+    sort=WorkSort
+    
+    def dict_row(self, inst):
+        return {
+            'client':unicode(inst.client) if inst.client else ''
+        }
+
+class WorkNodeTablePage(TablePage):
+    tableCls=WorkNodeTable
 
 model_dc[WorkNode]={'fields':WorkNodeForm}
+
+regist_director(name='busclient',src_model=BusClient)
 
 page_dc.update({
     'liucheng':NodeRecordPage,
     'liucheng.edit':NodeRrecordFormPage,
+    'worknode':WorkNodeTablePage,
     'worknode.edit':WorkNodeFormPage,
 })

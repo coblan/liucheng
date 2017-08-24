@@ -19,7 +19,13 @@ class PcMenu(BaseEngine):
 
         organize_menu.pc_menu,
         
-        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-home')},
+        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-home'),
+         'submenu':[
+             {'label':'工作流程','url':page('liucheng')},
+             {'label':'工作列表','url':page('worknode'),},
+             {'label':'客户信息','url':page('busclient'),},
+             
+             ]},
         
         {'label':'通用页面','url':page('webpage'),'icon':fa('fa-home'),'visible':can_touch(WebPage)},
         {'label':'系统设置','url':page('kv'),'icon':fa('fa-home'),'visible':can_touch(KVModel)},
