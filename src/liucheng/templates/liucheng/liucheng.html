@@ -32,6 +32,8 @@
 //		        model:model,
 //		        search_args:search_args,
 //		        ex:ex,
+            show_node_view:false,
+            crt_node:{},
         },
         mixins:[table_fun],
         watch:{
@@ -48,6 +50,11 @@
                     this.rows.push(resp.add_new_record.record)
                 })
             },
+            show_node:function(node){
+                this.crt_node=node
+                this.show_node_view=true
+
+            }
         }
 
     }
@@ -61,6 +68,19 @@
 
         Vue.nextTick(function(){
             mermaid.init({noteMargin: 10}, ".mermaid");
+        })
+    })
+
+    $(document).on('click','.nodes .node',function(event){
+        var id=$(event.currentTarget).attr('id')
+
+        ex.each(rows,function(row){
+            ex.each(row.nodes,function(node){
+                if(node.pk==id){
+                    table.show_node(node)
+                    return
+                }
+            })
         })
     })
 
@@ -95,6 +115,22 @@
 
     <paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
 
+    <modal v-show="show_node_view" @click.native="show_node_view=false">
+        <div @click.stop="" style="min-width: 500px;min-height: 500px;margin: 1em;">
+            <div>
+                <label for="" >主题:</label>
+                <span v-text="crt_node.short_desp"></span>
+            </div>
+            <div>
+                <label for="" >详细:</label>
+                <span v-text="crt_node.long_desp"></span>
+            </div>
+            <div>
+                <label for="" >修改时间:</label>
+                <span v-text="crt_node.mtime"></span>
+            </div>
+        </div>
+    </modal>
 
 </div>
 <script>

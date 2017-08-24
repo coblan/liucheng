@@ -210,9 +210,9 @@
         <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
     <!--</div>-->
 
-    <modal v-show="show_edit" @click.native="show_edit=false">
+    <modal v-show="show_edit">
         <div @click.stop="">
-            <div>
+            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">
                 <button @click="assure_edit()">确定</button>
                 <button @click="show_edit=false">取消</button>
             </div>
