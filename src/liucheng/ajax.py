@@ -19,3 +19,7 @@ def save_node_group(node_group):
     node_group=from_dict(node_group)
     node_group.save()
     return {'status':'success'}
+
+def add_node_template():
+    obj = NodeGroup.objects.create(kind='template')
+    return {'record':to_dict(obj)}

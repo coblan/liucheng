@@ -7,7 +7,6 @@
 <link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
 
 <script src='{% static "js/table.pack.js" %}'></script>
-<script src='{% static "liucheng/liucheng.pack.js" %}'></script>
 <script type="text/javascript">
 
     ex.each(heads,function(head){
@@ -16,8 +15,6 @@
         }
     })
 
-    muban_table_url=engine_url+'/'+'nodegrouptemplate'
-    muban_manager=new MubanManager(muban_table_url)
     table_logic={
         el:'#there',
         data:{
@@ -48,7 +45,7 @@
         methods:{
             add_new: function() {
                 var url ='/_ajax/'+app
-                var post_data=[{fun:'add_new_record'}]
+                var post_data=[{fun:'add_node_template'}]
                 ex.post(url,JSON.stringify(post_data),function(resp){
                     this.rows.push(resp.add_new_record.record)
                 })
@@ -57,9 +54,6 @@
                 this.crt_node=node
                 this.show_node_view=true
 
-            },
-            create_from_muban:function(){
-                muban_manager.select()
             }
         }
 
@@ -107,7 +101,6 @@
 
 
         <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
-            <button @click="create_from_muban()">从模板创建</button>
         </com-table-btn>
 
         <!--<div class='btn-group' style='float: right;' v-if="!search_args._pop">-->
@@ -148,7 +141,7 @@
             node_group:function(){
                 var node_group_local=ex.copy(this.row)
                 node_group_local.relations=JSON.parse(node_group_local.relations)
-              return node_group_local
+                return node_group_local
             },
             memraid_text:function(){
                 var text="graph LR;"
