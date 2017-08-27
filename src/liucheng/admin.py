@@ -18,20 +18,19 @@ class NodeRrecordFormPage(FormPage):
             if not self.can_access():
                 raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name
             dc=to_dict(self.instance)
-            if self.instance.relations:
-                relations=json.loads(self.instance.relations)
-            else:
-                relations=[]
+            #if self.instance.relations:
+                #relations=json.loads(self.instance.relations)
+            #else:
+                #relations=[]
             dc.update({
                 'nodes': [to_dict(x) for x in  self.instance.worknode_set.all()],
-                'relations':relations,
             })
             
             return dc
         
         class Meta:
             model=NodeGroup
-            exclude=[]    
+            exclude=['relations']    
     
     fieldsCls=NodeRecordForm
     template='liucheng/liucheng_form.html'
@@ -46,8 +45,13 @@ class NodeRecordPage(TablePage):
             return query.filter(kind='workrecord')
         
         def dict_row(self, inst):
+            #if inst.relations:
+                #relations=json.loads(inst.relations)
+            #else:
+                #relations=[]
             dc={
-                'nodes': [to_dict(x) for x in  inst.worknode_set.all()]
+                'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
+                #'relations':inst.relations
             }
             return dc    
         

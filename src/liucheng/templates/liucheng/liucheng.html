@@ -59,7 +59,15 @@
 
             },
             create_from_muban:function(){
-                muban_manager.select()
+                muban_manager.select(function(row){
+
+                    var url ='/_ajax/'+app
+                    var post_data=[{fun:'add_new_record',row:row}]
+                    ex.post(url,JSON.stringify(post_data),function(resp){
+                        this.rows.push(resp.add_new_record.record)
+                    })
+
+                })
             }
         }
 
@@ -147,7 +155,7 @@
         computed:{
             node_group:function(){
                 var node_group_local=ex.copy(this.row)
-                node_group_local.relations=JSON.parse(node_group_local.relations)
+//                node_group_local.relations=node_group_local.relations
               return node_group_local
             },
             memraid_text:function(){
@@ -174,7 +182,12 @@
     </div>
 </template>
 
-
+<style>
+    .muban-list{
+        width: 70vw;
+        height: 70vh;
+    }
+</style>
 {% block extra %}
 {% endblock %}
 {% endblock %}

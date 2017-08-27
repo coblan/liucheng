@@ -6,9 +6,14 @@ from helpers.director.db_tools import to_dict,from_dict
 def get_global():
     return globals()
 
-def add_new_record():
-    obj = NodeGroup.objects.create()
-    return {'record':to_dict(obj)}
+def add_new_record(row=None):
+    obj = NodeGroup.objects.create(kind='workrecord')
+    if row:
+        src_nodegroup=from_dict(row)
+        obj.copy(src_nodegroup)
+    dc=to_dict(obj)
+    dc['nodes']=[]
+    return {'record':dc}
 
 def create_node(node_group):
     node_group=from_dict(node_group)
@@ -22,4 +27,6 @@ def save_node_group(node_group):
 
 def add_node_template():
     obj = NodeGroup.objects.create(kind='template')
-    return {'record':to_dict(obj)}
+    dc=to_dict(obj)
+    dc['nodes']=[]
+    return {'record':dc}

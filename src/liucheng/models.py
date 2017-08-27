@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 import json
+from helpers.base.jsonfield import JsonField
 
 WORKNODE_STATUS=(
     ('waiting','等待'),
@@ -16,7 +17,8 @@ NODEGROUP_TYPE=(
     ('template','模板'),
 )
 class NodeGroup(models.Model):
-    relations=models.TextField(verbose_name='节点关系',blank=True)
+    #relations=models.TextField(verbose_name='节点关系',blank=True)
+    relations=JsonField(verbose_name='节点关系',default=[])
     
     short_desp=models.CharField('简略描述',max_length=300,blank=True)
     long_desp=models.TextField('详细描述',blank=True)
@@ -28,13 +30,14 @@ class NodeGroup(models.Model):
         for node in other.worknode_set.all():
             new_node = WorkNode.objects.create(short_desp=node.short_desp,long_desp=node.long_desp,node_group=self)
             pk_map[node.pk]=new_node.pk
-        if other.relations:
-            my_relations=[]
-            for relation in json.loads(node.relations):
-                new_relation=[pk_map[relation[0]],pk_map[relation[1]]]
-                my_relations.append(new_relation)
-            self.relations=json.dumps(my_relations)
+        #if other.relations:
+        my_relations=[]
+        for relation in other.relations:
+            new_relation=[pk_map[relation[0]],pk_map[relation[1]]]
+            my_relations.append(new_relation)
+        self.relations=my_relations
         self.save()
+        
         
     
 # Create your models here.

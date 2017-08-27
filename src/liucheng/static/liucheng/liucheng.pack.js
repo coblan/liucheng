@@ -72,9 +72,9 @@
 
 var _muban = __webpack_require__(1);
 
-var _liucheng = __webpack_require__(2);
+var _flowchart = __webpack_require__(2);
 
-var liucheng = _interopRequireWildcard(_liucheng);
+var liucheng = _interopRequireWildcard(_flowchart);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -101,25 +101,32 @@ var MubanManager = exports.MubanManager = function () {
 
         this.table_url = muban_table_url;
         this.vue_inst = null;
+        this.select_callback = null;
     }
 
     _createClass(MubanManager, [{
         key: 'select',
-        value: function select() {
+        value: function select(callback) {
             if (!this.vue_inst) {
                 this.vue_inst = this._mount();
             }
             this.vue_inst.show_me = true;
+            this.select_callback = callback;
         }
     }, {
         key: '_mount',
         value: function _mount() {
-            $('body').append('<div id="_muban_list">\n        <modal v-show="show_me" @click.native="show_me=false">\n              <muban-list @click.native.stop="" table_url="' + this.table_url + '"></muban-list>\n        </modal>\n        </div>');
-
+            $('body').append('<div id="_muban_list">\n        <modal v-show="show_me" @click.native="show_me=false">\n              <muban-list class="muban-list" @click.native.stop="" table_url="' + this.table_url + '"></muban-list>\n        </modal>\n        </div>');
+            var manager = this;
             window._muban_list = new Vue({
                 el: '#_muban_list',
                 data: {
                     show_me: false
+                },
+                mounted: function mounted() {
+                    this.$on('row-click', function (row) {
+                        manager.select_callback(row);
+                    });
                 }
             });
             return window._muban_list;
@@ -128,6 +135,14 @@ var MubanManager = exports.MubanManager = function () {
 
     return MubanManager;
 }();
+
+function emit_to_parent(com_inst, event_name, arg) {
+    var par = com_inst.$parent;
+    while (par) {
+        var rt = par.$emit(event_name, arg);
+        par = par.$parent;
+    }
+}
 
 var muban_list = {
     props: ['table_url'],
@@ -150,15 +165,35 @@ var muban_list = {
             var self = this;
             var url = ex.appendSearch(this.table_url, { _page: page_num });
             ex.get(url, function (resp) {
+
                 self.heads = resp.heads;
                 self.rows = resp.rows;
                 self.row_pages = resp.row_pages;
+
+                self.heads[0].type = "click-td";
+                ex.each(self.heads, function (head) {
+                    if (head.name == 'relations') {
+                        head.type = "flowchart-td";
+                    }
+                });
             });
         }
     },
-    template: '<div>\n        <com-table class=\'table fake-suit\' :has_check="false"\n            :heads="heads" :rows="rows" v-model="selected"></com-table>\n\n        <paginator :nums=\'row_pages.options\' :crt=\'row_pages.crt_page\' @goto_page=\'goto_page($event)\'></paginator>\n    </div>'
+    template: '<div>\n        <com-table class=\'table fake-suit\' :has_check="false" :map="map"\n            :heads="heads" :rows="rows" v-model="selected"></com-table>\n\n        <paginator :nums=\'row_pages.options\' :crt=\'row_pages.crt_page\' @goto_page=\'goto_page($event)\'></paginator>\n    </div>'
 };
 Vue.component('muban-list', muban_list);
+
+var click_td = {
+    props: ['name', 'row'],
+    template: '<span  @click="on_click()" v-text="row[name]"></span>',
+    methods: {
+        on_click: function on_click() {
+            //this.$parent.$emit('row-click',this.row)
+            emit_to_parent(this, 'row-click', this.row);
+        }
+    }
+};
+Vue.component('click-td', click_td);
 
 /***/ }),
 /* 2 */
@@ -167,10 +202,72 @@ Vue.component('muban-list', muban_list);
 "use strict";
 
 
-var liucheng = {
-    template: '<div>\n\n    </div>'
+var flowchart_base = {
+    template: '<div class="mermaid" v-text="memraid_text">\n    </div>',
+    props: ['node_group'],
+    mounted: function mounted() {},
+    computed: {
+        memraid_text: function memraid_text() {
+            var text = "graph LR;";
+            ex.each(this.node_group.nodes, function (node) {
+                if (node.short_desp) {
+                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
+                } else {
+                    text += ex.template('{id};', { id: node.id });
+                }
+            });
+            ex.each(this.node_group.relations, function (relation) {
+                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
+            });
+            return text;
+        }
+    }
 };
-Vue.component('liucheng', liucheng);
+Vue.component('com-flowchart', flowchart_base);
+
+var flowchart_td = {
+    props: ['name', 'row'],
+    template: ' <div class="mermaid" v-text="memraid_text"></div>',
+    mounted: function mounted() {
+        this.render();
+    },
+    watch: {
+        memraid_text: function memraid_text() {
+            this.render();
+        }
+    },
+    computed: {
+        node_group: function node_group() {
+            var node_group_local = ex.copy(this.row);
+            //node_group_local.relations=JSON.parse(node_group_local.relations)
+            return node_group_local;
+        },
+        memraid_text: function memraid_text() {
+            var text = "graph LR;";
+            ex.each(this.node_group.nodes, function (node) {
+                if (node.short_desp) {
+                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
+                } else {
+                    text += ex.template('{id};', { id: node.id });
+                }
+            });
+            ex.each(this.node_group.relations, function (relation) {
+                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
+            });
+            return text;
+        }
+    },
+    methods: {
+        render: function render() {
+            var self = this;
+            Vue.nextTick(function () {
+                mermaid.init({ noteMargin: 10 }, self.$el);
+            });
+        }
+    }
+
+};
+Vue.component('flowchart-td', flowchart_td);
 
 /***/ })
 /******/ ]);

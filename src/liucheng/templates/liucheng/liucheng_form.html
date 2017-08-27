@@ -61,7 +61,7 @@
             memraid_text:function(){
                 Vue.nextTick(function(){
                     $('.mermaid').attr('data-processed','')
-                    mermaid.init({noteMargin: 10}, ".mermaid");
+                    mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
                 })
 
             }
@@ -150,13 +150,14 @@
     }
 
     mermaid.initialize({
-        startOnLoad: false
+        startOnLoad: false,
+        boxMargin: 100,
     })
 
     $(function () {
         form_obj = new Vue(form_logic)
         Vue.nextTick(function(){
-            mermaid.init({noteMargin: 10}, ".mermaid");
+            mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
         })
     })
 
@@ -201,14 +202,13 @@
 
 
 
-    <div class="mermaid" v-text="memraid_text" style="padding: 3em;">
+    <div class="mermaid" v-text="memraid_text" style="padding: 1em;overflow: auto;">
 
     </div>
 
-    <!--<div class='field-panel'>-->
-
-        <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
-    <!--</div>-->
+    <div class='field-panel'>
+        <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
+    </div>
 
     <modal v-show="show_edit">
         <div @click.stop="">

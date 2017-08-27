@@ -47,7 +47,7 @@
                 var url ='/_ajax/'+app
                 var post_data=[{fun:'add_node_template'}]
                 ex.post(url,JSON.stringify(post_data),function(resp){
-                    this.rows.push(resp.add_new_record.record)
+                    this.rows.push(resp.add_node_template.record)
                 })
             },
             show_node:function(node){
@@ -140,7 +140,7 @@
         computed:{
             node_group:function(){
                 var node_group_local=ex.copy(this.row)
-                node_group_local.relations=JSON.parse(node_group_local.relations)
+//                node_group_local.relations=JSON.parse(node_group_local.relations)
                 return node_group_local
             },
             memraid_text:function(){
