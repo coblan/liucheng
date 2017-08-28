@@ -32,7 +32,7 @@ class NodeRrecordFormPage(FormPage):
         
         class Meta:
             model=NodeGroup
-            exclude=['relations']    
+            exclude=['relations','kind']    
     
     fieldsCls=NodeRecordForm
     template='liucheng/liucheng_form.html'
