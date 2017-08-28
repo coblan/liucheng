@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'hello',
     'helpers.director',
     'helpers.case.organize',
+    'helpers.case.site_frame',
     'helpers.pageadaptor',
     'liucheng',
     

@@ -1,5 +1,5 @@
 
-
+require('./scss/flowchart.scss')
 
 var flowchart_base={
     template:`<div class="mermaid" v-text="memraid_text">
@@ -20,6 +20,9 @@ var flowchart_base={
             })
             ex.each(this.node_group.relations,function(relation){
                 text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
+            })
+            ex.each(this.node_group.nodes,function(node){
+                text+=`class ${node.pk} ${node.status};`
             })
             return text
         }
@@ -56,6 +59,10 @@ var flowchart_td={
             ex.each(this.node_group.relations,function(relation){
                 text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
             })
+
+            ex.each(this.node_group.nodes,function(node){
+                text+=`class ${node.pk} ${node.status};`
+            })
             return text
         }
     },
@@ -71,3 +78,45 @@ var flowchart_td={
 }
 Vue.component('flowchart-td',flowchart_td)
 
+var mb_flowchart_base={
+    template:`<div class="mermaid" v-text="memraid_text">
+    </div>`,
+    props:['node_group'],
+    mounted:function(){
+        this.render()
+    },
+    watch:{
+        memraid_text:function () {
+            this.render()
+        },
+    },
+    computed:{
+        memraid_text:function(){
+            var text="graph TB;"
+            ex.each(this.node_group.nodes,function(node){
+                if(node.short_desp){
+                    text+=ex.template('{id}["{desp}"];',{id:node.id,desp:node.short_desp})
+                }else{
+                    text+=ex.template('{id};',{id:node.id})
+                }
+            })
+            ex.each(this.node_group.relations,function(relation){
+                text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
+            })
+            ex.each(this.node_group.nodes,function(node){
+                text+=`class ${node.pk} ${node.status};`
+            })
+            return text
+        }
+    },
+    methods:{
+        render:function(){
+            var self=this
+            $(this.$el).attr('data-processed','')
+            Vue.nextTick(function(){
+                mermaid.init({noteMargin: 10}, self.$el);
+            })
+        },
+    }
+}
+Vue.component('com-flowchart_mb',mb_flowchart_base)

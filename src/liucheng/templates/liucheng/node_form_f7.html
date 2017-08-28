@@ -1,0 +1,74 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_content %}
+<script src="{% static 'js/fields_mb.pack.js' %}"></script>
+<script type="text/javascript">
+
+    //    with_menu=false
+    //    ln.readCache()
+
+    form_logic={
+        el:'#there',
+        data:{
+            page_label:page_label,
+        },
+        mixins:[field_fun],
+
+        mounted:function(){
+
+        },
+        methods:{
+            after_sub: function (new_row) {
+                var self = this
+                ff.back(function (last_win) {
+                    if (self.kw.row.pk) {
+                        var node = ex.findone(last_win.form.node_group.nodes, {pk: new_row.pk})
+                        ex.assign(node, new_row)
+//                        Vue.nextTick(function(){
+//                            last_win.form.$refs.flowchart.render()
+//                        })
+
+
+                    } else { // 新建
+                        last_win.location.reload()
+                    }
+                })
+            },
+        }
+    }
+
+    $(function(){
+        new Vue(form_logic)
+    })
+</script>
+
+<div id="there" v-cloak style="overflow: auto;padding-bottom: 5em;">
+    <!--<div  class="page_label" v-text="page_label">编辑内容</div>-->
+
+    {% block form_view %}
+    <div class="form-pad">
+        <field v-for="head in kw.heads" :name="head.name" :kw="kw"></field>
+    </div>
+    {% endblock %}
+
+    {% block sub_btn_group %}
+    <!--<div style="margin-bottom: 8em;">-->
+    <!--<a style="width: 60vw;margin: auto;margin-top: 2em;" href="#" class="button button-fill" @click="submit()">确定</a>-->
+    <!--</div>-->
+
+    <div v-btn-group>
+        <a v-if="can_edit" state="success"  @click="submit()">确定</a>
+        <a v-if="can_del" state="danger" :href="get_del_link()">删除</a>
+    </div>
+
+    {% endblock %}
+</div>
+
+
+
+{% endblock %}
+
+

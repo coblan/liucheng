@@ -34,9 +34,17 @@ class PcMenu(BaseEngine):
     ]        
     
 
-class MbMenu(BaseEngine):
+class F7Engine(BaseEngine):
     url_name='liucheng_mobile'
+    prefer='f7'
+    root_page='/f7/home.f7'
+    
+    menu=[
+        {'name':'liucheng','label':'工作流程','url':page('liucheng.f7'),'icon':fa('fa-map fa-2x')}
+    ]
+    
+    
     
 
 PcMenu.add_pages(page_dc)
-MbMenu.add_pages(page_dc)
+F7Engine.add_pages(page_dc)

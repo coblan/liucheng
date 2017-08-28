@@ -1,0 +1,59 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_content %}
+<script src='{% static "lib/mermaid.min.js" %}'></script>
+<link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
+
+<script src='{% static "js/table.pack.js" %}'></script>
+<script src='{% static "liucheng/liucheng.pack.js" %}'></script>
+
+
+<script type="text/javascript">
+
+
+
+    form_logic={
+        el:'#there',
+        data:{
+            node_group:row,
+        },
+        mixins:[field_fun],
+        methods:{
+            edit_node:function(node){
+                var url=engine_url+'/node.f7.edit?pk='+node.pk
+                ff.load(url,'node_edit')
+            }
+        }
+    }
+
+
+    $(function(){
+        form =new Vue(form_logic)
+    })
+
+    $(document).on('click','.nodes .node',function(event){
+        var id=$(event.currentTarget).attr('id')
+//    ex.each(rows,function(row){
+        ex.each(row.nodes,function(node){
+            if(node.pk==id){
+                form.edit_node(node)
+//                alert(node)
+                return
+            }
+        })
+//    })
+    })
+</script>
+
+
+
+<div id="there" v-cloak style="overflow: auto;padding-bottom: 5em;">
+    <com-flowchart_mb ref="flowchart" :node_group="node_group"></com-flowchart_mb>
+
+</div>
+
+
+{% endblock %}

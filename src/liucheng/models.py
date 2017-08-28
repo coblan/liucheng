@@ -38,6 +38,9 @@ class NodeGroup(models.Model):
             my_relations.append(new_relation)
         self.relations=my_relations
         self.save()
+    
+    def __unicode__(self):
+        return self.short_desp+' '+ unicode(self.client)
         
         
     

@@ -5,7 +5,7 @@ from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,F
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
-
+from .mobile_admin import *
 # Register your models here.
 
 class NodeRrecordFormPage(FormPage):
@@ -35,7 +35,11 @@ class NodeRrecordFormPage(FormPage):
             exclude=['relations','kind']    
     
     fieldsCls=NodeRecordForm
-    template='liucheng/liucheng_form.html'
+    def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'liucheng/liucheng_form_f7.html'
+        else:
+            return 'liucheng/liucheng_form.html'
 
 
 class NodeRecordPage(TablePage):
@@ -112,6 +116,12 @@ class WorkNodeFormPage(FormPage):
             exclude=['node_group']
         
     fieldsCls=WorkNodeForm
+    
+    def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'liucheng/node_form_f7.html'
+        else:
+            return 'director/fields.html'
 
 
 class WorkNodeTablePage(TablePage):
@@ -136,13 +146,31 @@ class WorkNodeTablePage(TablePage):
     tableCls=WorkNodeTable
 
 
-model_dc[WorkNode]={'fields':WorkNodeFormPage.WorkNodeForm}
+class NodeGroupPageF7(TablePage):
+    class NodeGroupTable(ModelTable):
+        model=NodeGroup
+        
+        def dict_row(self, inst):
+            dc={
+                #'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
+                'client':unicode(inst.client) if inst.client else ''
+            }
+            return dc  
+    tableCls=NodeGroupTable
 
+
+model_dc[WorkNode]={'fields':WorkNodeFormPage.WorkNodeForm}
+model_dc[NodeGroup]={'fields':NodeRrecordFormPage.NodeRecordForm}
 regist_director(name='busclient',src_model=BusClient)
 
 page_dc.update({
     'liucheng':NodeRecordPage,
     'liucheng.edit':NodeRrecordFormPage,
+    'liucheng.f7':NodeGroupPageF7,
+    'liucheng.f7.edit':NodeRrecordFormPage,
+    
+    'node.f7.edit':WorkNodeFormPage,
+    
     'worknode':WorkNodeTablePage,
     'worknode.edit':WorkNodeFormPage,
     'nodegrouptemplate':NodeGroupTemplatePage,

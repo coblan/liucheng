@@ -5,6 +5,10 @@
 {% block page_content %}
 <script src='{% static "lib/mermaid.min.js" %}'></script>
 <link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
+
+<script src='{% static "js/table.pack.js" %}'></script>
+<script src='{% static "liucheng/liucheng.pack.js" %}'></script>
+
 <script type="text/javascript">
 
 
@@ -54,6 +58,9 @@
                 ex.each(this.node_group.relations,function(relation){
                     text+=ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
                 })
+               ex.each(this.node_group.nodes,function(node){
+                   text+=`class ${node.pk} ${node.status};`
+               })
                return text
            }
         },

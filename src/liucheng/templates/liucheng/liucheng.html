@@ -12,7 +12,8 @@
 
     ex.each(heads,function(head){
         if(head.name=='relations'){
-            head.type='worknode-flow'
+            head.type='flowchart-td'
+//            head.type='worknode-flow'
         }
     })
 
@@ -133,7 +134,7 @@
     <paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
 
     <modal v-show="show_node_view" @click.native="show_node_view=false">
-        <div @click.stop="" style="min-width: 500px;min-height: 500px;margin: 1em;">
+        <div @click.stop="" style="min-width: 500px;min-height: 500px;margin: 1em;max-width: 800px;max-height: 70vh;">
             <div>
                 <label for="" >主题:</label>
                 <span v-text="crt_node.short_desp"></span>
@@ -150,39 +151,39 @@
     </modal>
 
 </div>
-<script>
-    Vue.component('worknode-flow',{
-        props:['name','row',],
-        template:'#worknode-flow',
-        computed:{
-            node_group:function(){
-                var node_group_local=ex.copy(this.row)
-//                node_group_local.relations=node_group_local.relations
-              return node_group_local
-            },
-            memraid_text:function(){
-                var text="graph LR;"
-                ex.each(this.node_group.nodes,function(node){
-                    if(node.short_desp){
-                        text+=ex.template('{id}["{desp}"];',{id:node.id,desp:node.short_desp})
-                    }else{
-                        text+=ex.template('{id};',{id:node.id})
-                    }
-                })
-                ex.each(this.node_group.relations,function(relation){
-                    text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
-                })
-                return text
-            }
-        }
+<!--<script>-->
+    <!--Vue.component('worknode-flow',{-->
+        <!--props:['name','row',],-->
+        <!--template:'#worknode-flow',-->
+        <!--computed:{-->
+            <!--node_group:function(){-->
+                <!--var node_group_local=ex.copy(this.row)-->
+<!--//                node_group_local.relations=node_group_local.relations-->
+              <!--return node_group_local-->
+            <!--},-->
+            <!--memraid_text:function(){-->
+                <!--var text="graph LR;"-->
+                <!--ex.each(this.node_group.nodes,function(node){-->
+                    <!--if(node.short_desp){-->
+                        <!--text+=ex.template('{id}["{desp}"];',{id:node.id,desp:node.short_desp})-->
+                    <!--}else{-->
+                        <!--text+=ex.template('{id};',{id:node.id})-->
+                    <!--}-->
+                <!--})-->
+                <!--ex.each(this.node_group.relations,function(relation){-->
+                    <!--text+= ex.template("{src}&ndash;&gt;{dst};",{src:relation[0],dst:relation[1]})-->
+                <!--})-->
+                <!--return text-->
+            <!--}-->
+        <!--}-->
 
-    })
-</script>
+    <!--})-->
+<!--</script>-->
 
-<template id="worknode-flow" >
-    <div class="mermaid" v-text="memraid_text">
-    </div>
-</template>
+<!--<template id="worknode-flow" >-->
+    <!--<div class="mermaid" v-text="memraid_text">-->
+    <!--</div>-->
+<!--</template>-->
 
 <style>
     .muban-list{
