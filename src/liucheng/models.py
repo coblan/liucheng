@@ -18,12 +18,13 @@ NODEGROUP_TYPE=(
 )
 class NodeGroup(models.Model):
     #relations=models.TextField(verbose_name='节点关系',blank=True)
-    relations=JsonField(verbose_name='节点关系',default=[])
+    relations=JsonField(verbose_name='流程图',default=[])
     
     short_desp=models.CharField('简略描述',max_length=300,blank=True)
     long_desp=models.TextField('详细描述',blank=True)
     client=models.ForeignKey('BusClient',verbose_name='客户',blank=True,null=True)
     kind=models.CharField('类型',max_length=30,choices=NODEGROUP_TYPE,default='workrecord')
+    create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     
     def copy(self,other):
         pk_map={}

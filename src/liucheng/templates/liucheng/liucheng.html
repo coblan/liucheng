@@ -16,6 +16,8 @@
         }
     })
 
+    heads=ex.sort_by_names(heads,['id','client','short_desp','create_time','relations'])
+
     muban_table_url=engine_url+'/'+'nodegrouptemplate'
     muban_manager=new MubanManager(muban_table_url)
     table_logic={
@@ -186,6 +188,18 @@
     .muban-list{
         width: 70vw;
         height: 70vh;
+    }
+    td{
+        min-width: 6em;
+    }
+    td:first-child{
+        min-width: inherit;
+    }
+    .td_relations{
+        width: 70%;
+    }
+    .td_create_time{
+        min-width: 8em;
     }
 </style>
 {% block extra %}

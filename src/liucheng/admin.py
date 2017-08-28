@@ -1,5 +1,7 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from django.contrib import admin
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,RowSort
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,RowSort,RowSearch
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
@@ -38,6 +40,33 @@ class NodeRrecordFormPage(FormPage):
 
 class NodeRecordPage(TablePage):
     
+    class NodeRecordFilter(RowFilter):
+        model=NodeGroup
+        names=['client']    
+    
+    class WorkSort(RowSort):
+        names=['create_time']
+    
+    class NodeGroupSearch(RowSearch):
+        model=NodeGroup
+        def get_context(self):
+            return '简约说明'
+    
+        def get_query(self,query):
+            if self.q:
+                exp=None
+                return query.filter(short_desp__icontains=self.q)
+                #for name in self.valid_name:
+                    #kw ={}
+                    #kw['%s__icontains'%name] =self.q    
+                    #if exp is None:
+                        #exp = Q(**kw)
+                    #else:
+                        #exp = exp | Q(**kw) 
+                #return query.filter(exp)
+            else:
+                return query      
+        
     class NodeRecordTable(ModelTable):
         model=NodeGroup
         
@@ -51,10 +80,14 @@ class NodeRecordPage(TablePage):
                 #relations=[]
             dc={
                 'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
+                'client':unicode(inst.client) if inst.client else ''
                 #'relations':inst.relations
             }
             return dc    
-        
+    NodeRecordTable.filters=NodeRecordFilter
+    NodeRecordTable.sort=WorkSort
+    NodeRecordTable.search=NodeGroupSearch
+    
     tableCls=NodeRecordTable
     template='liucheng/liucheng.html'
 
@@ -93,10 +126,10 @@ class WorkNodeTablePage(TablePage):
     class WorkNodeTable(ModelTable):
         model=WorkNode
 
-        def dict_row(self, inst):
-            return {
-                'client':unicode(inst.client) if inst.client else ''
-            }
+        # def dict_row(self, inst):
+            # return {
+                # 'client':unicode(inst.client) if inst.client else ''
+            # }
     WorkNodeTable.filters=WorkNodeFilter
     WorkNodeTable.sort=WorkSort
     

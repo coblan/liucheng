@@ -24,7 +24,7 @@ class PcMenu(BaseEngine):
              {'label':'工作流程','url':page('liucheng')},
              {'label':'流程模板','url':page('nodegrouptemplate'),},
              
-             {'label':'工作列表','url':page('worknode'),},
+             # {'label':'工作列表','url':page('worknode'),},
              {'label':'客户信息','url':page('busclient'),},
              
              ]},

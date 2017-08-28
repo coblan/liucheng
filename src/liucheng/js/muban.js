@@ -89,7 +89,7 @@ Vue.component('muban-list',muban_list)
 
 var click_td={
     props:['name','row'],
-    template:`<span  @click="on_click()" v-text="row[name]"></span>`,
+    template:`<span style="cursor: pointer;"  @click="on_click()" v-text="row[name]"></span>`,
     methods:{
         on_click:function(){
             //this.$parent.$emit('row-click',this.row)
