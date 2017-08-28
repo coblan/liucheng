@@ -109,7 +109,7 @@ class WorkNodeFormPage(FormPage):
     class WorkNodeForm(ModelFields):
         class Meta:
             model=WorkNode
-            exclude=[]
+            exclude=['node_group']
         
     fieldsCls=WorkNodeForm
 
