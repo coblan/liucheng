@@ -75,7 +75,7 @@ class NodeRecordPage(TablePage):
         model=NodeGroup
         
         def inn_filter(self, query):
-            return query.filter(kind='workrecord')
+            return query.filter(kind='workrecord').order_by('-id')
         
         def dict_row(self, inst):
             #if inst.relations:
