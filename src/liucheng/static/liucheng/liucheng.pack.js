@@ -110,8 +110,12 @@ var MubanManager = exports.MubanManager = function () {
             if (!this.vue_inst) {
                 this.vue_inst = this._mount();
             }
+            var self = this;
             this.vue_inst.show_me = true;
-            this.select_callback = callback;
+            this.select_callback = function (row) {
+                callback(row);
+                self.vue_inst.show_me = false;
+            };
         }
     }, {
         key: '_mount',
@@ -202,7 +206,7 @@ Vue.component('click-td', click_td);
 "use strict";
 
 
-__webpack_require__(4);
+__webpack_require__(3);
 
 var flowchart_base = {
     template: '<div class="mermaid" v-text="memraid_text">\n    </div>',
@@ -269,6 +273,7 @@ var flowchart_td = {
     methods: {
         render: function render() {
             var self = this;
+            $(this.$el).attr('data-processed', '');
             Vue.nextTick(function () {
                 mermaid.init({ noteMargin: 10 }, self.$el);
             });
@@ -321,17 +326,16 @@ var mb_flowchart_base = {
 Vue.component('com-flowchart_mb', mb_flowchart_base);
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(5);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -348,10 +352,10 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)();
+exports = module.exports = __webpack_require__(5)();
 // imports
 
 
@@ -362,7 +366,7 @@ exports.push([module.i, ".node.working rect {\n  fill: #4fafff; }\n\n.node.finis
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -418,7 +422,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*

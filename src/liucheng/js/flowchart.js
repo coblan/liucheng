@@ -69,6 +69,7 @@ var flowchart_td={
     methods:{
         render:function(){
             var self=this
+            $(this.$el).attr('data-processed','')
             Vue.nextTick(function(){
                 mermaid.init({noteMargin: 10}, self.$el);
             })

@@ -9,8 +9,12 @@ export class MubanManager{
         if(!this.vue_inst){
             this.vue_inst=this._mount()
         }
+        var self=this
         this.vue_inst.show_me=true
-        this.select_callback=callback
+        this.select_callback=function(row){
+            callback(row)
+            self.vue_inst.show_me=false
+        }
     }
     _mount(){
         $('body').append(`<div id="_muban_list">

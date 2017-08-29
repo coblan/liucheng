@@ -53,7 +53,7 @@
                 var url ='/_ajax/'+app
                 var post_data=[{fun:'add_new_record'}]
                 ex.post(url,JSON.stringify(post_data),function(resp){
-                    this.rows.push(resp.add_new_record.record)
+                    this.rows.splice(0,0,resp.add_new_record.record)
                 })
             },
             show_node:function(node){
@@ -67,7 +67,7 @@
                     var url ='/_ajax/'+app
                     var post_data=[{fun:'add_new_record',row:row}]
                     ex.post(url,JSON.stringify(post_data),function(resp){
-                        this.rows.push(resp.add_new_record.record)
+                        this.rows.splice(0,0,resp.add_new_record.record)
                     })
 
                 })
