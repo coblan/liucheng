@@ -6,8 +6,8 @@
 <script src='{% static "lib/mermaid.min.js" %}'></script>
 <link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
 
-<script src='{% static "js/table.pack.js" %}'></script>
-<script src='{% static "liucheng/liucheng.pack.js" %}'></script>
+<script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
+<script src='{% static "js/liucheng.pack.js?t=" %}{{ js_stamp.liucheng_pack_js }}'></script>
 
 <script type="text/javascript">
 
@@ -59,7 +59,7 @@
                     text+=ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
                 })
                ex.each(this.node_group.nodes,function(node){
-                   text+=`class ${node.pk} ${node.status};`
+                   text+=ex.template('class {pk} {status};',{pk:node.pk,status:node.status})
                })
                return text
            }
@@ -151,6 +151,23 @@
                     self.show_edit=false
                 })
 
+            },
+            delete_node:function(){
+                var self=this
+                var nodes = this.selected.slice()
+                ex.each(nodes,function(node){
+                    self._delete_node_all_link(node)
+                })
+
+                ex.remove(self.node_group.nodes,function(node){
+                    return ex.isin(node,nodes)
+                })
+
+            },
+            _delete_node_all_link:function(node){
+                ex.remove(this.node_group.relations,function(relation){
+                    return ex.isin(node.pk,relation)
+                })
             }
         }
 
@@ -192,26 +209,30 @@
         <li><span>编辑</span></li>
     </path-nav>
 
-    <div>
+    <div style="overflow: hidden;">
         <div style="float: left;margin-left: 3em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
             <button @click="create_node()">创建节点</button>
-            <button @click="link_node()">连接节点</button>
-            <button @click="delet_link()">删除连接</button>
+            <button @click="delete_node()">删除节点</button>
 
         </div>
-        <div>
+        <div style="float: left;margin-left: 2em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
+            <button @click="link_node()">连接节点</button>
+            <button @click="delet_link()">删除连接</button>
+        </div>
+        <div style="float: left;margin-left: 2em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
             <button :class="['btn',{'btn-default':!can_select,'btn-primary':can_select}]"  @click="start_select()">开始选择</button>
-            <button @click="clear_select()">清空选择</button>
+            <button class="btn btn-default" @click="clear_select()">清空选择</button>
             <span v-text="selected.length"></span>
         </div>
         <com-form-btn :submit="submit" :del_row="del_row" :cancel="cancel" ></com-form-btn>
     </div>
 
 
-
     <div class="mermaid" v-text="memraid_text" style="padding: 1em;overflow: auto;">
 
     </div>
+
+
 
     <div class='field-panel'>
         <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
@@ -232,4 +253,9 @@
 
 </div>
 
+<style>
+    .mermaid{
+        margin: 1em;
+    }
+</style>
 {% endblock %}

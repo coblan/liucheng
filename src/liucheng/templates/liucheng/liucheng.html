@@ -6,8 +6,8 @@
 <script src='{% static "lib/mermaid.min.js" %}'></script>
 <link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
 
-<script src='{% static "js/table.pack.js" %}'></script>
-<script src='{% static "liucheng/liucheng.pack.js" %}'></script>
+<script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
+<script src='{% static "js/liucheng.pack.js?t=" %}{{ js_stamp.liucheng_pack_js }}'></script>
 <script type="text/javascript">
 
     ex.each(heads,function(head){

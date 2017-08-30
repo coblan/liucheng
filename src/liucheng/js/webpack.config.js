@@ -11,7 +11,7 @@ module.exports =
         liucheng: './main.js',
     },
     output: {
-        path:path.resolve(__dirname, '../static/liucheng'),
+        path:path.resolve(__dirname, '../static/js'),
         filename: '[name].pack.js'
     },
 

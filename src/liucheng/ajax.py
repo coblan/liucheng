@@ -21,7 +21,13 @@ def create_node(node_group):
     return to_dict(node)
 
 def save_node_group(node_group):
+    nodes=node_group.get('nodes',[])
+    nodes=[from_dict(x) for x in nodes]
     node_group=from_dict(node_group)
+    for node in node_group.worknode_set.all():
+        if node not in  nodes:
+            node.delete()
+    
     node_group.save()
     return {'status':'success'}
 
@@ -30,3 +36,9 @@ def add_node_template():
     dc=to_dict(obj)
     dc['nodes']=[]
     return {'record':dc}
+
+# def delete_nodes(nodes):
+    # for node_dc in nodes:
+        # node=from_dict(node_dc)
+        # node.delete()
+    # return {'status':'success'}

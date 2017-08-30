@@ -6,6 +6,7 @@ from helpers.case.organize import menu as organize_menu
 from helpers.director.shortcut import page_dc
 from helpers.director.models import KVModel
 from helpers.pageadaptor.models import WebPage
+from helpers.maintenance.update_static_timestamp import js_stamp
 
 class PcMenu(BaseEngine):
     url_name='liucheng'
@@ -31,7 +32,14 @@ class PcMenu(BaseEngine):
         
         {'label':'通用页面','url':page('webpage'),'icon':fa('fa-home'),'visible':can_touch(WebPage)},
         {'label':'系统设置','url':page('kv'),'icon':fa('fa-home'),'visible':can_touch(KVModel)},
-    ]        
+    ]      
+    
+    def custome_ctx(self, ctx):
+        ctx['js_stamp']=js_stamp
+        # engine_press=Press(help_name)
+        # if engine_press.page:
+            # ctx['help_url']=self.get_url('press')+'?_name=%s'%help_name
+        return ctx       
     
 
 class F7Engine(BaseEngine):
