@@ -25,6 +25,7 @@ class NodeGroup(models.Model):
     client=models.ForeignKey('BusClient',verbose_name='客户',blank=True,null=True)
     kind=models.CharField('类型',max_length=30,choices=NODEGROUP_TYPE,default='workrecord')
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
+    start_time=models.CharField('开始时间',max_length=100,blank=True)
     
     def copy(self,other):
         pk_map={}

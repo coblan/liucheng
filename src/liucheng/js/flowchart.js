@@ -72,6 +72,10 @@ var flowchart_td={
             $(this.$el).attr('data-processed','')
             Vue.nextTick(function(){
                 mermaid.init({noteMargin: 10}, self.$el);
+
+                //setTimeout(function(){
+                //    svgPanZoom( $(self.$el).find('svg')[0])
+                //})
             })
         },
     }

@@ -32,7 +32,12 @@ class NodeRrecordFormPage(FormPage):
         
         class Meta:
             model=NodeGroup
-            exclude=['relations','kind']    
+            exclude=['relations','kind']
+        
+        def dict_head(self, head):
+            if head['name']=='start_time':
+                head['type']='date'
+            return head
     
     fieldsCls=NodeRecordForm
     def get_template(self, prefer=None):
@@ -46,10 +51,11 @@ class NodeRecordPage(TablePage):
     
     class NodeRecordFilter(RowFilter):
         model=NodeGroup
-        names=['client']    
+        names=['client']   
+        range_fields =[{'name':'start_time','type':'date'}]
     
     class WorkSort(RowSort):
-        names=['create_time']
+        names=['start_time']
     
     class NodeGroupSearch(RowSearch):
         model=NodeGroup
