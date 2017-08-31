@@ -20,7 +20,7 @@ class PcMenu(BaseEngine):
 
         organize_menu.pc_menu,
         
-        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-home'),
+        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-eye'),
          'submenu':[
              {'label':'工作流程','url':page('liucheng')},
              {'label':'流程模板','url':page('nodegrouptemplate'),},
@@ -30,8 +30,8 @@ class PcMenu(BaseEngine):
              
              ]},
         
-        {'label':'通用页面','url':page('webpage'),'icon':fa('fa-home'),'visible':can_touch(WebPage)},
-        {'label':'系统设置','url':page('kv'),'icon':fa('fa-home'),'visible':can_touch(KVModel)},
+        {'label':'通用页面','url':page('webpage'),'icon':fa('fa-file-code-o'),'visible':can_touch(WebPage)},
+        {'label':'系统设置','url':page('kv'),'icon':fa('fa-cog'),'visible':can_touch(KVModel)},
     ]      
     
     def custome_ctx(self, ctx):

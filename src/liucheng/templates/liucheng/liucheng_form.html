@@ -12,13 +12,8 @@
 <script type="text/javascript">
 
 
-    //	heads=
-    //	row =
-    //
-    //
-    //	can_add=
-    //	can_log=
-    //	can_del=
+//    heads=ex.sort_by_names(heads,['short_desp',''])
+
 
     form_logic={
         el:'#there',
@@ -211,13 +206,13 @@
 
     <div style="overflow: hidden;">
         <div style="float: left;margin-left: 3em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
-            <button @click="create_node()">创建节点</button>
-            <button @click="delete_node()">删除节点</button>
+            <button class="btn btn-default" @click="create_node()">创建节点</button>
+            <button class="btn btn-default" @click="delete_node()">删除节点</button>
 
         </div>
         <div style="float: left;margin-left: 2em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
-            <button @click="link_node()">连接节点</button>
-            <button @click="delet_link()">删除连接</button>
+            <button class="btn btn-default" @click="link_node()">连接节点</button>
+            <button class="btn btn-default" @click="delet_link()">删除连接</button>
         </div>
         <div style="float: left;margin-left: 2em;padding: 0.6em;border-radius: 5px;background-color: #f5f4f4;border:1px solid #e2e2de;">
             <button :class="['btn',{'btn-default':!can_select,'btn-primary':can_select}]"  @click="start_select()">开始选择</button>
@@ -256,6 +251,10 @@
 <style>
     .mermaid{
         margin: 1em;
+    }
+    .field_input textarea{
+        min-height: 20em;
+        min-width: 50em;
     }
 </style>
 {% endblock %}
