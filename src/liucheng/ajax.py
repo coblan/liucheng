@@ -2,17 +2,19 @@
 from __future__ import unicode_literals
 from .models import NodeGroup,WorkNode
 from helpers.director.db_tools import to_dict,from_dict
+from .admin import NodeRrecordFormPage
 
 def get_global():
     return globals()
 
-def add_new_record(row=None):
+def add_new_record(request,row=None):
     obj = NodeGroup.objects.create(kind='workrecord')
     if row:
         src_nodegroup=from_dict(row)
         obj.copy(src_nodegroup)
-    dc=to_dict(obj)
-    dc['nodes']=[]
+    form = NodeRrecordFormPage.NodeRecordForm(instance=obj,crt_user=request.user)
+    dc=form.get_row() # to_dict(obj)
+    # dc['nodes']=[]
     return {'record':dc}
 
 def create_node(node_group):
