@@ -20,6 +20,7 @@ from hello.engin_menu import PcMenu,F7Engine
 from helpers.director import views as director_views
 from helpers.case.organize import urls as organize_urls
 from django.views.generic import RedirectView 
+from helpers.face import urls as face_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,7 +30,10 @@ urlpatterns = [
         
     url(r'^_ajax/(?P<app>\w+)?/?$',director_views.ajax_views,name='ajax_url'),
     url(r'^_ajax/?$',director_views.ajax_views), 
+    url(r'^_face/', include(face_urls)),
+    
     url(r'^orgnize/',include(organize_urls)),
+    
     
     url(r'^$',RedirectView.as_view(url='/pc/press?_name=home'))
 ]
