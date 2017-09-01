@@ -118,8 +118,8 @@
         <!--<div class="flex-grow"></div>-->
 
 
-        <com-table-btn class="main-table" v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
-            <button class="btn btn-default" @click="create_from_muban()">从模板创建</button>
+        <com-table-btn class="main-table" v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="width:15em;">
+            <button type="button" class="btn btn-default btn-sm" @click="create_from_muban()">从模板创建</button>
         </com-table-btn>
 
         <!--<div class='btn-group' style='float: right;' v-if="!search_args._pop">-->
