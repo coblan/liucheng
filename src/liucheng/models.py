@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.db import models
 import json
 from helpers.base.jsonfield import JsonField
+from helpers.case.organize.models import Employee
 
 WORKNODE_STATUS=(
     ('waiting','等待'),
@@ -17,6 +18,9 @@ NODEGROUP_TYPE=(
     ('template','模板'),
 )
 class NodeGroup(models.Model):
+    """
+    代表一个流程
+    """
     #relations=models.TextField(verbose_name='节点关系',blank=True)
     relations=JsonField(verbose_name='流程图',default=[])
     
@@ -25,7 +29,8 @@ class NodeGroup(models.Model):
     client=models.ForeignKey('BusClient',verbose_name='客户',blank=True,null=True)
     kind=models.CharField('类型',max_length=30,choices=NODEGROUP_TYPE,default='workrecord')
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
-    start_time=models.CharField('开始时间',max_length=100,blank=True)
+    
+    #related_emp=models.ManyToManyField(Employee,verbose_name='相关人员',blank=True,null=True)
     
     def copy(self,other):
         pk_map={}
@@ -53,6 +58,9 @@ class WorkNode(models.Model):
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     mtime=models.DateTimeField(verbose_name='修改时间',auto_now=True)
     node_group=models.ForeignKey(NodeGroup,verbose_name='节点组',blank=True,null=True)
+    owner=models.ForeignKey(Employee,verbose_name='负责人',blank=True,null=True)
+    start_time=models.CharField('指派时间',max_length=100,blank=True)
+    
     
 
 class BusClient(models.Model):

@@ -76,12 +76,20 @@ var flowchart_td={
                 //setTimeout(function(){
                 //    svgPanZoom( $(self.$el).find('svg')[0])
                 //})
+                setTimeout(function(){
+                    ex.each(self.node_group.nodes,function(node){
+                        if(node.owner){
+                            mount_user_image(node.pk,node._owner_label,node.head_img)
+                        }
+                    })
+                })
             })
         },
     }
 
 }
 Vue.component('flowchart-td',flowchart_td)
+
 
 var mb_flowchart_base={
     template:`<div class="mermaid" v-text="memraid_text">
@@ -125,3 +133,16 @@ var mb_flowchart_base={
     }
 }
 Vue.component('com-flowchart_mb',mb_flowchart_base)
+
+export function mount_user_image(myid,name,head) {
+    var head=head || '/static/image/user.jpg'
+    var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+    svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', head);
+    svgimg.setAttributeNS(null,'height','20');
+    svgimg.setAttributeNS(null,'width','20');
+    svgimg.setAttributeNS(null,'x','0');
+    svgimg.setAttributeNS(null,'y','20');
+    svgimg.setAttributeNS(null, 'visibility', 'visible');
+    svgimg.innerHTML=`<title>${name}</title>`;
+    document.getElementById(myid).appendChild(svgimg);
+}

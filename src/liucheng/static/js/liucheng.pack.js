@@ -79,6 +79,7 @@ var liucheng = _interopRequireWildcard(_flowchart);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 window.MubanManager = _muban.MubanManager;
+window.mount_user_image = _flowchart.mount_user_image;
 
 /***/ }),
 /* 1 */
@@ -206,6 +207,11 @@ Vue.component('click-td', click_td);
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.mount_user_image = mount_user_image;
+
 __webpack_require__(3);
 
 var flowchart_base = {
@@ -280,6 +286,13 @@ var flowchart_td = {
                 //setTimeout(function(){
                 //    svgPanZoom( $(self.$el).find('svg')[0])
                 //})
+                setTimeout(function () {
+                    ex.each(self.node_group.nodes, function (node) {
+                        if (node.owner) {
+                            mount_user_image(node.pk, node._owner_label, node.head_img);
+                        }
+                    });
+                });
             });
         }
     }
@@ -328,6 +341,19 @@ var mb_flowchart_base = {
     }
 };
 Vue.component('com-flowchart_mb', mb_flowchart_base);
+
+function mount_user_image(myid, name, head) {
+    var head = head || '/static/image/user.jpg';
+    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', head);
+    svgimg.setAttributeNS(null, 'height', '20');
+    svgimg.setAttributeNS(null, 'width', '20');
+    svgimg.setAttributeNS(null, 'x', '0');
+    svgimg.setAttributeNS(null, 'y', '20');
+    svgimg.setAttributeNS(null, 'visibility', 'visible');
+    svgimg.innerHTML = '<title>' + name + '</title>';
+    document.getElementById(myid).appendChild(svgimg);
+}
 
 /***/ }),
 /* 3 */

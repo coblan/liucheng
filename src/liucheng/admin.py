@@ -6,6 +6,8 @@ from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
 from .mobile_admin import *
+from helpers.case.organize.models import Employee
+
 # Register your models here.
 
 class NodeRrecordFormPage(FormPage):
@@ -20,12 +22,14 @@ class NodeRrecordFormPage(FormPage):
             if not self.can_access():
                 raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name
             dc=to_dict(self.instance)
-            #if self.instance.relations:
-                #relations=json.loads(self.instance.relations)
-            #else:
-                #relations=[]
+            nodes=[]
+            for node in self.instance.worknode_set.all():
+                node_dc=to_dict(node)
+                if node.owner and node.owner.baseinfo:
+                    node_dc['head_img']=node.owner.baseinfo.head
+                nodes.append(node_dc)
             dc.update({
-                'nodes': [to_dict(x) for x in  self.instance.worknode_set.all()],
+                'nodes': nodes #[to_dict(x) for x in  self.instance.worknode_set.all()],
             })
             
             return dc
@@ -53,6 +57,32 @@ class NodeRecordPage(TablePage):
         model=NodeGroup
         names=['client']   
         range_fields =[{'name':'start_time','type':'date'}]
+        
+        def get_context(self):
+            ls=super(self.__class__,self).get_context()
+            ls.append({'name':'start_time','type':'date','label':'节点开始时间'})
+            return ls
+        
+        def get_query(self,query):
+            self.query=query
+            start_time__gte=self.filter_args.pop('start_time__gte',None)
+            start_time__lte=self.filter_args.pop('start_time__lte',None)
+            if start_time__gte or start_time__lte:
+                node_filter_args={}
+                if start_time__gte:
+                    node_filter_args['start_time__gte']=start_time__gte
+                if start_time__lte:
+                    node_filter_args['start_time__lte']=start_time__lte
+                    
+                nodes_query=WorkNode.objects.filter(**node_filter_args)
+                record_pk_list=[]
+                for node in nodes_query:
+                    record_pk_list.append(node.node_group.pk)
+                record_pk_list=list(set(record_pk_list))
+                query=query.filter(pk__in=record_pk_list)
+            query=query.filter(**self.filter_args)
+            return query  
+        
     
     class WorkSort(RowSort):
         names=['start_time']
@@ -84,12 +114,15 @@ class NodeRecordPage(TablePage):
             return query.filter(kind='workrecord').order_by('-id')
         
         def dict_row(self, inst):
-            #if inst.relations:
-                #relations=json.loads(inst.relations)
-            #else:
-                #relations=[]
+            nodes=[]
+            for node in inst.worknode_set.all():
+                node_dc=to_dict(node)
+                if node.owner and node.owner.baseinfo:
+                    node_dc['head_img']=node.owner.baseinfo.head
+                nodes.append(node_dc)
+                
             dc={
-                'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
+                'nodes': nodes , # [to_dict(x) for x in  inst.worknode_set.all()],
                 'client':unicode(inst.client) if inst.client else ''
                 #'relations':inst.relations
             }
@@ -120,6 +153,18 @@ class WorkNodeFormPage(FormPage):
         class Meta:
             model=WorkNode
             exclude=['node_group']
+        
+        def get_row(self):
+            row=super(self.__class__,self).get_row()
+            node=self.instance
+            if node.owner and node.owner.baseinfo:
+                row['head_img']=node.owner.baseinfo.head     
+            return row
+        
+        def dict_head(self, head):
+            if head['name']=='start_time':
+                head['type']='date'
+            return head
         
     fieldsCls=WorkNodeForm
     

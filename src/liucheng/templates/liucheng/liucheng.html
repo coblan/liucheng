@@ -145,6 +145,10 @@
                 <span v-text="crt_node.long_desp"></span>
             </div>
             <div>
+                <label for="" >开始时间:</label>
+                <span v-text="crt_node.start_time"></span>
+            </div>
+            <div>
                 <label for="" >修改时间:</label>
                 <span v-text="crt_node.mtime"></span>
             </div>
@@ -153,6 +157,55 @@
 
 </div>
 
+<script>
+
+//    function test(myid) {
+//        var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+//        svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', '/static/image/user.jpg');
+//        svgimg.setAttributeNS(null,'height','20');
+//        svgimg.setAttributeNS(null,'width','20');
+//        svgimg.setAttributeNS(null,'x','0');
+//        svgimg.setAttributeNS(null,'y','20');
+//        svgimg.setAttributeNS(null, 'visibility', 'visible');
+//        svgimg.innerHTML='<title>张小姐</title>';
+//        document.getElementById(myid).appendChild(svgimg);
+//
+//    }
+
+//    <pattern id="raduisImage" patternUnits="userSpaceOnUse" width="100" height="100">
+//            <image xlink:href="test.jpg" x="0" y="0" width="625" height="605" />
+//            </pattern>
+
+//<circle cx="50" cy="50" r="10" fill="url(#raduisImage)"></circle>
+
+//    function test(myid){
+//        var defs=document.createElementNS('http://www.w3.org/2000/svg','defs')
+//        defs.innerHTML='<pattern id="raduisImage" patternUnits="userSpaceOnUse" width="20" height="20"> <image xlink:href="/static/image/201502041009207922590_225_260.jpg" x="0" y="0" width="20" height="20" /> </pattern>'
+//        var circle=document.createElementNS(null,'circle')
+//
+//        document.getElementById(myid).appendChild(defs);
+//        document.getElementById(myid).appendChild(circle)
+//        circle.outerHTML='<circle cx="10" cy="20" r="10" fill="url(#raduisImage)"></circle>'
+//    }
+
+//<foreignObject width="31" height="12"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">地税s</div></foreignObject>
+//    function test(myid){
+//        var obj=document.createElementNS(null,'g')
+//        obj.setAttributeNS(null,'transform',"translate(-15.5,-6)")
+////        obj.innerHTML='<span>hello fuck world</span>'
+//        var foreing_obj=document.createElementNS(null,'foreignObject')
+//        obj.innerHTML='<foreignObject id="foreign" width="31" height="12"></foreignObject>'
+//
+////        obj.setAttributeNS(null,'width','20');
+////        obj.setAttributeNS(null,'height','20');
+////        obj.innerHTML='<span>hello fuck world</span>'
+////        p.innerHTML="<span>hello world</span>"
+//        document.getElementById(myid).appendChild(obj);
+//        var foreign=document.getElementById('foreign');
+//        foreign.innerHTML='<span style="display: inline-block; white-space: nowrap;" >aaa</span>'
+
+//    }
+</script>
 
 <style>
     .muban-list{
@@ -172,6 +225,12 @@
     .td_start_time{
         min-width: 8em;
     }
+
+    /*.node image{*/
+        /*border-radius: 0.5em;*/
+        /*width: 1em;*/
+        /*height: 1em;*/
+    /*}*/
 </style>
 {% block extra %}
 {% endblock %}

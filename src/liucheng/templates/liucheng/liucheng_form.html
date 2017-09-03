@@ -40,6 +40,9 @@
             }
         },
         mixins:[field_fun],
+        mounted:function(){
+            this.render()
+        },
         computed:{
            memraid_text:function(){
                var text="graph LR;"
@@ -61,14 +64,32 @@
         },
         watch:{
             memraid_text:function(){
-                Vue.nextTick(function(){
-                    $('.mermaid').attr('data-processed','')
-                    mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
-                })
-
+                this.render()
             }
         },
         methods:{
+
+            render:function(){
+                var self=this
+                Vue.nextTick(function(){
+
+                    $('.mermaid').attr('data-processed','')
+                    mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
+                    setTimeout(function(){
+                        ex.each(self.node_group.nodes,function(node){
+                            if(node.owner){
+                                mount_user_image(node.pk,node._owner_label,node.head_img)
+                            }
+                        })
+                    },100)
+
+                })
+            },
+
+            update_head_img:function(node){
+                mount_user_image(node.pk,node._owner_label,node.head_img)
+            },
+
             select:function(id){
                 var node=ex.findone(this.node_group.nodes,{pk:id})
                 if(this.can_select){
@@ -120,6 +141,7 @@
                 var post_data = [{ fun: 'save_node_group', node_group: this.node_group }];
                 ex.post(url, JSON.stringify(post_data), function (resp) {
                     hide_upload(500);
+
                 });
             },
             edit:function(node){
@@ -139,10 +161,21 @@
                 show_upload()
                 var post_data=[{fun:'save',row:this.node_kw.row}]
                 ex.post('/_ajax',JSON.stringify(post_data),function(resp){
-                    var node=ex.findone(self.node_group.nodes,{pk:self.node_kw.row.pk})
-                    ex.assign(node,self.node_kw.row)
-                    hide_upload(300)
-                    self.show_edit=false
+                    if(resp.save.status=='success'){
+                        var node=ex.findone(self.node_group.nodes,{pk:self.node_kw.row.pk})
+                        var new_node=resp.save.row
+//                    ex.assign(node,self.node_kw.row)
+                        ex.assign(node,new_node)
+                        hide_upload(300)
+                        self.show_edit=false
+                        if(node.owner){
+                            mount_user_image(node.pk,node._owner_label,node.head_img)
+                        }else{
+                            $('#'+node.pk+' image').remove()
+                        }
+
+                    }
+
                 })
 
             },
@@ -174,9 +207,9 @@
 
     $(function () {
         form_obj = new Vue(form_logic)
-        Vue.nextTick(function(){
-            mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
-        })
+//        Vue.nextTick(function(){
+//            mermaid.init({noteMargin: 10,boxMargin: 100,}, ".mermaid");
+//        })
     })
 
     $(document).on('click','.nodes .node',function(event){
