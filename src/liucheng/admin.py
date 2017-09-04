@@ -150,7 +150,10 @@ class NodeGroupTemplatePage(TablePage):
         include=['id','short_desp','relations']
         def inn_filter(self, query):
             return query.filter(kind='template')    
-        
+    
+    NodeGroupTemplateTable.filters=RowFilter
+    NodeGroupTemplateTable.search=RowSearch
+    
     tableCls=NodeGroupTemplateTable
     template='liucheng/liucheng_template.html'
     
