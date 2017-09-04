@@ -92,7 +92,7 @@ Vue.component('flowchart-td',flowchart_td)
 
 
 var mb_flowchart_base={
-    template:`<div class="mermaid" v-text="memraid_text">
+    template:`<div class="mermaid" v-text="memraid_text" style="text-align: center">
     </div>`,
     props:['node_group'],
     mounted:function(){

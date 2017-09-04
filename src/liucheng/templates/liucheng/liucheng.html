@@ -129,9 +129,9 @@
         <!--<div class="flex-grow"></div>-->
 
 
-        <com-table-btn class="main-table" v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="width:18em;">
+        <com-table-btn class="main-table" v-if="!search_args._pop && (can_add || can_del)" :add_new="add_new" :del_item="del_item" style="width:18em;">
             <!--<button type="button" class="btn btn-default btn-sm" @click="toggle_edit()">编辑状态</button>-->
-            <button type="button" class="btn btn-default btn-sm" @click="create_from_muban()">从模板创建</button>
+            <button v-if="can_add" type="button" class="btn btn-default btn-sm" @click="create_from_muban()">从模板创建</button>
         </com-table-btn>
 
         <!--<div class='btn-group' style='float: right;' v-if="!search_args._pop">-->

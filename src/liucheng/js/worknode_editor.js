@@ -4,7 +4,7 @@ require('./scss/worknode_editor.scss')
 export class WorkNodeEditor{
     constructor(){
         var self=this
-        var url=engine_url+'/'+'worknode.edit'
+        var url=engine_url+'/'+'worknode.edit?pk=-1'
         ex.get(url,function(resp){
             self.heads=resp.heads
         })

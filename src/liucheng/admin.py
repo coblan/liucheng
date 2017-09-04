@@ -1,12 +1,14 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 from django.contrib import admin
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,RowSort,RowSearch
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,\
+     RowSort,RowSearch,form_dict,permit_list,has_permit
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
 from .mobile_admin import *
 from helpers.case.organize.models import Employee
+from django.core.exceptions import PermissionDenied
 
 # Register your models here.
 
@@ -36,7 +38,7 @@ class NodeRrecordFormPage(FormPage):
         
         class Meta:
             model=NodeGroup
-            exclude=['relations','kind']
+            exclude=['kind']
         
         def dict_head(self, head):
             if head['name']=='start_time':
@@ -105,14 +107,6 @@ class NodeRecordPage(TablePage):
             if self.q:
                 exp=None
                 return query.filter(short_desp__icontains=self.q)
-                #for name in self.valid_name:
-                    #kw ={}
-                    #kw['%s__icontains'%name] =self.q    
-                    #if exp is None:
-                        #exp = Q(**kw)
-                    #else:
-                        #exp = exp | Q(**kw) 
-                #return query.filter(exp)
             else:
                 return query      
         
@@ -120,12 +114,17 @@ class NodeRecordPage(TablePage):
         model=NodeGroup
         
         def inn_filter(self, query):
-            return query.filter(kind='workrecord').order_by('-id')
+            query= query.filter(kind='workrecord').order_by('-id')
+            if not has_permit(self.crt_user,'nodegroup.checkall'):
+                emp=self.crt_user.employee_set.first()
+                query = query.filter(worknode__owner=emp).distinct()
+            return query
+                
         
         def dict_row(self, inst):
             nodes=[]
             for node in inst.worknode_set.all():
-                node_dc=to_dict(node)
+                node_dc= to_dict(node)  #form_dict(node,user=self.crt_user) # 
                 if node.owner and node.owner.baseinfo:
                     node_dc['head_img']=node.owner.baseinfo.head
                 nodes.append(node_dc)
@@ -141,7 +140,11 @@ class NodeRecordPage(TablePage):
     NodeRecordTable.search=NodeGroupSearch
     
     tableCls=NodeRecordTable
-    template='liucheng/liucheng.html'
+    def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'f7/table.html'
+        else:
+            return 'liucheng/liucheng.html'
 
  
 class NodeGroupTemplatePage(TablePage):
@@ -149,6 +152,8 @@ class NodeGroupTemplatePage(TablePage):
     class NodeGroupTemplateTable(NodeRecordPage.NodeRecordTable):
         include=['id','short_desp','relations']
         def inn_filter(self, query):
+            if not has_permit(self.crt_user,'nodegroup.edit_template'):
+                raise PermissionDenied,'你没有权限编辑模板'
             return query.filter(kind='template')    
     
     NodeGroupTemplateTable.filters=RowFilter
@@ -229,7 +234,7 @@ regist_director(name='busclient',src_model=BusClient)
 page_dc.update({
     'liucheng':NodeRecordPage,
     'liucheng.edit':NodeRrecordFormPage,
-    'liucheng.f7':NodeGroupPageF7,
+    'liucheng.f7': NodeRecordPage, #NodeGroupPageF7,
     'liucheng.f7.edit':NodeRrecordFormPage,
     
     'node.f7.edit':WorkNodeFormPage,
@@ -239,3 +244,11 @@ page_dc.update({
     'nodegrouptemplate':NodeGroupTemplatePage,
     'nodegrouptemplate.edit':NodeRrecordFormPage,
 })
+
+permit_list.append(WorkNode)
+permit_list.append(NodeGroup)
+permit_list.append(BusClient)
+permit_list.append({'name':'nodegroup','label':'liucheng.nodegroup_SP','fields':[
+    {'name':'check_all','label':'查看所有流程','type':'bool'},
+    {'name':'edit_template','label':'编辑模板','type':'bool'},
+]})

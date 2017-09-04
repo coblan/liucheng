@@ -60,346 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _muban = __webpack_require__(1);
-
-var _flowchart = __webpack_require__(2);
-
-var liucheng = _interopRequireWildcard(_flowchart);
-
-var _worknode_editor = __webpack_require__(7);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-window.MubanManager = _muban.MubanManager;
-window.mount_user_image = _flowchart.mount_user_image;
-window.WorkNodeEditor = _worknode_editor.WorkNodeEditor;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MubanManager = exports.MubanManager = function () {
-    function MubanManager(muban_table_url) {
-        _classCallCheck(this, MubanManager);
-
-        this.table_url = muban_table_url;
-        this.vue_inst = null;
-        this.select_callback = null;
-    }
-
-    _createClass(MubanManager, [{
-        key: 'select',
-        value: function select(callback) {
-            if (!this.vue_inst) {
-                this.vue_inst = this._mount();
-            }
-            var self = this;
-            this.vue_inst.show_me = true;
-            this.select_callback = function (row) {
-                callback(row);
-                self.vue_inst.show_me = false;
-            };
-        }
-    }, {
-        key: '_mount',
-        value: function _mount() {
-            $('body').append('<div id="_muban_list">\n        <modal v-show="show_me" @click.native="show_me=false">\n              <muban-list class="muban-list" @click.native.stop="" table_url="' + this.table_url + '"></muban-list>\n        </modal>\n        </div>');
-            var manager = this;
-            window._muban_list = new Vue({
-                el: '#_muban_list',
-                data: {
-                    show_me: false
-                },
-                mounted: function mounted() {
-                    this.$on('row-click', function (row) {
-                        manager.select_callback(row);
-                    });
-                }
-            });
-            return window._muban_list;
-        }
-    }]);
-
-    return MubanManager;
-}();
-
-function emit_to_parent(com_inst, event_name, arg) {
-    var par = com_inst.$parent;
-    while (par) {
-        var rt = par.$emit(event_name, arg);
-        par = par.$parent;
-    }
-}
-
-var muban_list = {
-    props: ['table_url'],
-    data: function data() {
-        return {
-            heads: [],
-            rows: [],
-            row_pages: {
-                options: [],
-                crt_page: 1
-            }
-        };
-    },
-    mixins: [table_fun],
-    mounted: function mounted() {
-        this.goto_page(1);
-    },
-    methods: {
-        goto_page: function goto_page(page_num) {
-            var self = this;
-            var url = ex.appendSearch(this.table_url, { _page: page_num });
-            ex.get(url, function (resp) {
-
-                self.heads = resp.heads;
-                self.rows = resp.rows;
-                self.row_pages = resp.row_pages;
-
-                self.heads[0].type = "click-td";
-                ex.each(self.heads, function (head) {
-                    if (head.name == 'relations') {
-                        head.type = "flowchart-td";
-                    }
-                });
-            });
-        }
-    },
-    template: '<div>\n        <com-table class=\'table fake-suit\' :has_check="false" :map="map"\n            :heads="heads" :rows="rows" v-model="selected"></com-table>\n\n        <paginator :nums=\'row_pages.options\' :crt=\'row_pages.crt_page\' @goto_page=\'goto_page($event)\'></paginator>\n    </div>'
-};
-Vue.component('muban-list', muban_list);
-
-var click_td = {
-    props: ['name', 'row'],
-    template: '<span style="cursor: pointer;"  @click="on_click()" v-text="row[name]"></span>',
-    methods: {
-        on_click: function on_click() {
-            //this.$parent.$emit('row-click',this.row)
-            emit_to_parent(this, 'row-click', this.row);
-        }
-    }
-};
-Vue.component('click-td', click_td);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.mount_user_image = mount_user_image;
-
-__webpack_require__(3);
-
-var flowchart_base = {
-    template: '<div class="mermaid" v-text="memraid_text">\n    </div>',
-    props: ['node_group'],
-    mounted: function mounted() {},
-    computed: {
-        memraid_text: function memraid_text() {
-            var text = "graph LR;";
-            ex.each(this.node_group.nodes, function (node) {
-                if (node.short_desp) {
-                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
-                } else {
-                    text += ex.template('{id};', { id: node.id });
-                }
-            });
-            ex.each(this.node_group.relations, function (relation) {
-                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
-            });
-            ex.each(this.node_group.nodes, function (node) {
-                text += 'class ' + node.pk + ' ' + node.status + ';';
-            });
-            return text;
-        }
-    }
-};
-Vue.component('com-flowchart', flowchart_base);
-
-var flowchart_td = {
-    props: ['name', 'row'],
-    template: ' <div class="mermaid" v-text="memraid_text"></div>',
-    mounted: function mounted() {
-        this.render();
-    },
-    watch: {
-        memraid_text: function memraid_text() {
-            this.render();
-        }
-    },
-    computed: {
-        node_group: function node_group() {
-            var node_group_local = ex.copy(this.row);
-            //node_group_local.relations=JSON.parse(node_group_local.relations)
-            return node_group_local;
-        },
-        memraid_text: function memraid_text() {
-            var text = "graph LR;";
-            ex.each(this.node_group.nodes, function (node) {
-                if (node.short_desp) {
-                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
-                } else {
-                    text += ex.template('{id};', { id: node.id });
-                }
-            });
-            ex.each(this.node_group.relations, function (relation) {
-                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
-            });
-
-            ex.each(this.node_group.nodes, function (node) {
-                text += 'class ' + node.pk + ' ' + node.status + ';';
-            });
-            return text;
-        }
-    },
-    methods: {
-        render: function render() {
-            var self = this;
-            $(this.$el).attr('data-processed', '');
-            Vue.nextTick(function () {
-                mermaid.init({ noteMargin: 10 }, self.$el);
-
-                //setTimeout(function(){
-                //    svgPanZoom( $(self.$el).find('svg')[0])
-                //})
-                setTimeout(function () {
-                    ex.each(self.node_group.nodes, function (node) {
-                        if (node.owner) {
-                            mount_user_image(node.pk, node._owner_label, node.head_img);
-                        }
-                    });
-                });
-            });
-        }
-    }
-
-};
-Vue.component('flowchart-td', flowchart_td);
-
-var mb_flowchart_base = {
-    template: '<div class="mermaid" v-text="memraid_text">\n    </div>',
-    props: ['node_group'],
-    mounted: function mounted() {
-        this.render();
-    },
-    watch: {
-        memraid_text: function memraid_text() {
-            this.render();
-        }
-    },
-    computed: {
-        memraid_text: function memraid_text() {
-            var text = "graph TB;";
-            ex.each(this.node_group.nodes, function (node) {
-                if (node.short_desp) {
-                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
-                } else {
-                    text += ex.template('{id};', { id: node.id });
-                }
-            });
-            ex.each(this.node_group.relations, function (relation) {
-                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
-            });
-            ex.each(this.node_group.nodes, function (node) {
-                text += 'class ' + node.pk + ' ' + node.status + ';';
-            });
-            return text;
-        }
-    },
-    methods: {
-        render: function render() {
-            var self = this;
-            $(this.$el).attr('data-processed', '');
-            Vue.nextTick(function () {
-                mermaid.init({ noteMargin: 10 }, self.$el);
-            });
-        }
-    }
-};
-Vue.component('com-flowchart_mb', mb_flowchart_base);
-
-function mount_user_image(myid, name, head) {
-    var head = head || '/static/image/user.jpg';
-    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', head);
-    svgimg.setAttributeNS(null, 'height', '30');
-    svgimg.setAttributeNS(null, 'width', '30');
-    svgimg.setAttributeNS(null, 'x', '0');
-    svgimg.setAttributeNS(null, 'y', '20');
-    svgimg.setAttributeNS(null, 'visibility', 'visible');
-    svgimg.innerHTML = '<title>' + name + '</title>';
-    document.getElementById(myid).appendChild(svgimg);
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(4);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss", function() {
-			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(5)();
-// imports
-
-
-// module
-exports.push([module.i, ".node.working rect {\n  fill: #4fafff; }\n\n.node.finish rect {\n  fill: #61c11a; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -455,7 +120,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 6 */
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -471,7 +136,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -707,6 +372,341 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _muban = __webpack_require__(3);
+
+var _flowchart = __webpack_require__(4);
+
+var liucheng = _interopRequireWildcard(_flowchart);
+
+var _worknode_editor = __webpack_require__(7);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+window.MubanManager = _muban.MubanManager;
+window.mount_user_image = _flowchart.mount_user_image;
+window.WorkNodeEditor = _worknode_editor.WorkNodeEditor;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MubanManager = exports.MubanManager = function () {
+    function MubanManager(muban_table_url) {
+        _classCallCheck(this, MubanManager);
+
+        this.table_url = muban_table_url;
+        this.vue_inst = null;
+        this.select_callback = null;
+    }
+
+    _createClass(MubanManager, [{
+        key: 'select',
+        value: function select(callback) {
+            if (!this.vue_inst) {
+                this.vue_inst = this._mount();
+            }
+            var self = this;
+            this.vue_inst.show_me = true;
+            this.select_callback = function (row) {
+                callback(row);
+                self.vue_inst.show_me = false;
+            };
+        }
+    }, {
+        key: '_mount',
+        value: function _mount() {
+            $('body').append('<div id="_muban_list">\n        <modal v-show="show_me" @click.native="show_me=false">\n              <muban-list class="muban-list" @click.native.stop="" table_url="' + this.table_url + '"></muban-list>\n        </modal>\n        </div>');
+            var manager = this;
+            window._muban_list = new Vue({
+                el: '#_muban_list',
+                data: {
+                    show_me: false
+                },
+                mounted: function mounted() {
+                    this.$on('row-click', function (row) {
+                        manager.select_callback(row);
+                    });
+                }
+            });
+            return window._muban_list;
+        }
+    }]);
+
+    return MubanManager;
+}();
+
+function emit_to_parent(com_inst, event_name, arg) {
+    var par = com_inst.$parent;
+    while (par) {
+        var rt = par.$emit(event_name, arg);
+        par = par.$parent;
+    }
+}
+
+var muban_list = {
+    props: ['table_url'],
+    data: function data() {
+        return {
+            heads: [],
+            rows: [],
+            row_pages: {
+                options: [],
+                crt_page: 1
+            }
+        };
+    },
+    mixins: [table_fun],
+    mounted: function mounted() {
+        this.goto_page(1);
+    },
+    methods: {
+        goto_page: function goto_page(page_num) {
+            var self = this;
+            var url = ex.appendSearch(this.table_url, { _page: page_num });
+            ex.get(url, function (resp) {
+
+                self.heads = resp.heads;
+                self.rows = resp.rows;
+                self.row_pages = resp.row_pages;
+
+                self.heads[0].type = "click-td";
+                ex.each(self.heads, function (head) {
+                    if (head.name == 'relations') {
+                        head.type = "flowchart-td";
+                    }
+                });
+            });
+        }
+    },
+    template: '<div>\n        <com-table class=\'table fake-suit\' :has_check="false" :map="map"\n            :heads="heads" :rows="rows" v-model="selected"></com-table>\n\n        <paginator :nums=\'row_pages.options\' :crt=\'row_pages.crt_page\' @goto_page=\'goto_page($event)\'></paginator>\n    </div>'
+};
+Vue.component('muban-list', muban_list);
+
+var click_td = {
+    props: ['name', 'row'],
+    template: '<span style="cursor: pointer;"  @click="on_click()" v-text="row[name]"></span>',
+    methods: {
+        on_click: function on_click() {
+            //this.$parent.$emit('row-click',this.row)
+            emit_to_parent(this, 'row-click', this.row);
+        }
+    }
+};
+Vue.component('click-td', click_td);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.mount_user_image = mount_user_image;
+
+__webpack_require__(5);
+
+var flowchart_base = {
+    template: '<div class="mermaid" v-text="memraid_text">\n    </div>',
+    props: ['node_group'],
+    mounted: function mounted() {},
+    computed: {
+        memraid_text: function memraid_text() {
+            var text = "graph LR;";
+            ex.each(this.node_group.nodes, function (node) {
+                if (node.short_desp) {
+                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
+                } else {
+                    text += ex.template('{id};', { id: node.id });
+                }
+            });
+            ex.each(this.node_group.relations, function (relation) {
+                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
+            });
+            ex.each(this.node_group.nodes, function (node) {
+                text += 'class ' + node.pk + ' ' + node.status + ';';
+            });
+            return text;
+        }
+    }
+};
+Vue.component('com-flowchart', flowchart_base);
+
+var flowchart_td = {
+    props: ['name', 'row'],
+    template: ' <div class="mermaid" v-text="memraid_text"></div>',
+    mounted: function mounted() {
+        this.render();
+    },
+    watch: {
+        memraid_text: function memraid_text() {
+            this.render();
+        }
+    },
+    computed: {
+        node_group: function node_group() {
+            var node_group_local = ex.copy(this.row);
+            //node_group_local.relations=JSON.parse(node_group_local.relations)
+            return node_group_local;
+        },
+        memraid_text: function memraid_text() {
+            var text = "graph LR;";
+            ex.each(this.node_group.nodes, function (node) {
+                if (node.short_desp) {
+                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
+                } else {
+                    text += ex.template('{id};', { id: node.id });
+                }
+            });
+            ex.each(this.node_group.relations, function (relation) {
+                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
+            });
+
+            ex.each(this.node_group.nodes, function (node) {
+                text += 'class ' + node.pk + ' ' + node.status + ';';
+            });
+            return text;
+        }
+    },
+    methods: {
+        render: function render() {
+            var self = this;
+            $(this.$el).attr('data-processed', '');
+            Vue.nextTick(function () {
+                mermaid.init({ noteMargin: 10 }, self.$el);
+
+                //setTimeout(function(){
+                //    svgPanZoom( $(self.$el).find('svg')[0])
+                //})
+                setTimeout(function () {
+                    ex.each(self.node_group.nodes, function (node) {
+                        if (node.owner) {
+                            mount_user_image(node.pk, node._owner_label, node.head_img);
+                        }
+                    });
+                });
+            });
+        }
+    }
+
+};
+Vue.component('flowchart-td', flowchart_td);
+
+var mb_flowchart_base = {
+    template: '<div class="mermaid" v-text="memraid_text" style="text-align: center">\n    </div>',
+    props: ['node_group'],
+    mounted: function mounted() {
+        this.render();
+    },
+    watch: {
+        memraid_text: function memraid_text() {
+            this.render();
+        }
+    },
+    computed: {
+        memraid_text: function memraid_text() {
+            var text = "graph TB;";
+            ex.each(this.node_group.nodes, function (node) {
+                if (node.short_desp) {
+                    text += ex.template('{id}["{desp}"];', { id: node.id, desp: node.short_desp });
+                } else {
+                    text += ex.template('{id};', { id: node.id });
+                }
+            });
+            ex.each(this.node_group.relations, function (relation) {
+                text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
+            });
+            ex.each(this.node_group.nodes, function (node) {
+                text += 'class ' + node.pk + ' ' + node.status + ';';
+            });
+            return text;
+        }
+    },
+    methods: {
+        render: function render() {
+            var self = this;
+            $(this.$el).attr('data-processed', '');
+            Vue.nextTick(function () {
+                mermaid.init({ noteMargin: 10 }, self.$el);
+            });
+        }
+    }
+};
+Vue.component('com-flowchart_mb', mb_flowchart_base);
+
+function mount_user_image(myid, name, head) {
+    var head = head || '/static/image/user.jpg';
+    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', head);
+    svgimg.setAttributeNS(null, 'height', '30');
+    svgimg.setAttributeNS(null, 'width', '30');
+    svgimg.setAttributeNS(null, 'x', '0');
+    svgimg.setAttributeNS(null, 'y', '20');
+    svgimg.setAttributeNS(null, 'visibility', 'visible');
+    svgimg.innerHTML = '<title>' + name + '</title>';
+    document.getElementById(myid).appendChild(svgimg);
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(6);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss", function() {
+			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".node.working rect {\n  fill: #4fafff; }\n\n.node.finish rect {\n  fill: #61c11a; }\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -728,7 +728,7 @@ var WorkNodeEditor = exports.WorkNodeEditor = function () {
         _classCallCheck(this, WorkNodeEditor);
 
         var self = this;
-        var url = engine_url + '/' + 'worknode.edit';
+        var url = engine_url + '/' + 'worknode.edit?pk=-1';
         ex.get(url, function (resp) {
             self.heads = resp.heads;
         });
@@ -791,14 +791,14 @@ var WorkNodeEditor = exports.WorkNodeEditor = function () {
 var content = __webpack_require__(9);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(1)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss", function() {
-			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss");
+		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worknode_editor.scss", function() {
+			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worknode_editor.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -811,7 +811,7 @@ if(false) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(0)();
 // imports
 
 
