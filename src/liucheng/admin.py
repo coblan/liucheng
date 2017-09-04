@@ -55,31 +55,40 @@ class NodeRecordPage(TablePage):
     
     class NodeRecordFilter(RowFilter):
         model=NodeGroup
-        names=['client']   
+        names=['client','node_status']   
         range_fields =[{'name':'start_time','type':'date'}]
         
         def get_context(self):
             ls=super(self.__class__,self).get_context()
-            ls.append({'name':'start_time','type':'date','label':'节点开始时间'})
+            ls.append({'name':'start_time','type':'date','label':'节点指派时间'})
+            
+            option=[{'value':'waiting','label':'等待'},
+                    {'value':'finish','label':'完成'}]
+            ls.append({'name':'node_status','label':'包含节点状态','options':option})
             return ls
         
         def get_query(self,query):
             self.query=query
             start_time__gte=self.filter_args.pop('start_time__gte',None)
             start_time__lte=self.filter_args.pop('start_time__lte',None)
-            if start_time__gte or start_time__lte:
+            node_status=self.filter_args.pop('node_status',None)
+            
+            if start_time__gte or start_time__lte or node_status:
                 node_filter_args={}
                 if start_time__gte:
                     node_filter_args['start_time__gte']=start_time__gte
                 if start_time__lte:
                     node_filter_args['start_time__lte']=start_time__lte
-                    
+                if node_status:
+                    node_filter_args['status']=node_status
                 nodes_query=WorkNode.objects.filter(**node_filter_args)
-                record_pk_list=[]
-                for node in nodes_query:
-                    record_pk_list.append(node.node_group.pk)
-                record_pk_list=list(set(record_pk_list))
-                query=query.filter(pk__in=record_pk_list)
+                # record_pk_list=[]
+                # for node in nodes_query:
+                    # record_pk_list.append(node.node_group.pk)
+                # record_pk_list=list(set(record_pk_list))
+                # query=query.filter(pk__in=record_pk_list)
+                query=query.filter(worknode__in=nodes_query).distinct()
+                
             query=query.filter(**self.filter_args)
             return query  
         

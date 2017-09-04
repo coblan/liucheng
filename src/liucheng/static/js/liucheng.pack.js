@@ -76,10 +76,13 @@ var _flowchart = __webpack_require__(2);
 
 var liucheng = _interopRequireWildcard(_flowchart);
 
+var _worknode_editor = __webpack_require__(7);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 window.MubanManager = _muban.MubanManager;
 window.mount_user_image = _flowchart.mount_user_image;
+window.WorkNodeEditor = _worknode_editor.WorkNodeEditor;
 
 /***/ }),
 /* 1 */
@@ -371,8 +374,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss", function() {
-			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss");
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -468,7 +471,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -701,6 +704,121 @@ function updateLink(linkElement, obj) {
 	if(oldSrc)
 		URL.revokeObjectURL(oldSrc);
 }
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(8);
+
+var WorkNodeEditor = exports.WorkNodeEditor = function () {
+    function WorkNodeEditor() {
+        _classCallCheck(this, WorkNodeEditor);
+
+        var self = this;
+        var url = engine_url + '/' + 'worknode.edit';
+        ex.get(url, function (resp) {
+            self.heads = resp.heads;
+        });
+
+        $(function () {
+            $('body').append('<div id="worknode-editor">\n                <modal v-show="show_edit">\n        <div @click.stop="">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <a :href="\'/pc/log?rows=liucheng.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in node_kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'node_kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
+
+            self.editor = new Vue({
+                el: '#worknode-editor',
+                data: {
+                    show_edit: false,
+                    node_kw: {
+                        heads: [],
+                        row: {},
+                        errors: {}
+                    }
+                },
+                methods: {
+                    assure_edit: function assure_edit() {
+                        var self = this;
+                        show_upload();
+                        var post_data = [{ fun: 'save', row: this.node_kw.row }];
+                        ex.post('/_ajax', JSON.stringify(post_data), function (resp) {
+                            if (resp.save.status == 'success') {
+                                //var node=ex.findone(self.node_group.nodes,{pk:self.node_kw.row.pk})
+                                var node = self.node_kw.row;
+                                var new_node = resp.save.row;
+                                ex.assign(node, new_node);
+                                hide_upload(300);
+                                self.show_edit = false;
+                                self.callback(node);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    _createClass(WorkNodeEditor, [{
+        key: 'edit',
+        value: function edit(node, callback) {
+            this.editor.node_kw.heads = this.heads;
+            this.editor.node_kw.row = ex.copy(node);
+            this.editor.show_edit = true;
+            this.editor.callback = callback;
+        }
+    }]);
+
+    return WorkNodeEditor;
+}();
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(6)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)();
+// imports
+
+
+// module
+exports.push([module.i, ".field_input textarea {\n  min-height: 20em;\n  min-width: 50em; }\n", ""]);
+
+// exports
 
 
 /***/ })

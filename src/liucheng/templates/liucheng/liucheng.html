@@ -22,6 +22,9 @@
 
     muban_table_url=engine_url+'/'+'nodegrouptemplate'
     muban_manager=new MubanManager(muban_table_url)
+
+    node_editor=new WorkNodeEditor()
+
     table_logic={
         el:'#there',
         data:{
@@ -59,7 +62,15 @@
             },
             show_node:function(node){
                 this.crt_node=node
-                this.show_node_view=true
+//                this.show_node_view=true
+                node_editor.edit(node,function(new_node){
+                    ex.assign(node,new_node)
+                    if(node.owner){
+                        mount_user_image(node.pk,node._owner_label,node.head_img)
+                    }else{
+                        $('#'+node.pk+' image').remove()
+                    }
+                })
 
             },
             create_from_muban:function(){
@@ -72,7 +83,7 @@
                     })
 
                 })
-            }
+            },
         }
 
     }
@@ -118,7 +129,8 @@
         <!--<div class="flex-grow"></div>-->
 
 
-        <com-table-btn class="main-table" v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="width:15em;">
+        <com-table-btn class="main-table" v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="width:18em;">
+            <!--<button type="button" class="btn btn-default btn-sm" @click="toggle_edit()">编辑状态</button>-->
             <button type="button" class="btn btn-default btn-sm" @click="create_from_muban()">从模板创建</button>
         </com-table-btn>
 
@@ -157,56 +169,6 @@
 
 </div>
 
-<script>
-
-//    function test(myid) {
-//        var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
-//        svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', '/static/image/user.jpg');
-//        svgimg.setAttributeNS(null,'height','20');
-//        svgimg.setAttributeNS(null,'width','20');
-//        svgimg.setAttributeNS(null,'x','0');
-//        svgimg.setAttributeNS(null,'y','20');
-//        svgimg.setAttributeNS(null, 'visibility', 'visible');
-//        svgimg.innerHTML='<title>张小姐</title>';
-//        document.getElementById(myid).appendChild(svgimg);
-//
-//    }
-
-//    <pattern id="raduisImage" patternUnits="userSpaceOnUse" width="100" height="100">
-//            <image xlink:href="test.jpg" x="0" y="0" width="625" height="605" />
-//            </pattern>
-
-//<circle cx="50" cy="50" r="10" fill="url(#raduisImage)"></circle>
-
-//    function test(myid){
-//        var defs=document.createElementNS('http://www.w3.org/2000/svg','defs')
-//        defs.innerHTML='<pattern id="raduisImage" patternUnits="userSpaceOnUse" width="20" height="20"> <image xlink:href="/static/image/201502041009207922590_225_260.jpg" x="0" y="0" width="20" height="20" /> </pattern>'
-//        var circle=document.createElementNS(null,'circle')
-//
-//        document.getElementById(myid).appendChild(defs);
-//        document.getElementById(myid).appendChild(circle)
-//        circle.outerHTML='<circle cx="10" cy="20" r="10" fill="url(#raduisImage)"></circle>'
-//    }
-
-//<foreignObject width="31" height="12"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml">地税s</div></foreignObject>
-//    function test(myid){
-//        var obj=document.createElementNS(null,'g')
-//        obj.setAttributeNS(null,'transform',"translate(-15.5,-6)")
-////        obj.innerHTML='<span>hello fuck world</span>'
-//        var foreing_obj=document.createElementNS(null,'foreignObject')
-//        obj.innerHTML='<foreignObject id="foreign" width="31" height="12"></foreignObject>'
-//
-////        obj.setAttributeNS(null,'width','20');
-////        obj.setAttributeNS(null,'height','20');
-////        obj.innerHTML='<span>hello fuck world</span>'
-////        p.innerHTML="<span>hello world</span>"
-//        document.getElementById(myid).appendChild(obj);
-//        var foreign=document.getElementById('foreign');
-//        foreign.innerHTML='<span style="display: inline-block; white-space: nowrap;" >aaa</span>'
-
-//    }
-</script>
-
 <style>
     .muban-list{
         width: 70vw;
@@ -231,6 +193,13 @@
         /*width: 1em;*/
         /*height: 1em;*/
     /*}*/
+
+    .node {
+        cursor: pointer;
+    }
+    #filter-node_status{
+        width: 10em;
+    }
 </style>
 {% block extra %}
 {% endblock %}

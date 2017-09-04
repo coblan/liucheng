@@ -9,7 +9,7 @@ from helpers.case.organize.models import Employee
 
 WORKNODE_STATUS=(
     ('waiting','等待'),
-    ('working','处理中'),
+    # ('working','处理中'),
     ('finish','完成'),
 )
 
