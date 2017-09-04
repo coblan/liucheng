@@ -138,8 +138,8 @@ export function mount_user_image(myid,name,head) {
     var head=head || '/static/image/user.jpg'
     var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
     svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', head);
-    svgimg.setAttributeNS(null,'height','20');
-    svgimg.setAttributeNS(null,'width','20');
+    svgimg.setAttributeNS(null,'height','30');
+    svgimg.setAttributeNS(null,'width','30');
     svgimg.setAttributeNS(null,'x','0');
     svgimg.setAttributeNS(null,'y','20');
     svgimg.setAttributeNS(null, 'visibility', 'visible');
