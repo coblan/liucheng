@@ -115,6 +115,8 @@ class NodeRecordPage(TablePage):
         
         def inn_filter(self, query):
             query= query.filter(kind='workrecord').order_by('-id')
+            if not self.permit.can_access():
+                raise PermissionDenied,'没有权限访问工作流程图'
             if not has_permit(self.crt_user,'nodegroup.checkall'):
                 emp=self.crt_user.employee_set.first()
                 query = query.filter(worknode__owner=emp).distinct()
@@ -124,7 +126,7 @@ class NodeRecordPage(TablePage):
         def dict_row(self, inst):
             nodes=[]
             for node in inst.worknode_set.all():
-                node_dc= to_dict(node)  #form_dict(node,user=self.crt_user) # 
+                node_dc=to_dict(node) # form_dict(node,user=self.crt_user) # to_dict(node)  #
                 if node.owner and node.owner.baseinfo:
                     node_dc['head_img']=node.owner.baseinfo.head
                 nodes.append(node_dc)

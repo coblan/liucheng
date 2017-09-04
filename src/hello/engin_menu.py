@@ -7,7 +7,7 @@ from helpers.director.shortcut import page_dc,has_permit
 from helpers.director.models import KVModel
 from helpers.pageadaptor.models import WebPage
 from helpers.maintenance.update_static_timestamp import js_stamp
-from liucheng.models import BusClient
+from liucheng.models import BusClient,NodeGroup
 
 class PcMenu(BaseEngine):
     url_name='liucheng'
@@ -21,9 +21,9 @@ class PcMenu(BaseEngine):
 
         organize_menu.pc_menu,
         
-        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-eye'),
+        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
          'submenu':[
-             {'label':'工作流程','url':page('liucheng')},
+             {'label':'工作流程','url':page('liucheng'),'visible':can_touch(NodeGroup)},
              {'label':'流程模板','url':page('nodegrouptemplate'),'visible':lambda user:has_permit(user,'nodegroup.edit_template')},
              
              # {'label':'工作列表','url':page('worknode'),},
