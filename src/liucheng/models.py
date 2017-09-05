@@ -46,7 +46,7 @@ class NodeGroup(models.Model):
         self.save()
     
     def __unicode__(self):
-        return self.short_desp+' '+ unicode(self.client)
+        return unicode(self.client) + '/' + self.short_desp
         
         
     
