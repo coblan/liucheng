@@ -84,11 +84,10 @@ class NodeRecordPage(TablePage):
                 if node_status:
                     node_filter_args['status']=node_status
                 nodes_query=WorkNode.objects.filter(**node_filter_args)
-                # record_pk_list=[]
-                # for node in nodes_query:
-                    # record_pk_list.append(node.node_group.pk)
-                # record_pk_list=list(set(record_pk_list))
-                # query=query.filter(pk__in=record_pk_list)
+                if start_time__gte or start_time__lte:  # 张容智商有问题，看来只能排除掉未设置时间项目的干扰，她才能理解
+                                                        # 当过滤时间时，把未设置时间的项，排除开。
+                    nodes_query=nodes_query.exclude(start_time='')
+
                 query=query.filter(worknode__in=nodes_query).distinct()
                 
             query=query.filter(**self.filter_args)
