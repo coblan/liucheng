@@ -38,7 +38,7 @@ class NodeRrecordFormPage(FormPage):
         
         class Meta:
             model=NodeGroup
-            exclude=['kind']
+            exclude=['relations','kind']
         
         def dict_head(self, head):
             if head['name']=='start_time':
