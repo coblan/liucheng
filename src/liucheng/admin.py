@@ -228,9 +228,24 @@ class NodeGroupPageF7(TablePage):
     tableCls=NodeGroupTable
 
 
+
 model_dc[WorkNode]={'fields':WorkNodeFormPage.WorkNodeForm}
 model_dc[NodeGroup]={'fields':NodeRrecordFormPage.NodeRecordForm}
+
+class ClientSort(RowSort):
+    names=['name']
+    def get_query(self, query):
+        if self.sort_str:
+            ls=self.sort_str.replace('name','converted').split(',')
+            query= query.extra(select={'converted': 'CONVERT(name USING gbk)'},order_by=['converted'])
+            return query.order_by(*ls)
+        else:
+            return query
+        
+        return 
+        
 regist_director(name='busclient',src_model=BusClient)
+page_dc['busclient'].tableCls.sort=ClientSort
 
 page_dc.update({
     'liucheng':NodeRecordPage,

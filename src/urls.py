@@ -35,7 +35,7 @@ urlpatterns = [
     
     url(r'^orgnize/',include(organize_urls)),
     
-    
+    url(r'^mb/?$',RedirectView.as_view(url='/f7/home.f7')),
     url(r'^$',RedirectView.as_view(url='/pc/press?_name=home'))
 ]
 
