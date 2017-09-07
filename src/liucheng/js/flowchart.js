@@ -61,8 +61,17 @@ var flowchart_td={
             })
 
             ex.each(this.node_group.nodes,function(node){
+
+                if(is_matched_node(node)){
+                    text+=`class ${node.pk} matched;`
+                }else if(node.start_time){
+                    text+=`class ${node.pk} has_time;`
+                }
                 text+=`class ${node.pk} ${node.status};`
+
+
             })
+
             return text
         }
     },
@@ -117,7 +126,11 @@ var mb_flowchart_base={
                 text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
             })
             ex.each(this.node_group.nodes,function(node){
-                text+=`class ${node.pk} ${node.status};`
+                var mt=''
+                if(is_matched_node(node)){
+                    mt='matched'
+                }
+                text+=`class ${node.pk} ${node.status} ${mt};`
             })
             return text
         }
@@ -145,4 +158,30 @@ export function mount_user_image(myid,name,head) {
     svgimg.setAttributeNS(null, 'visibility', 'visible');
     svgimg.innerHTML=`<title>${name}</title>`;
     document.getElementById(myid).appendChild(svgimg);
+}
+
+function is_matched_node(node){
+    if(!node.start_time){
+        return false
+    }
+    if(search_args._start_start_time){
+       if(node.start_time< search_args._start_start_time) {
+           return false
+       }
+    }
+    if(search_args._end_start_time){
+        if(node.start_time > search_args._end_start_time){
+            return false
+        }
+    }
+    if(search_args.node_status){
+        if(node.status!=search_args.node_status){
+            return false
+        }
+    }
+    if(!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status){
+        return false
+    }
+    return true
+
 }

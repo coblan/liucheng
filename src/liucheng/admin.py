@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.contrib import admin
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,ModelFields,FormPage,model_dc,regist_director,RowFilter,\
-     RowSort,RowSearch,form_dict,permit_list,has_permit
+     RowSort,RowSearch,form_dict,permit_list,has_permit,PageNum
 from .models import NodeGroup,WorkNode,BusClient
 from helpers.director.db_tools import to_dict
 import json
@@ -54,6 +54,9 @@ class NodeRrecordFormPage(FormPage):
 
 
 class NodeRecordPage(TablePage):
+    
+    class NodeRecordNum(PageNum):
+        perPage=10
     
     class NodeRecordFilter(RowFilter):
         model=NodeGroup
@@ -135,7 +138,8 @@ class NodeRecordPage(TablePage):
                 'client':unicode(inst.client) if inst.client else ''
                 #'relations':inst.relations
             }
-            return dc    
+            return dc   
+    NodeRecordTable.pagenator=NodeRecordNum
     NodeRecordTable.filters=NodeRecordFilter
     NodeRecordTable.sort=WorkSort
     NodeRecordTable.search=NodeGroupSearch

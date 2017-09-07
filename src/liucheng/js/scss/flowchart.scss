@@ -1,6 +1,28 @@
-.node.working rect{
-  fill: #4fafff;
+
+.node.matched rect{
+  fill: #fff49e;
+  stroke:#f66;
+  stroke-width:2px;
+  stroke-dasharray: 5, 5;
 }
+
+//.node.working rect{
+//  fill: #4fafff;
+//}
+
+.node.has_time rect{
+    fill: #2e6cc1;
+  }
+.node.has_time div{
+    color: #fff;
+  }
+
+
+
 .node.finish rect{
-  fill: #61c11a;
+  fill: #61c11a !important;
+}
+
+.node.has_time div{
+  color: #000 !important;
 }

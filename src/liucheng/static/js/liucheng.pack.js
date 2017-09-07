@@ -582,8 +582,15 @@ var flowchart_td = {
             });
 
             ex.each(this.node_group.nodes, function (node) {
+
+                if (is_matched_node(node)) {
+                    text += 'class ' + node.pk + ' matched;';
+                } else if (node.start_time) {
+                    text += 'class ' + node.pk + ' has_time;';
+                }
                 text += 'class ' + node.pk + ' ' + node.status + ';';
             });
+
             return text;
         }
     },
@@ -636,7 +643,11 @@ var mb_flowchart_base = {
                 text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
             });
             ex.each(this.node_group.nodes, function (node) {
-                text += 'class ' + node.pk + ' ' + node.status + ';';
+                var mt = '';
+                if (is_matched_node(node)) {
+                    mt = 'matched';
+                }
+                text += 'class ' + node.pk + ' ' + node.status + ' ' + mt + ';';
             });
             return text;
         }
@@ -664,6 +675,31 @@ function mount_user_image(myid, name, head) {
     svgimg.setAttributeNS(null, 'visibility', 'visible');
     svgimg.innerHTML = '<title>' + name + '</title>';
     document.getElementById(myid).appendChild(svgimg);
+}
+
+function is_matched_node(node) {
+    if (!node.start_time) {
+        return false;
+    }
+    if (search_args._start_start_time) {
+        if (node.start_time < search_args._start_start_time) {
+            return false;
+        }
+    }
+    if (search_args._end_start_time) {
+        if (node.start_time > search_args._end_start_time) {
+            return false;
+        }
+    }
+    if (search_args.node_status) {
+        if (node.status != search_args.node_status) {
+            return false;
+        }
+    }
+    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status) {
+        return false;
+    }
+    return true;
 }
 
 /***/ }),
@@ -701,7 +737,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".node.working rect {\n  fill: #4fafff; }\n\n.node.finish rect {\n  fill: #61c11a; }\n", ""]);
+exports.push([module.i, ".node.matched rect {\n  fill: #fff49e;\n  stroke: #f66;\n  stroke-width: 2px;\n  stroke-dasharray: 5, 5; }\n\n.node.has_time rect {\n  fill: #2e6cc1; }\n\n.node.has_time div {\n  color: #fff; }\n\n.node.finish rect {\n  fill: #61c11a !important; }\n\n.node.has_time div {\n  color: #000 !important; }\n", ""]);
 
 // exports
 
