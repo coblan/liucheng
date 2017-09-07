@@ -737,7 +737,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".node.matched rect {\n  fill: #fff49e;\n  stroke: #f66;\n  stroke-width: 2px;\n  stroke-dasharray: 5, 5; }\n\n.node.has_time rect {\n  fill: #2e6cc1; }\n\n.node.has_time div {\n  color: #fff; }\n\n.node.finish rect {\n  fill: #61c11a !important; }\n\n.node.has_time div {\n  color: #000 !important; }\n", ""]);
+exports.push([module.i, ".node.matched rect {\n  fill: #fff49e;\n  stroke: #f66;\n  stroke-width: 2px;\n  stroke-dasharray: 5, 5; }\n\n.node.has_time rect {\n  fill: #2e6cc1; }\n\n.node.has_time div {\n  color: #fff; }\n\n.node.finish rect {\n  fill: #61c11a !important; }\n\n.node.finish.has_time div {\n  color: #000; }\n", ""]);
 
 // exports
 
