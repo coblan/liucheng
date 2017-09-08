@@ -5,6 +5,9 @@
 {% block page_content %}
 <script src='{% static "lib/mermaid.min.js" %}'></script>
 <link href= '{% static "lib/mermaid.min.css" %}'  rel="stylesheet">
+
+<script src='{% static "lib/colResizable-1.6.min.js" %}'></script>
+
 <!--<script src="https://ariutta.github.io/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>-->
 
 <script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
@@ -97,6 +100,13 @@
 
         Vue.nextTick(function(){
             mermaid.init({noteMargin: 10}, ".mermaid");
+
+            $('.fake-suit').colResizable({
+                liveDrag:true,
+//                gripInnerHtml:"<div style='width:1px;height: ;border: 1px solid black;'></div>",
+                draggingClass:"dragging",
+                resizeMode:'fit'
+            })
         })
     })
 
@@ -199,6 +209,9 @@
     }
     #filter-node_status{
         width: 10em;
+    }
+    th{
+        border-right: 1px solid #d0d0d0;
     }
 </style>
 {% block extra %}
