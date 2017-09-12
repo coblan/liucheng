@@ -1,0 +1,107 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+
+{% block page_content %}
+<script>
+
+
+    page_label='首页'
+
+    menu = {{ menu | jsonify }}
+
+    function home_init(){
+        home=new Vue({
+            el:'#there',
+            data:{
+                menu:menu,
+            },
+            methods:{
+                load:function(url,name){
+                    ff.load(url,name)
+                }
+            }
+        })
+    }
+    $(function(){
+        home_init()
+    })
+
+
+</script>
+
+<div id="there">
+
+    <div class="b-image">
+        <img src="/static/image/201502041009207922590_225_260.jpg" width="100%"/>
+    </div>
+
+
+    <div class="weui-cells__title">张容</div>
+
+    <div class="weui-cells" style="padding: 1em 1em 2em 1em;">
+        <table >
+            <tr>
+                <td><div class="tb-label">今日需要完成</div></td>
+                <td class="tb-middle">:</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td><div class="tb-label">已经完成</div></td>
+                <td class="tb-middle">:</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><div class="tb-label">以前未完成</div></td>
+                <td class="tb-middle">:</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><div class="tb-label">当月完成</div></td>
+                <td class="tb-middle">:</td>
+                <td>53</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="weui-cells__title">工作面板</div>
+    <div class="weui-cells">
+        <div class="weui-grids">
+            <!--<a :href="'/_f7_iframe?name=iframe_'+act.name+'&src='+act.url" class="weui-grid ajax" v-for="act in menu">-->
+            <span @click="load(act.url,act.name)" class="weui-grid ajax" v-for="act in menu">
+                <div class="weui-grid__icon">
+                    <span v-html="act.icon"></span>
+                </div>
+                <p class="weui-grid__label" v-text="act.label"></p>
+            </span>
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    .tb-label{
+        width: 6em;
+        text-align: justify;
+        height: 1.5em;
+
+    }
+    .tb-middle{
+        padding: 0 0.6em;
+    }
+    .tb-label:after {
+        width: 100%;
+        height: 0;
+        margin: 0;
+        display: inline-block;
+        overflow: hidden;
+        content: '';
+    }
+</style>
+{% endblock %}
+
+
+

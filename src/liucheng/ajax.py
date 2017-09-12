@@ -44,3 +44,9 @@ def add_node_template():
         # node=from_dict(node_dc)
         # node.delete()
     # return {'status':'success'}
+    
+def get_emp_node_info(user):
+    emp=user.employee_set.first()
+    WorkNode.objects.filter(owner=emp,start_time=today)
+    WorkNode.objects.filter(owner=emp,start_time__lt=today,status='waiting')
+    WorkNode.objects.filter(owner=emp,start_time__gte=month_first,start_time_lte=month_last,status='finish')

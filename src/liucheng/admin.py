@@ -219,17 +219,17 @@ class WorkNodeTablePage(TablePage):
     tableCls=WorkNodeTable
 
 
-class NodeGroupPageF7(TablePage):
-    class NodeGroupTable(ModelTable):
-        model=NodeGroup
+#class NodeGroupPageF7(TablePage):
+    #class NodeGroupTable(ModelTable):
+        #model=NodeGroup
         
-        def dict_row(self, inst):
-            dc={
-                #'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
-                'client':unicode(inst.client) if inst.client else ''
-            }
-            return dc  
-    tableCls=NodeGroupTable
+        #def dict_row(self, inst):
+            #dc={
+                ##'nodes': [to_dict(x) for x in  inst.worknode_set.all()],
+                #'client':unicode(inst.client) if inst.client else ''
+            #}
+            #return dc  
+    #tableCls=NodeGroupTable
 
 
 

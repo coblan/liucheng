@@ -59,7 +59,7 @@ class WorkNode(models.Model):
     mtime=models.DateTimeField(verbose_name='修改时间',auto_now=True)
     node_group=models.ForeignKey(NodeGroup,verbose_name='节点组',blank=True,null=True)
     owner=models.ForeignKey(Employee,verbose_name='负责人',blank=True,null=True)
-    start_time=models.CharField('启动时间',max_length=100,blank=True)
+    start_time=models.CharField('启动时间',max_length=20,blank=True)
     
     
 
