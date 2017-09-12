@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>索引 &mdash; 工作流程管理 1.0 文档</title>
+  <title>5. 工作查询 &mdash; 工作流程管理 1.0 文档</title>
   
 
   
@@ -31,7 +30,9 @@
   
 
   
-    <link rel="top" title="工作流程管理 1.0 文档" href="index.html"/> 
+    <link rel="top" title="工作流程管理 1.0 文档" href="index.html"/>
+        <link rel="next" title="6. 移动端" href="mobile.html"/>
+        <link rel="prev" title="4. 流程图编辑" href="liucheng_edit.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -80,12 +81,16 @@
           
             
             
-                <ul>
+                <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="employee.html">1. 录入员工</a></li>
 <li class="toctree-l1"><a class="reference internal" href="permit.html">2. 人员权限</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liucheng.html">3. 流程界面介绍</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liucheng_edit.html">4. 流程图编辑</a></li>
-<li class="toctree-l1"><a class="reference internal" href="liucheng_search.html">5. 工作查询</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. 工作查询</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">5.1. 查询样例一</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-color">5.2. 查询结果颜色</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="mobile.html">6. 移动端</a></li>
 </ul>
 
@@ -109,7 +114,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -117,9 +122,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>5. 工作查询</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="_sources/liucheng_search.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -129,17 +136,59 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-<h1 id="index">索引</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="id1">
+<h1>5. 工作查询<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>流程检索是系统使用最频繁的功能，也是相对传统工作方式提升效率最大的地方。</p>
+<p>在 <a class="reference internal" href="#liucheng-search-png"><span class="std std-ref">流程检索截图</span></a> 的上方，有过滤框，下面分别介绍下几种过滤逻辑。</p>
+<div class="figure" id="id4">
+<span id="liucheng-search-png"></span><img alt="_images/liucheng_search.png" src="_images/liucheng_search.png" />
+<p class="caption"><span class="caption-text">流程检索截图</span></p>
+</div>
+<div class="section" id="id2">
+<h2>5.1. 查询样例一<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>假设想要查询“启动时间”是2017-09-13日之前，并且是为完成状态的“工作节点”，在结果页面显示出包含这些节点的流程图。</p>
+<p>如 <a class="reference internal" href="#search-1-png"><span class="std std-ref">查询一截图</span></a>，不填写起始日期，即可查询以前所有的节点。</p>
+<div class="figure" id="id5">
+<span id="search-1-png"></span><img alt="_images/search_1.png" src="_images/search_1.png" />
+<p class="caption"><span class="caption-text">查询一截图</span></p>
+</div>
+</div>
+<div class="section" id="search-color">
+<span id="id3"></span><h2>5.2. 查询结果颜色<a class="headerlink" href="#search-color" title="永久链接至标题">¶</a></h2>
+<p>可以用几个准则来描述: （相关: <a class="reference internal" href="liucheng.html#normal-color"><span class="std std-ref">工作节点颜色</span></a>）</p>
+<ol class="arabic">
+<li><p class="first">绿色是已经完成的“工作节点”。</p>
+</li>
+<li><p class="first">未设置时间又没有完成的“工作节点”，永远是灰色的，而且不会被选中框选。</p>
+</li>
+<li><dl class="first docutils">
+<dt>查询匹配的“工作节点”，会有一个框，框中可能会有以下颜色。</dt>
+<dd><ul class="first last simple">
+<li>绿色，表示已经完成。</li>
+<li>黄色，表示已经设置了颜色，但没有完成。</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">蓝色，表示已经设置了颜色，但是没有完成，并且不是查询的匹配“工作节点”</p>
+</li>
+</ol>
+</div>
 </div>
 
 
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mobile.html" class="btn btn-neutral float-right" title="6. 移动端" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="liucheng_edit.html" class="btn btn-neutral" title="4. 流程图编辑" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

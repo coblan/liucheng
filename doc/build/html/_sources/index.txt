@@ -17,6 +17,7 @@
    permit
    liucheng
    liucheng_edit
+   liucheng_search
    mobile
 
 
