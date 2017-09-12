@@ -18,14 +18,19 @@ PROJECT_NAME = "liucheng"
 PROJECT_DIR = "/pypro/liucheng/"  # project dir on server
 
 
-def staging():
-    env.user = "coblan"
-    env.hosts = ["10.0.2.250"]
+# def staging():
+    # env.user = "coblan"
+    # env.hosts = ["10.0.2.250"]
 
 
 def prod():
     env.user = "coblan"
     env.hosts = ["enjoyst.com"]
+
+def tun():
+    env.user = "coblan"
+    env.hosts = ["localhost"]
+    env.port=10899
 
 
 def archive():
