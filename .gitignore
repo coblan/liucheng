@@ -36,3 +36,4 @@ nosetests.xml
 /log
 /run
 .idea
+/deploy/liucheng.tar.gz
