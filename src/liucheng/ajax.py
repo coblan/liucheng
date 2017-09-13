@@ -80,7 +80,7 @@ def get_node_info():
     today_count=today_query.count()
     today_finish_count=today_query.filter(status='finish').count()
     
-    old_query = WorkNode.objects.filter(start_time__lt=today,status='waiting',start_time__isnull=False)
+    old_query = WorkNode.objects.filter(start_time__lt=today,status='waiting').exclude(start_time='')
     old_count=old_query.count()
     
     this_month_start=today[:7]
