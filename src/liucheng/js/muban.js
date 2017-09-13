@@ -1,5 +1,10 @@
 
 export class MubanManager{
+    /*
+    muban= new MubanManager()
+    muban.select(callback)
+    直接选择并且返回一个模板
+    * */
     constructor(muban_table_url){
         this.table_url=muban_table_url
         this.vue_inst=null

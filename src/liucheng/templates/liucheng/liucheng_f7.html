@@ -1,0 +1,131 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block extra_head %}
+<script src='{% static "js/liucheng.pack.js?t=" %}{{ js_stamp.liucheng_pack_js }}'></script>
+<script>
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建',
+                onClick: function () {
+                    table.add_new();
+                }
+            },
+            {
+                text: '排序过滤',
+                onClick: function () {
+//                    filter.open()
+                    filter_win.open()
+                }
+            },
+        ];
+        if(table.help_url){
+            buttons.push({
+                text: '帮助',
+                onClick: function () {
+                    table.goto(help_url);
+                }
+            })
+        }
+
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+</script>
+{% endblock %}
+
+{% block page_content %}
+
+<script type="text/javascript">
+
+    ex.remove(row_filters,function(my_filter){
+        if(my_filter.name=='owner'){
+            return true
+        }
+    })
+
+    table_logic={
+        el:'#there',
+        data:{
+//            crt_view:crt_view,
+//            in_wx_agent:in_wx_agent,
+//            ln:ln,
+//            page_label:page_label,
+//            is_show_menu:false,
+            checkable:false,
+        },
+        mixins:[table_fun,scroll_loader],
+//        mounted:function(){
+//            var self=this
+////            Vue.nextTick(function(){
+////                self.$refs.scroller.refresh()
+////            })
+//
+//            bus.$on('menu_click',function(){
+//                self.is_show_menu=true
+//            })
+//        },
+        methods:{
+            ge_edit:function(pk){
+                var url = ex.template('{engine_url}/{page_name}.edit?pk={pk}',{engine_url:engine_url,page_name:page_name,pk:pk})
+                ff.load(url,page_name+'_edit')
+            },
+            has_delay:function(flow){
+                return flow_has_node_delay(flow)
+            }
+
+        }
+    }
+
+
+    $(function(){
+        table= new Vue(table_logic)
+    })
+</script>
+{% block table_logic %}
+
+{% endblock %}
+
+<style>
+    /*.total-wrap{*/
+    /*height: 100vh;*/
+    /*position: relative;*/
+    /*}*/
+
+</style>
+
+
+
+<div id="there" v-cloak class="flex-grow"  style="position: relative;">
+
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">
+            <div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">
+                <com-check-box v-if="checkable" v-model="selected" :value="row.pk"></com-check-box>
+            </div>
+            <div class="weui-cell__bd" @click="ge_edit(row.pk)">
+                <p style="position: relative;">
+                    <span v-text="row._label"></span>
+                    <span v-if="has_delay(row)" style="position: absolute;right: 1em;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                </p>
+
+                <!--<p v-if="has_delay(row)">延迟</p>-->
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}

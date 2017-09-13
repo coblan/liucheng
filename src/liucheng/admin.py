@@ -60,13 +60,16 @@ class NodeRecordPage(TablePage):
     
     class NodeRecordFilter(RowFilter):
         model=NodeGroup
-        names=['client','node_status']   
+        names=['client','node_status','owner']   
         range_fields =[{'name':'start_time','type':'date'}]
         
         def get_context(self):
             ls=super(self.__class__,self).get_context()
-            ls.append({'name':'start_time','type':'date','label':'节点指派时间'})
-            
+            user_options=[]
+            for emp in Employee.objects.all():
+                user_options.append({'value':emp.pk,'label':unicode(emp)})
+            ls.append({'name':'owner','label':'负责人','options':user_options})
+            ls.append({'name':'start_time','type':'date','label':'节点启动时间'})
             option=[{'value':'waiting','label':'等待'},
                     {'value':'finish','label':'完成'}]
             ls.append({'name':'node_status','label':'包含节点状态','options':option})
@@ -74,11 +77,13 @@ class NodeRecordPage(TablePage):
         
         def get_query(self,query):
             self.query=query
+            owner=self.filter_args.pop('owner',None)
+
             start_time__gte=self.filter_args.pop('start_time__gte',None)
             start_time__lte=self.filter_args.pop('start_time__lte',None)
             node_status=self.filter_args.pop('node_status',None)
             
-            if start_time__gte or start_time__lte or node_status:
+            if start_time__gte or start_time__lte or node_status or owner:
                 node_filter_args={}
                 if start_time__gte:
                     node_filter_args['start_time__gte']=start_time__gte
@@ -86,6 +91,8 @@ class NodeRecordPage(TablePage):
                     node_filter_args['start_time__lte']=start_time__lte
                 if node_status:
                     node_filter_args['status']=node_status
+                if owner:
+                    node_filter_args['owner_id']=owner
                 nodes_query=WorkNode.objects.filter(**node_filter_args)
                 if start_time__gte or start_time__lte:  # 张容智商有问题，看来只能排除掉未设置时间项目的干扰，她才能理解
                                                         # 当过滤时间时，把未设置时间的项，排除开。
@@ -147,7 +154,7 @@ class NodeRecordPage(TablePage):
     tableCls=NodeRecordTable
     def get_template(self, prefer=None):
         if prefer=='f7':
-            return 'f7/table.html'
+            return 'liucheng/liucheng_f7.html'
         else:
             return 'liucheng/liucheng.html'
 
@@ -172,6 +179,9 @@ class NodeGroupTemplatePage(TablePage):
 class WorkNodeFormPage(FormPage):
     
     class WorkNodeForm(ModelFields):
+        def __init__(self,*args,**kw):
+            super(self.__class__,self).__init__(*args,**kw)
+            self.emp=self.crt_user.employee_set.first()
         class Meta:
             model=WorkNode
             exclude=['node_group']
@@ -186,6 +196,10 @@ class WorkNodeFormPage(FormPage):
         def dict_head(self, head):
             if head['name']=='start_time':
                 head['type']='date'
+                
+          # 不是当前员工的节点，不允许其编辑任何字段。
+            if not has_permit(self.crt_user,'nodegroup.check_all') and self.instance.owner!=self.emp:
+                head['readonly']=True
             return head
         
     fieldsCls=WorkNodeForm

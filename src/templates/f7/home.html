@@ -17,11 +17,29 @@
             el:'#there',
             data:{
                 menu:menu,
+
+                user_static:{
+                    employee:'未知姓名',
+                    today_count:0,
+                    today_finish_count:0,
+                    old_waiting_count:0,
+                    month_finish_count:0,
+                },
+
+
             },
             methods:{
                 load:function(url,name){
                     ff.load(url,name)
                 }
+            },
+            mounted:function(){
+                var self=this
+                var post_data=[{fun:'get_emp_node_info'}]
+                ex.post('/_ajax/liucheng',JSON.stringify(post_data),function(resp){
+                    var rt=resp.get_emp_node_info
+                    ex.assign(self.user_static,rt)
+                })
             }
         })
     }
@@ -39,29 +57,29 @@
     </div>
 
 
-    <div class="weui-cells__title">张容</div>
+    <div class="weui-cells__title"><span v-text="user_static.employee"></span></div>
 
     <div class="weui-cells" style="padding: 1em 1em 2em 1em;">
         <table >
             <tr>
                 <td><div class="tb-label">今日需要完成</div></td>
                 <td class="tb-middle">:</td>
-                <td>7</td>
+                <td><span v-text="user_static.today_finish_count"></span>/<span v-text="user_static.today_count"></span></td>
             </tr>
-            <tr>
-                <td><div class="tb-label">已经完成</div></td>
-                <td class="tb-middle">:</td>
-                <td>3</td>
-            </tr>
+            <!--<tr>-->
+                <!--<td><div class="tb-label">已经完成</div></td>-->
+                <!--<td class="tb-middle">:</td>-->
+                <!--<td><span v-text="user_static.today_waiting_count"></span></td>-->
+            <!--</tr>-->
             <tr>
                 <td><div class="tb-label">以前未完成</div></td>
                 <td class="tb-middle">:</td>
-                <td>0</td>
+                <td><span v-text="user_static.old_waiting_count"></span></td>
             </tr>
             <tr>
                 <td><div class="tb-label">当月完成</div></td>
                 <td class="tb-middle">:</td>
-                <td>53</td>
+                <td><span v-text="user_static.month_finish_count"></span></td>
             </tr>
         </table>
     </div>

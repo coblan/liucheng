@@ -126,12 +126,12 @@ var mb_flowchart_base={
                 text+= ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
             })
             ex.each(this.node_group.nodes,function(node){
-                var mt=''
-                if(is_matched_node(node)){
-                    mt='matched'
+               if(node.start_time){
+                    text+=`class ${node.pk} has_time;`
                 }
-                text+=`class ${node.pk} ${node.status} ${mt};`
+                text+=`class ${node.pk} ${node.status};`
             })
+
             return text
         }
     },
@@ -141,6 +141,15 @@ var mb_flowchart_base={
             $(this.$el).attr('data-processed','')
             Vue.nextTick(function(){
                 mermaid.init({noteMargin: 10}, self.$el);
+
+                setTimeout(function(){
+                    ex.each(self.node_group.nodes,function(node){
+                        if(node.owner){
+                            mount_user_image_top_down(node.pk,node._owner_label,node.head_img)
+                        }
+                    })
+                })
+
             })
         },
     }
@@ -160,9 +169,27 @@ export function mount_user_image(myid,name,head) {
     document.getElementById(myid).appendChild(svgimg);
 }
 
+export function mount_user_image_top_down(myid,name,head) {
+    var head=head || '/static/image/user.jpg'
+    var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+    svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href', head);
+    svgimg.setAttributeNS(null,'height','30');
+    svgimg.setAttributeNS(null,'width','30');
+    svgimg.setAttributeNS(null,'x','10');
+    svgimg.setAttributeNS(null,'y','20');
+    svgimg.setAttributeNS(null, 'visibility', 'visible');
+    svgimg.innerHTML=`<title>${name}</title>`;
+    document.getElementById(myid).appendChild(svgimg);
+}
+
 function is_matched_node(node){
     if(!node.start_time){
         return false
+    }
+    if (search_args.owner){
+        if(node.owner!=search_args.owner){
+            return false
+        }
     }
     if(search_args._start_start_time){
        if(node.start_time< search_args._start_start_time) {
@@ -179,9 +206,10 @@ function is_matched_node(node){
             return false
         }
     }
-    if(!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status){
+    if(!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status && !search_args.owner){
         return false
     }
     return true
 
 }
+

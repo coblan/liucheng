@@ -136,7 +136,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -386,11 +386,15 @@ var liucheng = _interopRequireWildcard(_flowchart);
 
 var _worknode_editor = __webpack_require__(7);
 
+var _flow_filter = __webpack_require__(10);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 window.MubanManager = _muban.MubanManager;
 window.mount_user_image = _flowchart.mount_user_image;
 window.WorkNodeEditor = _worknode_editor.WorkNodeEditor;
+
+window.flow_has_node_delay = _flow_filter.flow_has_node_delay;
 
 /***/ }),
 /* 3 */
@@ -408,6 +412,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MubanManager = exports.MubanManager = function () {
+    /*
+    muban= new MubanManager()
+    muban.select(callback)
+    直接选择并且返回一个模板
+    * */
     function MubanManager(muban_table_url) {
         _classCallCheck(this, MubanManager);
 
@@ -522,6 +531,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.mount_user_image = mount_user_image;
+exports.mount_user_image_top_down = mount_user_image_top_down;
 
 __webpack_require__(5);
 
@@ -643,12 +653,12 @@ var mb_flowchart_base = {
                 text += ex.template("{src}-->{dst};", { src: relation[0], dst: relation[1] });
             });
             ex.each(this.node_group.nodes, function (node) {
-                var mt = '';
-                if (is_matched_node(node)) {
-                    mt = 'matched';
+                if (node.start_time) {
+                    text += 'class ' + node.pk + ' has_time;';
                 }
-                text += 'class ' + node.pk + ' ' + node.status + ' ' + mt + ';';
+                text += 'class ' + node.pk + ' ' + node.status + ';';
             });
+
             return text;
         }
     },
@@ -658,6 +668,14 @@ var mb_flowchart_base = {
             $(this.$el).attr('data-processed', '');
             Vue.nextTick(function () {
                 mermaid.init({ noteMargin: 10 }, self.$el);
+
+                setTimeout(function () {
+                    ex.each(self.node_group.nodes, function (node) {
+                        if (node.owner) {
+                            mount_user_image_top_down(node.pk, node._owner_label, node.head_img);
+                        }
+                    });
+                });
             });
         }
     }
@@ -677,9 +695,27 @@ function mount_user_image(myid, name, head) {
     document.getElementById(myid).appendChild(svgimg);
 }
 
+function mount_user_image_top_down(myid, name, head) {
+    var head = head || '/static/image/user.jpg';
+    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', head);
+    svgimg.setAttributeNS(null, 'height', '30');
+    svgimg.setAttributeNS(null, 'width', '30');
+    svgimg.setAttributeNS(null, 'x', '10');
+    svgimg.setAttributeNS(null, 'y', '20');
+    svgimg.setAttributeNS(null, 'visibility', 'visible');
+    svgimg.innerHTML = '<title>' + name + '</title>';
+    document.getElementById(myid).appendChild(svgimg);
+}
+
 function is_matched_node(node) {
     if (!node.start_time) {
         return false;
+    }
+    if (search_args.owner) {
+        if (node.owner != search_args.owner) {
+            return false;
+        }
     }
     if (search_args._start_start_time) {
         if (node.start_time < search_args._start_start_time) {
@@ -696,7 +732,7 @@ function is_matched_node(node) {
             return false;
         }
     }
-    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status) {
+    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status && !search_args.owner) {
         return false;
     }
     return true;
@@ -718,8 +754,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss", function() {
-			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flowchart.scss");
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flowchart.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -833,8 +869,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worknode_editor.scss", function() {
-			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worknode_editor.scss");
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worknode_editor.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -856,6 +892,47 @@ exports.push([module.i, ".field_input textarea {\n  min-height: 20em;\n  min-wid
 
 // exports
 
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.flow_has_node_delay = flow_has_node_delay;
+function flow_has_node_delay(flow) {
+    /*
+    查询流程图是否有延期的节点
+    *
+    * */
+    var today = get_today_str();
+    for (var i = 0; i < flow.nodes.length; i++) {
+        var node = flow.nodes[i];
+        if (node.status == 'waiting' && node.start_time && node.start_time < today) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function get_today_str() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var day = now.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
+
+    return year + '-' + month + '-' + day;
+}
 
 /***/ })
 /******/ ]);
