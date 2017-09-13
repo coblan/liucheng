@@ -64,7 +64,7 @@ class WorkNode(models.Model):
     
 
 class BusClient(models.Model):
-    name=models.CharField('客户名称',max_length=200,blank=True)
+    name=models.CharField('客户名称',max_length=200,unique=True)
     
     def __unicode__(self):
         return self.name
