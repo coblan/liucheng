@@ -70,3 +70,25 @@ def get_emp_node_info(user):
         'old_waiting_count':old_count,
         'month_finish_count':month_count,
     }
+
+
+def get_node_info():
+    now = timezone.now()
+    now=timezone.localtime(now)
+    today=now.strftime('%Y-%m-%d')
+    today_query=WorkNode.objects.filter(start_time=today)
+    today_count=today_query.count()
+    today_finish_count=today_query.filter(status='finish').count()
+    
+    old_query = WorkNode.objects.filter(start_time__lt=today,status='waiting')
+    old_count=old_query.count()
+    
+    this_month_start=today[:7]
+    month_query = WorkNode.objects.filter(start_time__startswith=this_month_start,status='finish')
+    month_count=month_query.count()
+    return {
+        'today_count':today_count,
+        'today_finish_count':today_finish_count,
+        'old_waiting_count':old_count,
+        'month_finish_count':month_count,
+    }    

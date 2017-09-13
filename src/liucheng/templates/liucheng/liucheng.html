@@ -47,8 +47,22 @@
 //		        ex:ex,
             show_node_view:false,
             crt_node:{},
+
+            node_static:{
+                today_count:0,
+                today_finish_count:0,
+                old_waiting_count:0,
+                month_finish_count:0,
+            },
         },
         mixins:[table_fun],
+        mounted:function(){
+            var self=this
+          var post_data=[{fun:'get_node_info'}]
+            ex.post('/_ajax/liucheng',JSON.stringify(post_data),function(resp){
+                ex.assign(self.node_static,resp.get_node_info)
+            })
+        },
         watch:{
             'row_sort.sort_str':function (v) {
                 this.search_args._sort=v
@@ -130,24 +144,25 @@
 {% endblock %}
 
 <div id='there'>
-    <path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
+    <path-nav :menu='menu' v-if="!search_args._pop">
+        <span style="width: 3em;display: inline-block"></span>
+        <span style="margin-right: 3em;"><b>今日需要完成：</b><span><span v-text="node_static.today_finish_count"></span>/<span v-text="node_static.today_count"></span></span></span></span>
+        <span style="margin-right: 3em;"><b>延迟未完成：</b><span v-text="node_static.old_waiting_count"></span></span>
+        <span style="margin-right: 3em;"><b>当月已完成：</b><span v-text="node_static.month_finish_count"></span></span>
+    </path-nav>
+
+
     <div class='btn-panel flex flex-sb' style="padding-left:20px; ">
 
         <!--<div v-if="row_filters.length==0" class="flex-grow"></div>-->
         <com-filter class="flex" :heads="row_filters" :search="search_args"
                     :search_tip='search_tip' @submit="search()"></com-filter>
-        <!--<div class="flex-grow"></div>-->
 
 
         <com-table-btn class="main-table" v-if="!search_args._pop && (can_add || can_del)" :add_new="add_new" :del_item="del_item" style="width:18em;">
             <!--<button type="button" class="btn btn-default btn-sm" @click="toggle_edit()">编辑状态</button>-->
             <button v-if="can_add" type="button" class="btn btn-default btn-sm" @click="create_from_muban()">从模板创建</button>
         </com-table-btn>
-
-        <!--<div class='btn-group' style='float: right;' v-if="!search_args._pop">-->
-        <!--<a type="button" class="btn btn-success btn-sm" :href='add_new()' v-if='can_add' role="button">创建</a>-->
-        <!--<button type="button" class="btn btn-danger btn-sm" @click='del_item()' v-if='can_del'>删除</button>-->
-        <!--</div>-->
 
     </div>
 
@@ -212,6 +227,10 @@
     }
     th{
         border-right: 1px solid #d0d0d0;
+    }
+
+    #filter-owner{
+        max-width: 8em;
     }
 </style>
 {% block extra %}
