@@ -712,6 +712,11 @@ function is_matched_node(node) {
     if (!node.start_time) {
         return false;
     }
+    if (search_args.owner) {
+        if (node.owner != search_args.owner) {
+            return false;
+        }
+    }
     if (search_args._start_start_time) {
         if (node.start_time < search_args._start_start_time) {
             return false;
@@ -727,7 +732,7 @@ function is_matched_node(node) {
             return false;
         }
     }
-    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status) {
+    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status && !search_args.owner) {
         return false;
     }
     return true;
@@ -900,6 +905,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.flow_has_node_delay = flow_has_node_delay;
 function flow_has_node_delay(flow) {
+    /*
+    查询流程图是否有延期的节点
+    *
+    * */
     var today = get_today_str();
     for (var i = 0; i < flow.nodes.length; i++) {
         var node = flow.nodes[i];
