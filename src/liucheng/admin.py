@@ -9,6 +9,7 @@ import json
 from .mobile_admin import *
 from helpers.case.organize.models import Employee
 from django.core.exceptions import PermissionDenied
+from django import forms
 
 # Register your models here.
 
@@ -261,9 +262,20 @@ class ClientSort(RowSort):
             return query
         
         return 
-        
+
+class ClientForm(ModelFields):
+    class Meta:
+        model=BusClient
+        exclude=[]
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if BusClient.objects.filter(name=name):
+            raise forms.ValidationError('公司名字重复')
+        return name
+
 regist_director(name='busclient',src_model=BusClient)
 page_dc['busclient'].tableCls.sort=ClientSort
+model_dc[BusClient]={'fields':ClientForm}
 
 page_dc.update({
     'liucheng':NodeRecordPage,
