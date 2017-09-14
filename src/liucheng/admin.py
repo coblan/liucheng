@@ -39,7 +39,7 @@ class NodeRrecordFormPage(FormPage):
         
         class Meta:
             model=NodeGroup
-            exclude=['relations','kind']
+            exclude=['kind']
         
         def dict_head(self, head):
             if head['name']=='start_time':
@@ -293,7 +293,7 @@ page_dc.update({
 
 permit_list.append(WorkNode)
 permit_list.append(NodeGroup)
-permit_list.append(BusClient)
+# permit_list.append(BusClient)
 permit_list.append({'name':'nodegroup','label':'liucheng.nodegroup_SP','fields':[
     {'name':'check_all','label':'查看所有流程','type':'bool'},
     {'name':'edit_template','label':'编辑模板','type':'bool'},

@@ -14,6 +14,9 @@
 
 //    heads=ex.sort_by_names(heads,['short_desp',''])
 
+    ex.remove(heads,function(head){
+        return head.name=='relations'
+    })
 
     form_logic={
         el:'#there',
@@ -57,6 +60,9 @@
                     text+=ex.template("{src}-->{dst};",{src:relation[0],dst:relation[1]})
                 })
                ex.each(this.node_group.nodes,function(node){
+                   if(node.start_time){
+                       text+=`class ${node.pk} has_time;`
+                   }
                    text+=ex.template('class {pk} {status};',{pk:node.pk,status:node.status})
                })
                return text

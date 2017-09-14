@@ -4,8 +4,6 @@ from .models import NodeGroup,WorkNode
 from helpers.director.db_tools import to_dict,from_dict
 from .admin import NodeRrecordFormPage
 from django.utils import timezone
-from helpers.director.decorator import need_login
-
 
 def get_global():
     return globals()
