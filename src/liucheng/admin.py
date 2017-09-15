@@ -106,7 +106,7 @@ class NodeRecordPage(TablePage):
         
     
     class WorkSort(RowSort):
-        names=['start_time']
+        names=['client','short_desp']
     
     class NodeGroupSearch(RowSearch):
         model=NodeGroup
