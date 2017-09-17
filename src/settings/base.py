@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'helpers.case.site_frame',
     'helpers.pageadaptor',
     'liucheng',
+    'workboard',
     
 ]
 

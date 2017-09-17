@@ -1,0 +1,25 @@
+
+.plan{
+  .item{
+    width:10em;
+    height: 10em;
+    border: 1px solid #a8a8a8;
+    text-align: center;
+
+    position: relative;
+  }
+
+}
+
+.center-two{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform:translate(-50%, -50%); 	/* IE 9 */
+  -moz-transform:translate(-50%, -50%); 	/* Firefox */
+  -webkit-transform:translate(-50%, -50%); /* Safari ºÍ Chrome */
+  -o-transform:translate(-50%, -50%);
+  /*text-align: center;*/
+  /*z-index: 1000;*/
+}

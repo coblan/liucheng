@@ -31,6 +31,13 @@ class PcMenu(BaseEngine):
              
              ]},
         
+        {'label':'新工作流程','url':page('workboard.workgroup'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
+             'submenu':[
+                 {'label':'工作流程','url':page('workboard.workgroup'),'visible':can_touch(NodeGroup)},
+                 {'label':'客户信息','url':page('workboard.busclient'),'visible':can_touch(BusClient)},
+
+             ]},
+        
         {'label':'通用页面','url':page('webpage'),'icon':fa('fa-file-code-o'),'visible':can_touch(WebPage)},
         {'label':'系统设置','url':page('kv'),'icon':fa('fa-cog'),'visible':can_touch(KVModel)},
     ]      
