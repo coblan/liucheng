@@ -119,6 +119,30 @@
         content: '';
     }
 </style>
+
+<script>
+    function fuck(){
+        alert('fuck')
+    }
+    function on_click(){
+        var java_obj=window.java_obj;
+        java_obj.set_qr_code("wating")
+        java_obj.qr_scan()
+        var timer = setInterval(function(){
+            var qr_code = java_obj.get_qr_code()
+            if(qr_code =="" || qr_code !="waiting"){
+                clearInterval(timer)
+                alert(qr_code)
+            }
+        },1000)
+    }
+</script>
+
+<div>
+    <button onclick="fuck()">click</button>
+    <button onclick="on_click()">click</button>
+</div>
+
 {% endblock %}
 
 
