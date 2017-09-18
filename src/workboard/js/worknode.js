@@ -18,7 +18,7 @@ export class WorkNodeEditor{
         $(function(){
             $('body').append(`<div id="worknode-editor">
      <modal v-show="show_edit">
-        <div @click.stop="">
+        <div @click.stop="" style="max-height: 70vh;max-width: 70vw;">
             <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">
                 <a :href="'/pc/log?rows=workboard.worknode:'+node_kw.row.pk" target="_blank">修改日志</a>
                 <button @click="assure_edit()">确定</button>
