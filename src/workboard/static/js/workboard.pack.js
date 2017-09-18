@@ -102,6 +102,7 @@ var plan_board = {
             gb: gb
         };
     },
+
     methods: {
         add_new: function add_new() {
             var self = this;
@@ -112,7 +113,6 @@ var plan_board = {
                 _class: 'workboard.worknode'
             };
             node_editor.edit(init_node, function (node) {
-
                 self.row.nodes.push(node);
             });
         },
@@ -129,12 +129,45 @@ var plan_board = {
                 var post_data = [{ fun: 'del_rows', rows: [node] }];
                 ex.post('/_ajax', JSON.stringify(post_data), function (resp) {});
             }
+        },
+        is_match_search: function is_match_search(node) {
+            return is_matched_node(node);
         }
     },
-    template: '<div class="flex plan">\n    <div class="item" v-for="node in row.nodes" @click="edit(node)">\n        <div class="center-two text" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n        <div class="delete-icon" v-if="gb.node_edit_state" @click.stop="delete_node(node)">\n            <span><i class="fa fa-trash" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()" v-if="gb.node_edit_state">\n        <div class="center-two" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
+    template: '<div class="flex plan">\n    <div :class="[\'item\',{\'matched\':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)">\n        <div class="center-two text" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n        <div class="delete-icon" v-if="gb.node_edit_state" @click.stop="delete_node(node)">\n            <span><i class="fa fa-trash" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()" v-if="gb.node_edit_state">\n        <div class="center-two" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
 };
 
 Vue.component('plan-board', plan_board);
+
+function is_matched_node(node) {
+    if (!node.start_time) {
+        return false;
+    }
+    if (search_args.owner) {
+        if (node.owner != search_args.owner) {
+            return false;
+        }
+    }
+    if (search_args._start_start_time) {
+        if (node.start_time < search_args._start_start_time) {
+            return false;
+        }
+    }
+    if (search_args._end_start_time) {
+        if (node.start_time > search_args._end_start_time) {
+            return false;
+        }
+    }
+    if (search_args.node_status) {
+        if (node.status != search_args.node_status) {
+            return false;
+        }
+    }
+    if (!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status && !search_args.owner) {
+        return false;
+    }
+    return true;
+}
 
 /***/ }),
 /* 2 */
@@ -250,7 +283,7 @@ exports = module.exports = __webpack_require__(5)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap; }\n  .plan .item {\n    width: 10em;\n    height: 7em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari �� Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap; }\n  .plan .item {\n    width: 10em;\n    height: 6em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari �� Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
 
 // exports
 

@@ -16,6 +16,7 @@ var plan_board={
             gb:gb,
         }
     },
+
     methods:{
       add_new:function(){
           var self=this
@@ -26,7 +27,6 @@ var plan_board={
               _class:'workboard.worknode'
           }
           node_editor.edit( init_node,function(node){
-
                 self.row.nodes.push(node)
           })
       },
@@ -45,10 +45,13 @@ var plan_board={
 
                 })
             }
+        },
+        is_match_search:function(node){
+            return is_matched_node(node)
         }
     },
     template:`<div class="flex plan">
-    <div class="item" v-for="node in row.nodes" @click="edit(node)">
+    <div :class="['item',{'matched':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)">
         <div class="center-two text" >
             <span v-text="node.short_desp"></span>
         </div>
@@ -69,3 +72,35 @@ var plan_board={
 }
 
 Vue.component('plan-board',plan_board)
+
+
+function is_matched_node(node){
+    if(!node.start_time){
+        return false
+    }
+    if (search_args.owner){
+        if(node.owner!=search_args.owner){
+            return false
+        }
+    }
+    if(search_args._start_start_time){
+        if(node.start_time< search_args._start_start_time) {
+            return false
+        }
+    }
+    if(search_args._end_start_time){
+        if(node.start_time > search_args._end_start_time){
+            return false
+        }
+    }
+    if(search_args.node_status){
+        if(node.status!=search_args.node_status){
+            return false
+        }
+    }
+    if(!search_args._start_start_time && !search_args._end_start_time && !search_args.node_status && !search_args.owner){
+        return false
+    }
+    return true
+
+}

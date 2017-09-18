@@ -2,7 +2,7 @@
 .plan{
   .item{
     width:10em;
-    height: 7em;
+    height: 6em;
     border: 1px solid #a8a8a8;
     text-align: center;
 
@@ -11,6 +11,9 @@
     &:hover{
       background-color: #f6fcf0;
     }
+    &.matched{
+      border: 2px dashed red;
+    }
   }
 
   flex-wrap: wrap;
@@ -18,6 +21,7 @@
   .text{
     width: 7em;
   }
+
   .status-icon{
     position: absolute;
     right: 0.2em;

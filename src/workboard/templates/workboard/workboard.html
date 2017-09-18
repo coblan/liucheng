@@ -71,7 +71,7 @@
             <button type="button" :class="['btn btn-sm',{'btn-default':!gb.node_edit_state,'btn-primary':gb.node_edit_state}]" @click="toggle_node_edit()">添加删除进度详情</button>
         </div>
 
-        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
+        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="min-width: 7em;">
         </com-table-btn>
 
     </div>
