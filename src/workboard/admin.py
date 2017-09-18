@@ -15,6 +15,9 @@ class WorkGroupPage(TablePage):
         
         def get_context(self):
             ls=super(self.__class__,self).get_context()
+            for f in ls:
+                if f['name']=='client':
+                    f['type']='sel-search-filter'
             user_options=[]
             for emp in Employee.objects.all():
                 user_options.append({'value':emp.pk,'label':unicode(emp)})
@@ -89,6 +92,10 @@ class WorkGroupFormPage(FormPage):
             heads= super(self.__class__,self).get_heads()
             heads=[x for x in heads if x['name'] != 'order']
             return heads
+        def dict_head(self, head):
+            if head['name']=='client':
+                head['type']='search_select'
+            return head
         
     fieldsCls=WorkGroupForm
 
