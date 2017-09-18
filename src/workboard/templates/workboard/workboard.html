@@ -14,6 +14,10 @@
         }
     })
 
+    gb={
+        node_edit_state:false
+     }
+
     table_logic={
         el:'#there',
         data:{
@@ -31,6 +35,7 @@
 //		        model:model,
 //		        search_args:search_args,
 //		        ex:ex,
+            gb:gb,
         },
         mixins:[table_fun],
         watch:{
@@ -39,6 +44,11 @@
                 this.search()
             }
         },
+        methods:{
+            toggle_node_edit:function(){
+                this.gb.node_edit_state = !this.gb.node_edit_state
+            }
+        }
 
     }
     $(function () {
@@ -54,14 +64,14 @@
     <path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
     <div class='btn-panel flex flex-sb' style="padding-left:20px; ">
 
-        <!--<div v-if="row_filters.length==0" class="flex-grow"></div>-->
+
         <com-filter class="flex" :heads="row_filters" :search="search_args"
                     :search_tip='search_tip' @submit="search()"></com-filter>
-        <div class="flex-grow"></div>
+        <div>
+            <button type="button" :class="['btn btn-sm',{'btn-default':!gb.node_edit_state,'btn-primary':gb.node_edit_state}]" @click="toggle_node_edit()">添加删除进度详情</button>
+        </div>
 
         <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
-            {% block extra_btn %}
-            {% endblock %}
         </com-table-btn>
 
     </div>

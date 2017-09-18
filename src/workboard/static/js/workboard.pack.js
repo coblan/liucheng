@@ -97,6 +97,11 @@ var plan_board = {
     //      return this.row.nodes
     //  }
     //},
+    data: function data() {
+        return {
+            gb: gb
+        };
+    },
     methods: {
         add_new: function add_new() {
             var self = this;
@@ -116,9 +121,17 @@ var plan_board = {
             node_editor.edit(tmp_node, function (rt_node) {
                 ex.assign(node, rt_node);
             });
+        },
+        delete_node: function delete_node(node) {
+            var r = confirm('真的删除吗？');
+            if (r) {
+                ex.remove(this.row.nodes, node);
+                var post_data = [{ fun: 'del_rows', rows: [node] }];
+                ex.post('/_ajax', JSON.stringify(post_data), function (resp) {});
+            }
         }
     },
-    template: '<div class="flex plan">\n    <div class="item" v-for="node in row.nodes" @click="edit(node)">\n        <div class="center-two" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()">\n        <div class="center-two" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
+    template: '<div class="flex plan">\n    <div class="item" v-for="node in row.nodes" @click="edit(node)">\n        <div class="center-two text" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n        <div class="delete-icon" v-if="gb.node_edit_state" @click.stop="delete_node(node)">\n            <span><i class="fa fa-trash" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()" v-if="gb.node_edit_state">\n        <div class="center-two" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
 };
 
 Vue.component('plan-board', plan_board);
@@ -155,7 +168,7 @@ var WorkNodeEditor = exports.WorkNodeEditor = function () {
         });
 
         $(function () {
-            $('body').append('<div id="worknode-editor">\n     <modal v-show="show_edit">\n        <div @click.stop="" style="max-height: 70vh;max-width: 70vw;">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <a :href="\'/pc/log?rows=workboard.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in node_kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'node_kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
+            $('body').append('<div id="worknode-editor">\n     <modal v-show="show_edit">\n        <div @click.stop="" style="max-height: 90vh;max-width: 90vw;">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <a :href="\'/pc/log?rows=workboard.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in node_kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'node_kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
 
             self.editor = new Vue({
                 el: '#worknode-editor',
@@ -237,7 +250,7 @@ exports = module.exports = __webpack_require__(5)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap; }\n  .plan .item {\n    width: 10em;\n    height: 10em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari �� Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 30em; }\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap; }\n  .plan .item {\n    width: 10em;\n    height: 7em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari �� Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
 
 // exports
 

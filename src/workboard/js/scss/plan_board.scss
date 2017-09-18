@@ -2,7 +2,7 @@
 .plan{
   .item{
     width:10em;
-    height: 10em;
+    height: 7em;
     border: 1px solid #a8a8a8;
     text-align: center;
 
@@ -15,10 +15,25 @@
 
   flex-wrap: wrap;
 
+  .text{
+    width: 7em;
+  }
   .status-icon{
     position: absolute;
     right: 0.2em;
     bottom: 0.2em;
+  }
+  .delete-icon{
+    position: absolute;
+    right: 0.2em;
+    top:0.2em;
+    color: red;
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+
+    &:hover{
+      background-color: #cecece;
+    }
   }
 }
 
@@ -37,5 +52,5 @@
 
 #id_long_desp{
   width: 40em;
-  height: 30em;
+  height: 26em;
 }

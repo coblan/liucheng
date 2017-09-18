@@ -1,12 +1,16 @@
 # encoding:utf-8
 
 from django.contrib import admin
-from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort
+from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort,RowFilter
 from helpers.director.db_tools import permit_to_dict
 from .models import WorkGroup,BusClient,WorkNode
 # Register your models here.
 class WorkGroupPage(TablePage):
     template='workboard/workboard.html'
+    
+    class WorkGroupFilter(RowFilter):
+        names=['client']
+    
     class WorkGroupTable(ModelTable):
         model=WorkGroup
         exclude=[]
@@ -17,6 +21,7 @@ class WorkGroupPage(TablePage):
                 "client":unicode(inst.client) if inst.client else "",
                 "nodes":[permit_to_dict(self.crt_user,x) for x in  inst.worknode_set.order_by('id')]
                 }
+    WorkGroupTable.filters=WorkGroupFilter
     
     tableCls=WorkGroupTable
 
