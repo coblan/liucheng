@@ -7,8 +7,19 @@
     text-align: center;
 
     position: relative;
+    cursor: pointer;
+    &:hover{
+      background-color: #f6fcf0;
+    }
   }
 
+  flex-wrap: wrap;
+
+  .status-icon{
+    position: absolute;
+    right: 0.2em;
+    bottom: 0.2em;
+  }
 }
 
 .center-two{
@@ -22,4 +33,9 @@
   -o-transform:translate(-50%, -50%);
   /*text-align: center;*/
   /*z-index: 1000;*/
+}
+
+#id_long_desp{
+  width: 40em;
+  height: 30em;
 }

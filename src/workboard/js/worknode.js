@@ -5,7 +5,15 @@ export class WorkNodeEditor{
         var url=engine_url+'/'+'workboard.worknode.edit'
         ex.get(url,function(resp){
             self.heads=resp.heads
+            self.heads=ex.sort_by_names(self.heads,["short_desp","owner","status","start_time","long_desp"])
+            //ex.remove(self.heads,function(head){
+            //    if(head.name=="work_group"){
+            //        return true
+            //    }
+            //})
+
         })
+
 
         $(function(){
             $('body').append(`<div id="worknode-editor">

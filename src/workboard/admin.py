@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort
+from helpers.director.db_tools import permit_to_dict
 from .models import WorkGroup,BusClient,WorkNode
 # Register your models here.
 class WorkGroupPage(TablePage):
@@ -9,6 +10,13 @@ class WorkGroupPage(TablePage):
     class WorkGroupTable(ModelTable):
         model=WorkGroup
         exclude=[]
+        
+        def dict_row(self, inst):
+
+            return {
+                "client":unicode(inst.client) if inst.client else "",
+                "nodes":[permit_to_dict(self.crt_user,x) for x in  inst.worknode_set.order_by('id')]
+                }
     
     tableCls=WorkGroupTable
 
@@ -29,6 +37,10 @@ class WorkNodeFormPage(FormPage):
         class Meta:
             model=WorkNode
             exclude=[]
+        def dict_head(self, head):
+            if head['name']=="start_time":
+                head['type']='date'
+            return head
     fieldsCls=WrokNodeForm
 
 class ClientPage(TablePage):
