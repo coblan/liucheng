@@ -155,7 +155,7 @@ var WorkNodeEditor = exports.WorkNodeEditor = function () {
         });
 
         $(function () {
-            $('body').append('<div id="worknode-editor">\n     <modal v-show="show_edit">\n        <div @click.stop="">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <a :href="\'/pc/log?rows=workboard.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in node_kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'node_kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
+            $('body').append('<div id="worknode-editor">\n     <modal v-show="show_edit">\n        <div @click.stop="" style="max-height: 70vh;max-width: 70vw;">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <a :href="\'/pc/log?rows=workboard.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in node_kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'node_kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
 
             self.editor = new Vue({
                 el: '#worknode-editor',
