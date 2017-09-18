@@ -459,7 +459,7 @@ Vue.component('com-filter', {
 
 function isChinese(temp) {
     var re = /[^\u4E00-\u9FA5]/;
-    if (re.test(temp)) {
+    if (re.test(temp[0])) {
         return false;
     }
     return true;
