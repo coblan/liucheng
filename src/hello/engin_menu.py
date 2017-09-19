@@ -56,7 +56,9 @@ class F7Engine(BaseEngine):
     root_page='/f7/home.f7'
     
     menu=[
-        {'name':'liucheng','label':'工作流程','url':page('liucheng.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x')}
+        #{'name':'liucheng','label':'工作流程','url':page('liucheng.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x')},
+        {'name':'liucheng','label':'工作流程','url':page('workboard.workgroup.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x')}
+    
     ]
     
     def custome_ctx(self, ctx):

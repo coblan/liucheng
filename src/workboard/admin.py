@@ -7,8 +7,7 @@ from .models import WorkGroup,BusClient,WorkNode
 from helpers.case.organize.models import Employee
 # Register your models here.
 class WorkGroupPage(TablePage):
-    template='workboard/workboard.html'
-    
+
     class WorkGroupFilter(RowFilter):
         names=['client','node_status','owner']
         range_fields=[{'name':'start_time','type':'date'}]
@@ -82,6 +81,11 @@ class WorkGroupPage(TablePage):
     WorkGroupTable.search=NodeGroupSearch
     
     tableCls=WorkGroupTable
+    def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'f7/table.html'
+        else:
+            return 'workboard/workboard.html'
 
 class WorkGroupFormPage(FormPage):
     class WorkGroupForm(ModelFields):
@@ -141,6 +145,20 @@ class ClientFormPage(FormPage):
             return name
     fieldsCls = ClientForm
 
+class WorkGroup_single_F7Page(FormPage):
+    template='workboard/workgroup_f7.html'
+    class MyForm(ModelFields):
+        class Meta:
+            model=WorkGroup
+            exclude=[]
+        def get_row(self):
+            row=super(self.__class__,self).get_row()
+            nodes=[permit_to_dict(self.crt_user,x) for x in  self.instance.worknode_set.order_by('id')]
+            row['nodes']=nodes
+            return row
+    fieldsCls=MyForm
+
+
 model_dc[BusClient]={'fields':ClientFormPage.ClientForm}
 model_dc[WorkGroup]={'fields':WorkGroupFormPage.WorkGroupForm}
 model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
@@ -148,6 +166,8 @@ model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
 page_dc.update({
     'workboard.workgroup':WorkGroupPage,
     'workboard.workgroup.edit':WorkGroupFormPage,
+    'workboard.workgroup.f7':WorkGroupPage,
+    'workboard.workgroup.f7.edit':WorkGroup_single_F7Page,
     
     'workboard.worknode.edit':WorkNodeFormPage,
     

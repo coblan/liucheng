@@ -1,0 +1,66 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_content %}
+<script src="{% static 'js/fields_mb.pack.js' %}"></script>
+<script type="text/javascript">
+
+    //    with_menu=false
+    //    ln.readCache()
+
+    form_logic={
+        el:'#there',
+        data:{
+            page_label:page_label,
+        },
+        mixins:[field_fun],
+
+        mounted:function(){
+
+        },
+        methods:{
+            after_sub:function(new_row){
+                var self=this
+                ff.back(function(last_win){
+                    if(self.kw.row.pk){
+                        var row = ex.findone(last_win.table.rows,{pk:new_row.pk})
+                        ex.assign(row,new_row)
+                    }else{ // 新建
+                        last_win.location.reload()
+                    }
+                })
+            },
+        }
+    }
+
+    $(function(){
+        new Vue(form_logic)
+    })
+</script>
+
+<div id="there" v-cloak style="overflow: auto;padding-bottom: 5em;">
+
+    <!--<div class="form-pad">-->
+        <!--<field v-for="head in kw.heads" :name="head.name" :kw="kw"></field>-->
+    <!--</div>-->
+
+
+
+
+    <!--<div v-btn-group>-->
+        <!--<a v-if="can_edit" state="success"  @click="submit()">确定</a>-->
+        <!--<a v-if="can_del" state="danger" :href="get_del_link()">删除</a>-->
+    <!--</div>-->
+
+    <div>
+        <div v-for="node in kw.row.nodes">
+            <span v-text="node.short_desp"></span>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
