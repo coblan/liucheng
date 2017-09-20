@@ -36,7 +36,7 @@
             mounted:function(){
                 var self=this
                 var post_data=[{fun:'get_emp_node_info'}]
-                ex.post('/_ajax/liucheng',JSON.stringify(post_data),function(resp){
+                ex.post('/_ajax/workboard',JSON.stringify(post_data),function(resp){
                     var rt=resp.get_emp_node_info
                     ex.assign(self.user_static,rt)
                 })
@@ -138,10 +138,10 @@
     }
 </script>
 
-<div>
-    <button onclick="fuck()">click</button>
-    <button onclick="on_click()">click</button>
-</div>
+<!--<div>-->
+    <!--<button onclick="fuck()">click</button>-->
+    <!--<button onclick="on_click()">click</button>-->
+<!--</div>-->
 
 {% endblock %}
 

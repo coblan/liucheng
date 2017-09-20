@@ -32,6 +32,11 @@
                     }
                 })
             },
+            open_node:function(node){
+//                alert('ok')
+                var url = ex.template('{engine_url}/workboard.worknode.f7.edit?pk={pk}',{engine_url:engine_url,pk:node.pk})
+                ff.load(url,'worknode_edit')
+            }
         }
     }
 
@@ -54,13 +59,41 @@
         <!--<a v-if="can_del" state="danger" :href="get_del_link()">删除</a>-->
     <!--</div>-->
 
-    <div>
-        <div v-for="node in kw.row.nodes">
+    <div class="times">
+        <div class="section material-wave" v-for="node in kw.row.nodes" @click="open_node(node)">
+            <div :class=["circle",node.status]></div>
             <span v-text="node.short_desp"></span>
         </div>
     </div>
 
 </div>
 
+
+<style>
+    .times{
+        margin-top: 2em;
+        margin-left: 2em;
+        padding-left: 2em;
+        border-left: 2px solid #e4e4e4;
+
+    }
+    .times .section{
+        padding-top: 1em;
+        position: relative;
+        padding-bottom: 2em;
+    }
+    .times .circle{
+        width: 1.4em;
+        height: 1.4em;
+        position: absolute;
+        left: -2.8em;
+        background-color: #dbdbdb;
+        border-radius: 0.7em;
+    }
+    .times .circle.finish{
+        background-color: #56db1d;
+    }
+
+</style>
 
 {% endblock %}

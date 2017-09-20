@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 from django.contrib import admin
-from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort,RowFilter,RowSearch
+from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort,RowFilter,RowSearch,permit_list,has_permit
 from helpers.director.db_tools import permit_to_dict
 from .models import WorkGroup,BusClient,WorkNode
 from helpers.case.organize.models import Employee
@@ -111,6 +111,11 @@ class WorkNodeFormPage(FormPage):
         def dict_head(self, head):
             if head['name']=="start_time":
                 head['type']='date'
+            if not has_permit(self.crt_user,"worknode.modify_all"):
+                emp=self.crt_user.employee_set.first()
+                if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
+                    head['readonly']=True
+                
             return head
     fieldsCls=WrokNodeForm
 
@@ -163,6 +168,12 @@ model_dc[BusClient]={'fields':ClientFormPage.ClientForm}
 model_dc[WorkGroup]={'fields':WorkGroupFormPage.WorkGroupForm}
 model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
 
+permit_list.append(WorkGroup)
+permit_list.append(WorkNode)
+permit_list.append({'name':'worknode','label':'worknode.特别权限','fields':[
+    {'name':'modify_all','label':'修改所有节点','type':'bool'},]
+})
+
 page_dc.update({
     'workboard.workgroup':WorkGroupPage,
     'workboard.workgroup.edit':WorkGroupFormPage,
@@ -170,6 +181,7 @@ page_dc.update({
     'workboard.workgroup.f7.edit':WorkGroup_single_F7Page,
     
     'workboard.worknode.edit':WorkNodeFormPage,
+    'workboard.worknode.f7.edit':WorkNodeFormPage,
     
     'workboard.busclient':ClientPage,
     'workboard.busclient.edit':ClientFormPage,
