@@ -111,6 +111,8 @@ class WorkNodeFormPage(FormPage):
         def dict_head(self, head):
             if head['name']=="start_time":
                 head['type']='date'
+            elif head['name']=='work_group':
+                head['readonly']=True
             if not has_permit(self.crt_user,"worknode.modify_all"):
                 emp=self.crt_user.employee_set.first()
                 if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
