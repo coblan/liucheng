@@ -17,6 +17,8 @@ class PcMenu(BaseEngine):
          'submenu':[
                     {'label':'账号管理','url':page('user'),'visible':can_touch(User)},
                     {'label':'权限组','url':page('group'),'visible':can_touch(Group)},
+                    {'label':'用户权限组','url':page('group_human',append="?prefix=assem."),'visible':can_touch(Group)},
+                    
                     ]},
 
         organize_menu.pc_menu,
