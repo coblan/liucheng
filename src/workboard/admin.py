@@ -1,5 +1,6 @@
 # encoding:utf-8
 
+from __future__ import unicode_literals
 from django.contrib import admin
 from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort,RowFilter,RowSearch,permit_list,has_permit
 from helpers.director.db_tools import permit_to_dict
@@ -131,11 +132,12 @@ class ClientPage(TablePage):
                 return query.order_by(*ls)
             else:
                 return query
-            
             return 
     
     class ClientTabel(ModelTable):
         model=BusClient
+ 
+  
     ClientTabel.sort=ClientSort
     tableCls=ClientTabel
     
@@ -150,6 +152,8 @@ class ClientFormPage(FormPage):
             if BusClient.objects.filter(name=name):
                 raise forms.ValidationError('公司名字重复')
             return name
+
+        
     fieldsCls = ClientForm
 
 class WorkGroup_single_F7Page(FormPage):
@@ -172,7 +176,8 @@ model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
 
 permit_list.append(WorkGroup)
 permit_list.append(WorkNode)
-permit_list.append({'name':'worknode','label':'worknode.特别权限','fields':[
+permit_list.append(BusClient)
+permit_list.append({'name':'worknode','label':'工作任务','fields':[
     {'name':'modify_all','label':'修改所有节点','type':'bool'},]
 })
 

@@ -7,7 +7,8 @@ from helpers.director.shortcut import page_dc,has_permit
 from helpers.director.models import KVModel
 from helpers.pageadaptor.models import WebPage
 from helpers.maintenance.update_static_timestamp import js_stamp
-from liucheng.models import BusClient,NodeGroup
+from workboard.models import WorkGroup,BusClient
+
 
 class PcMenu(BaseEngine):
     url_name='liucheng'
@@ -33,9 +34,9 @@ class PcMenu(BaseEngine):
              
              # ]},
         
-        {'label':'工作分配','url':page('workboard.workgroup'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
+        {'label':'工作分配','url':page('workboard.workgroup'),'icon':fa('fa-eye'),'visible':can_list([WorkGroup,BusClient]),
              'submenu':[
-                 {'label':'工作流程','url':page('workboard.workgroup'),'visible':can_touch(NodeGroup)},
+                 {'label':'工作流程','url':page('workboard.workgroup'),'visible':can_touch(WorkGroup)},
                  {'label':'客户信息','url':page('workboard.busclient'),'visible':can_touch(BusClient)},
 
              ]},
