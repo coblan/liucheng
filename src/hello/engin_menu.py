@@ -16,24 +16,24 @@ class PcMenu(BaseEngine):
         {'label':'账号与权限','url':page('user'),'icon':fa('fa-users'),'visible':can_list((User,Group)),
          'submenu':[
                     {'label':'账号管理','url':page('user'),'visible':can_touch(User)},
-                    {'label':'权限组','url':page('group'),'visible':can_touch(Group)},
-                    {'label':'用户权限组','url':page('group_human',append="?prefix=assem."),'visible':can_touch(Group)},
+                    # {'label':'权限组','url':page('group'),'visible':can_touch(Group)},
+                    {'label':'权限分组','url':page('group_human'),'visible':can_touch(Group)},
                     
                     ]},
 
         organize_menu.pc_menu,
         
-        {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
-         'submenu':[
-             {'label':'工作流程','url':page('liucheng'),'visible':can_touch(NodeGroup)},
-             {'label':'流程模板','url':page('nodegrouptemplate'),'visible':lambda user:has_permit(user,'nodegroup.edit_template')},
+        # {'label':'工作流程','url':page('liucheng'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
+         # 'submenu':[
+             # {'label':'工作流程','url':page('liucheng'),'visible':can_touch(NodeGroup)},
+             # {'label':'流程模板','url':page('nodegrouptemplate'),'visible':lambda user:has_permit(user,'nodegroup.edit_template')},
              
-             # {'label':'工作列表','url':page('worknode'),},
-             {'label':'客户信息','url':page('busclient'),'visible':can_touch(BusClient)},
+             # # {'label':'工作列表','url':page('worknode'),},
+             # {'label':'客户信息','url':page('busclient'),'visible':can_touch(BusClient)},
              
-             ]},
+             # ]},
         
-        {'label':'新工作流程','url':page('workboard.workgroup'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
+        {'label':'工作分配','url':page('workboard.workgroup'),'icon':fa('fa-eye'),'visible':can_touch(NodeGroup),
              'submenu':[
                  {'label':'工作流程','url':page('workboard.workgroup'),'visible':can_touch(NodeGroup)},
                  {'label':'客户信息','url':page('workboard.busclient'),'visible':can_touch(BusClient)},
