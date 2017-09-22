@@ -90,17 +90,38 @@ class WorkGroupPage(TablePage):
 
 class WorkGroupFormPage(FormPage):
     class WorkGroupForm(ModelFields):
+        def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False,**kw):
+            if not pk and kw.get('muban',None):
+                temp = WorkTemplate.objects.get(pk=kw.get('muban'))
+                inst= WorkGroup(short_desp=temp.short_desp,long_desp=temp.long_desp)
+                super(self.__class__,self).__init__(dc=dc,crt_user=crt_user,nolimit=nolimit,instance=inst,**kw)
+            else:
+                super(self.__class__,self).__init__(dc=dc,pk=pk,crt_user=crt_user,nolimit=nolimit,**kw)
+                
         class Meta:
             model=WorkGroup
             exclude=[]
+            
         def get_heads(self):
             heads= super(self.__class__,self).get_heads()
             heads=[x for x in heads if x['name'] != 'order']
             return heads
+        
         def dict_head(self, head):
             if head['name']=='client':
                 head['type']='search_select'
             return head
+        
+        def save_form(self):
+            if not self.instance.pk and self.kw.get('muban'):
+                temp = WorkTemplate.objects.get(pk=self.kw.get('muban'))
+                super(self.__class__,self).save_form()
+                for node_dc in temp.content:
+                    node = WorkNode.objects.create(short_desp=node_dc['short_desp'],long_desp=node_dc['long_desp'])
+                    self.instance.worknode_set.add(node)
+            else:
+                super(self.__class__,self).save_form()
+                
         
     fieldsCls=WorkGroupForm
 
@@ -114,7 +135,7 @@ class WorkNodeFormPage(FormPage):
                 head['type']='date'
             elif head['name']=='work_group':
                 head['readonly']=True
-            if has_permit(self.crt_user,"workgroup.only_self"):
+            if has_permit(self.crt_user,"workgroup.-only_self"):
                 emp=self.crt_user.employee_set.first()
                 if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
                     head['readonly']=True
@@ -188,7 +209,7 @@ permit_list.append(WorkGroup)
 permit_list.append(WorkNode)
 permit_list.append(BusClient)
 permit_list.append({'name':'workgroup','label':'工作流程','fields':[
-    {'name':'only_self','label':'只能修改自身工作步骤','type':'bool'},]
+    {'name':'-only_self','label':'只能修改自身工作步骤','type':'bool'},]
 })
 
 page_dc.update({

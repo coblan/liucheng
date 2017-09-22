@@ -38,10 +38,13 @@
             select_muban:function(){
                 var self=this
                 ln.openFrame('/pc/workboard.worktemplate',function(uu){
-                    var post_data=[{fun:'create_worknode_from_temp',temp:uu}]
-                    ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
-                        self.rows.push(reps.create_worknode_from_temp)
-                    })
+                    location=engine_url+'/workboard.workgroup.edit?muban='+uu.pk
+//                    sessionStorage.setItem('worknode_muban',JSON.stringify(uu))
+
+//                    var post_data=[{fun:'create_worknode_from_temp',temp:uu}]
+//                    ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
+//                        self.rows.splice(0,0,resp.create_worknode_from_temp)
+//                    })
                 })
             }
         }

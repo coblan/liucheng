@@ -66,8 +66,6 @@ class WorkTemplate(models.Model):
     long_desp=models.TextField('详细描述',blank=True)
     content=JsonField(verbose_name='内容',blank=True,default=[])
     
-    def create_node(self):
-        pass
     
     
 
