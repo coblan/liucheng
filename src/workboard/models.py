@@ -44,7 +44,7 @@ class WorkNode(models.Model):
     status=models.CharField('状态',max_length=30,default='waiting',choices=WORKNODE_STATUS)
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     mtime=models.DateTimeField(verbose_name='修改时间',auto_now=True)
-    work_group=models.ForeignKey(WorkGroup,verbose_name='工作计划',blank=True,null=True)
+    work_group=models.ForeignKey(WorkGroup,verbose_name='工作流程',blank=True,null=True)
     owner=models.ForeignKey(Employee,verbose_name='负责人',blank=True,null=True,related_name='work_nodes')
     start_time=models.CharField('启动时间',max_length=20,blank=True)
     
@@ -60,3 +60,14 @@ class BusClient(models.Model):
     
     class Meta:
         verbose_name="客户信息表"
+
+class WorkTemplate(models.Model):
+    short_desp=models.CharField('简略描述',max_length=300,blank=True)
+    long_desp=models.TextField('详细描述',blank=True)
+    content=JsonField(verbose_name='内容',blank=True,default=[])
+    
+    def create_node(self):
+        pass
+    
+    
+

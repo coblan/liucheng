@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from helpers.director.shortcut import ModelTable,TablePage,page_dc,FormPage,ModelFields,model_dc,RowSort,RowFilter,RowSearch,permit_list,has_permit
 from helpers.director.db_tools import permit_to_dict
-from .models import WorkGroup,BusClient,WorkNode
+from .models import WorkGroup,BusClient,WorkNode,WorkTemplate
 from helpers.case.organize.models import Employee
 # Register your models here.
 class WorkGroupPage(TablePage):
@@ -126,15 +126,7 @@ class ClientPage(TablePage):
     class ClientSort(RowSort):
         names=['name']
         chinese_words=['name']
-        # def get_query(self, query):
-            # if self.sort_str:
-                # ls=self.sort_str.replace('name','converted').split(',')
-                # query= query.extra(select={'converted': 'CONVERT(name USING gbk)'},order_by=['converted'])
-                # return query.order_by(*ls)
-            # else:
-                # return query
-            # return 
-    
+
     class ClientTabel(ModelTable):
         model=BusClient
  
@@ -158,6 +150,8 @@ class ClientFormPage(FormPage):
     fieldsCls = ClientForm
 
 class WorkGroup_single_F7Page(FormPage):
+    """
+    """
     template='workboard/workgroup_f7.html'
     class MyForm(ModelFields):
         class Meta:
@@ -170,10 +164,25 @@ class WorkGroup_single_F7Page(FormPage):
             return row
     fieldsCls=MyForm
 
+class WorkTemplatePage(TablePage):
+    template='workboard/worktemplate.html'
+    class WorkTemplateTable(ModelTable):
+        model=WorkTemplate
+        
+    tableCls=WorkTemplateTable
+
+class WorkTemplateFormPage(FormPage):
+    template='workboard/worktemplate_form.html'
+    class WorkTemplateForm(ModelFields):
+        class Meta:
+            model=WorkTemplate
+            exclude=[]
+    fieldsCls=WorkTemplateForm
 
 model_dc[BusClient]={'fields':ClientFormPage.ClientForm}
 model_dc[WorkGroup]={'fields':WorkGroupFormPage.WorkGroupForm}
 model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
+model_dc[WorkTemplate]={'fields':WorkTemplateFormPage.WorkTemplateForm}
 
 permit_list.append(WorkGroup)
 permit_list.append(WorkNode)
@@ -193,6 +202,10 @@ page_dc.update({
     
     'workboard.busclient':ClientPage,
     'workboard.busclient.edit':ClientFormPage,
+    
+    'workboard.worktemplate':WorkTemplatePage,
+    'workboard.worktemplate.edit':WorkTemplateFormPage,
+    
 })
 
 

@@ -1,0 +1,13 @@
+.work-template-pan{
+  position: relative;
+  .item{
+    width: 10em;
+    height: 5em;
+    border: 1px solid #a8a8a8;
+    position: relative;
+    cursor: pointer;
+  }
+  .item:hover{
+    background-color: #f0ffde;
+  }
+}

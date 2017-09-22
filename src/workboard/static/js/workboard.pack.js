@@ -74,7 +74,23 @@ var _plan_board = __webpack_require__(1);
 
 var plan_board = _interopRequireWildcard(_plan_board);
 
+var _worktemplate = __webpack_require__(7);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+//import {MubanManager}  from './muban.js'
+//import * as liucheng from './flowchart.js'
+//import {mount_user_image} from  './flowchart.js'
+//import {WorkNodeEditor} from './worknode_editor.js'
+//import {flow_has_node_delay} from  './flow_filter.js'
+//
+//window.MubanManager=MubanManager
+//window.mount_user_image=mount_user_image
+//window.WorkNodeEditor=WorkNodeEditor
+//
+//window.flow_has_node_delay=flow_has_node_delay
+
+window.WorkTemplateEditor = _worktemplate.WorkTemplateEditor;
 
 /***/ }),
 /* 1 */
@@ -594,6 +610,147 @@ function updateLink(linkElement, obj) {
 	if(oldSrc)
 		URL.revokeObjectURL(oldSrc);
 }
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(8);
+
+var WorkTemplateEditor = exports.WorkTemplateEditor = function () {
+    function WorkTemplateEditor() {
+        _classCallCheck(this, WorkTemplateEditor);
+
+        var self = this;
+
+        $(function () {
+            $('body').append('<div id="worktemplate-editor">\n     <modal v-show="show_edit">\n        <div @click.stop="" style="max-height: 90vh;max-width: 90vw;min-height: 40em;min-width: 50em;">\n            <div style="text-align: right;padding-right: 1em;padding-top: 0.3em;">\n                <!--<a :href="\'/pc/log?rows=workboard.worknode:\'+node_kw.row.pk" target="_blank">\u4FEE\u6539\u65E5\u5FD7</a>-->\n                <button @click="assure_edit()">\u786E\u5B9A</button>\n                <button @click="show_edit=false">\u53D6\u6D88</button>\n            </div>\n            <div  class=\'field-panel\'>\n                <field  v-for=\'head in kw.heads\' :key="head.name" :name=\'head.name\' :kw=\'kw\'></field>\n            </div>\n        </div>\n\n    </modal>\n            </div>');
+
+            self.editor = new Vue({
+                el: '#worktemplate-editor',
+                data: {
+                    show_edit: false,
+                    editable: true,
+                    kw: {
+                        heads: [{ name: 'short_desp', type: 'linetext', label: '简短描述' }, { name: 'long_desp', type: 'blocktext', label: '详细描述' }],
+                        row: { short_desp: '', long_desp: '' },
+                        errors: {}
+                    }
+                },
+                methods: {
+                    assure_edit: function assure_edit() {
+                        this.callback(this.kw.row);
+                        this.show_edit = false;
+                    }
+
+                }
+            });
+        });
+    }
+
+    _createClass(WorkTemplateEditor, [{
+        key: 'edit',
+        value: function edit(node, callback) {
+            //this.editor.node_kw.heads=this.heads
+            this.editor.kw.row = ex.copy(node);
+            this.editor.show_edit = true;
+            this.editor.callback = callback;
+        }
+    }, {
+        key: 'set_editable',
+        value: function set_editable(editable) {
+            if (editable) {
+                this.editor.kw.heads = [{ name: 'short_desp', type: 'linetext', label: '简短描述' }, { name: 'long_desp', type: 'blocktext', label: '详细描述' }];
+            } else {
+                this.editor.kw.heads = [{ name: 'short_desp', type: 'linetext', label: '简短描述', readonly: true }, { name: 'long_desp', type: 'blocktext', label: '详细描述', readonly: true }];
+            }
+        }
+    }]);
+
+    return WorkTemplateEditor;
+}();
+
+var editor = new WorkTemplateEditor();
+
+var com_worktemplate_pan = {
+    props: ['content', 'editable'],
+    //data:function(){
+    //
+    //    return {
+    //
+    //    }
+    //},
+    template: '<div class="flex work-template-pan">\n        <div class="item" v-for="node in content" @click="edit(node)">\n            <div class="center-two" >\n                <span v-text="node.short_desp"></span>\n            </div>\n\n        </div>\n        <div v-if="editable" class="item" @click="add_new()">\n            <div class="center-two">\n                <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n            </div>\n        </div>\n    </div>',
+    methods: {
+        add_new: function add_new() {
+            var new_content = {
+                short_desp: '工作步骤',
+                long_desp: ''
+            };
+            this.content.push(new_content);
+        },
+        edit: function edit(node) {
+            editor.set_editable(this.editable);
+            editor.edit(node, function (new_node) {
+                ex.assign(node, new_node);
+            });
+        }
+    }
+
+};
+
+Vue.component('com-worktemplate-pan', com_worktemplate_pan);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(6)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)();
+// imports
+
+
+// module
+exports.push([module.i, ".work-template-pan {\n  position: relative; }\n  .work-template-pan .item {\n    width: 10em;\n    height: 5em;\n    border: 1px solid #a8a8a8;\n    position: relative;\n    cursor: pointer; }\n  .work-template-pan .item:hover {\n    background-color: #f0ffde; }\n", ""]);
+
+// exports
 
 
 /***/ })

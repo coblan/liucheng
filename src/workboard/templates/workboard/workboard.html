@@ -5,6 +5,7 @@
 {% block page_content %}
 <script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
 <script src='{% static "js/workboard.pack.js?t=" %}{{ js_stamp.workboard_pack_js }}'></script>
+
 <script type="text/javascript">
 
     heads=ex.sort_by_names(heads,['id','client','short_desp','order'])
@@ -21,20 +22,6 @@
     table_logic={
         el:'#there',
         data:{
-//		        heads:heads,
-//		        rows:rows,
-//		        row_filters:row_filters,
-//		        row_sort:row_sort,
-//		        row_pages:row_pages,
-//		        placeholder:placeholder,
-//		        selected:[],
-//		        del_info:[],
-//		        menu:menu,
-//		        can_add:can_add,
-//		        can_del:can_del,
-//		        model:model,
-//		        search_args:search_args,
-//		        ex:ex,
             gb:gb,
         },
         mixins:[table_fun],
@@ -47,9 +34,17 @@
         methods:{
             toggle_node_edit:function(){
                 this.gb.node_edit_state = !this.gb.node_edit_state
+            },
+            select_muban:function(){
+                var self=this
+                ln.openFrame('/pc/workboard.worktemplate',function(uu){
+                    var post_data=[{fun:'create_worknode_from_temp',temp:uu}]
+                    ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
+                        self.rows.push(reps.create_worknode_from_temp)
+                    })
+                })
             }
         }
-
     }
     $(function () {
         table=new Vue(table_logic)
@@ -69,6 +64,7 @@
                     :search_tip='search_tip' @submit="search()"></com-filter>
         <div>
             <button type="button" :class="['btn btn-sm',{'btn-default':!gb.node_edit_state,'btn-primary':gb.node_edit_state}]" @click="toggle_node_edit()">添加删除进度详情</button>
+            <button type="button" :class="['btn btn-sm','btn-default']" @click="select_muban()">从模板创建</button>
         </div>
 
         <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="min-width: 7em;">
@@ -83,7 +79,9 @@
 
     <paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
 
-
+    <!--<modal>-->
+        <!--<iframe src="/pc/workboard.worktemplate?_pop=1" frameborder="0" height="90vh" width="90vw"></iframe>-->
+    <!--</modal>-->
 </div>
 <style type="text/css" media="screen" id="test">
     .td_client{

@@ -1,0 +1,73 @@
+{% extends "director/index.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+<script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
+<script src='{% static "js/workboard.pack.js?t=" %}{{ js_stamp.workboard_pack_js }}'></script>
+<script type="text/javascript">
+
+ex.each(heads,function(head){
+    if(head.name=='content'){
+        head.type='com-temp-td'
+    }
+})
+    table_logic={
+        el:'#there',
+        data:{
+
+        },
+        mixins:[table_fun],
+        watch:{
+            'row_sort.sort_str':function (v) {
+                this.search_args._sort=v
+                this.search()
+            }
+        },
+
+    }
+    $(function () {
+        table=new Vue(table_logic)
+    })
+
+</script>
+
+{% block extra_head %}
+{% endblock %}
+
+<div id='there'>
+    <path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
+    <div class='btn-panel flex flex-sb' style="padding-left:20px; ">
+
+        <!--<div v-if="row_filters.length==0" class="flex-grow"></div>-->
+        <com-filter class="flex" :heads="row_filters" :search="search_args"
+                    :search_tip='search_tip' @submit="search()"></com-filter>
+        <div class="flex-grow"></div>
+
+        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
+            {% block extra_btn %}
+            {% endblock %}
+        </com-table-btn>
+
+    </div>
+
+    <com-table class='table fake-suit' :has_check="!search_args._pop" :map="map"
+               :row_sort="row_sort" :heads="heads" :rows="rows" v-model="selected"></com-table>
+
+
+
+
+    <paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
+
+
+</div>
+
+<script>
+    Vue.component('com-temp-td',{
+        props:['row','name'],
+        template:'<div><com-worktemplate-pan :content="row.content"></com-worktemplate-pan></div>'
+    })
+</script>
+{% block extra %}
+{% endblock %}
+{% endblock %}

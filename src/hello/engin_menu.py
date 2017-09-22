@@ -38,6 +38,9 @@ class PcMenu(BaseEngine):
              'submenu':[
                  {'label':'工作流程','url':page('workboard.workgroup'),'visible':can_touch(WorkGroup)},
                  {'label':'客户信息','url':page('workboard.busclient'),'visible':can_touch(BusClient)},
+                {'label':'流程模板','url':page('workboard.worktemplate'),'visible':can_touch(BusClient)},
+                 
+                 
 
              ]},
         

@@ -11,3 +11,6 @@
 //window.flow_has_node_delay=flow_has_node_delay
 
 import * as plan_board from './plan_board.js'
+import {WorkTemplateEditor} from './worktemplate.js'
+
+window.WorkTemplateEditor=WorkTemplateEditor
