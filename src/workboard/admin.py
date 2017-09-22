@@ -114,7 +114,7 @@ class WorkNodeFormPage(FormPage):
                 head['type']='date'
             elif head['name']=='work_group':
                 head['readonly']=True
-            if not has_permit(self.crt_user,"worknode.modify_all"):
+            if has_permit(self.crt_user,"workgroup.only_self"):
                 emp=self.crt_user.employee_set.first()
                 if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
                     head['readonly']=True
@@ -125,14 +125,15 @@ class WorkNodeFormPage(FormPage):
 class ClientPage(TablePage):
     class ClientSort(RowSort):
         names=['name']
-        def get_query(self, query):
-            if self.sort_str:
-                ls=self.sort_str.replace('name','converted').split(',')
-                query= query.extra(select={'converted': 'CONVERT(name USING gbk)'},order_by=['converted'])
-                return query.order_by(*ls)
-            else:
-                return query
-            return 
+        chinese_words=['name']
+        # def get_query(self, query):
+            # if self.sort_str:
+                # ls=self.sort_str.replace('name','converted').split(',')
+                # query= query.extra(select={'converted': 'CONVERT(name USING gbk)'},order_by=['converted'])
+                # return query.order_by(*ls)
+            # else:
+                # return query
+            # return 
     
     class ClientTabel(ModelTable):
         model=BusClient
@@ -177,8 +178,8 @@ model_dc[WorkNode]={'fields':WorkNodeFormPage.WrokNodeForm}
 permit_list.append(WorkGroup)
 permit_list.append(WorkNode)
 permit_list.append(BusClient)
-permit_list.append({'name':'worknode','label':'工作任务','fields':[
-    {'name':'modify_all','label':'修改所有节点','type':'bool'},]
+permit_list.append({'name':'workgroup','label':'工作流程','fields':[
+    {'name':'only_self','label':'只能修改自身工作步骤','type':'bool'},]
 })
 
 page_dc.update({

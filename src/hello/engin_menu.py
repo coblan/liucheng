@@ -13,7 +13,7 @@ from workboard.models import WorkGroup,BusClient
 class PcMenu(BaseEngine):
     url_name='liucheng'
     menu=[
-        {'label':'home','url':page('press',append='?_name=home'),'icon':fa('fa-home')},
+        {'label':'首页','url':page('press',append='?_name=home'),'icon':fa('fa-home')},
         {'label':'账号与权限','url':page('user'),'icon':fa('fa-users'),'visible':can_list((User,Group)),
          'submenu':[
                     {'label':'账号管理','url':page('user'),'visible':can_touch(User)},

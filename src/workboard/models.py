@@ -28,23 +28,12 @@ class WorkGroup(models.Model):
     #kind=models.CharField('类型',max_length=30,choices=WORKGROUP_TYPE,default='workrecord')
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     
-    #related_emp=models.ManyToManyField(Employee,verbose_name='相关人员',blank=True,null=True)
-    
-    #def copy(self,other):
-        #pk_map={}
-        #for node in other.worknode_set.all():
-            #new_node = WorkNode.objects.create(short_desp=node.short_desp,long_desp=node.long_desp,node_group=self)
-            #pk_map[node.pk]=new_node.pk
-        ##if other.relations:
-        #my_relations=[]
-        #for relation in other.relations:
-            #new_relation=[pk_map[relation[0]],pk_map[relation[1]]]
-            #my_relations.append(new_relation)
-        #self.relations=my_relations
-        #self.save()
     
     def __unicode__(self):
         return unicode(self.client) + '/' + self.short_desp
+    
+    class Meta:
+        verbose_name="工作流程表"
         
         
     
@@ -59,6 +48,8 @@ class WorkNode(models.Model):
     owner=models.ForeignKey(Employee,verbose_name='负责人',blank=True,null=True,related_name='work_nodes')
     start_time=models.CharField('启动时间',max_length=20,blank=True)
     
+    class Meta:
+        verbose_name="工作步骤表"
     
 
 class BusClient(models.Model):
@@ -68,4 +59,4 @@ class BusClient(models.Model):
         return self.name
     
     class Meta:
-        verbose_name="客户表"
+        verbose_name="客户信息表"

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'helpers.case.organize',
     'helpers.case.site_frame',
     'helpers.pageadaptor',
-    'liucheng',
+    # 'liucheng',
     'workboard',
     
 ]
