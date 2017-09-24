@@ -39,6 +39,7 @@ export class WorkTemplateEditor{
                         this.show_edit=false
                     },
 
+
                 }
             })
         })
@@ -71,6 +72,9 @@ var com_worktemplate_pan={
     //},
     template:`<div class="flex work-template-pan">
         <div class="item" v-for="node in content" @click="edit(node)">
+            <span v-if="editable" class="delete-btn" @click.stop="del_node(node)">
+               <i class="fa fa-trash" aria-hidden="true"></i>
+            </span>
             <div class="center-two" >
                 <span v-text="node.short_desp"></span>
             </div>
@@ -95,6 +99,9 @@ var com_worktemplate_pan={
             editor.edit(node,function(new_node){
                 ex.assign(node,new_node)
             })
+        },
+        del_node:function(node){
+            ex.remove(this.content,node)
         }
     }
 

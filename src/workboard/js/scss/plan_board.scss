@@ -1,5 +1,8 @@
 
 .plan{
+  flex-wrap: wrap;
+  position: relative;
+
   .item{
     width:10em;
     height: 6em;
@@ -16,7 +19,16 @@
     }
   }
 
-  flex-wrap: wrap;
+  .edit-btn{
+    position: absolute;
+    left: -5em;
+    color: #ffb23d;
+    cursor: pointer;
+
+    padding: 2em;
+
+  }
+
 
   .text{
     width: 7em;
@@ -27,6 +39,7 @@
     right: 0.2em;
     bottom: 0.2em;
   }
+
   .delete-icon{
     position: absolute;
     right: 0.2em;

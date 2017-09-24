@@ -63,12 +63,14 @@
     <com-form-btn :submit="submit" :del_row="del_row" :cancel="cancel"></com-form-btn>
 
 
+    <com-worktemplate-pan :content="row.content" :editable="true"></com-worktemplate-pan>
+
     <div class='field-panel'>
 
         <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
     </div>
 
-    <com-worktemplate-pan :content="row.content" :editable="true"></com-worktemplate-pan>
+
 
     <!--<div class="flex">-->
         <!--<div class="item" v-for="node in row.content" @click="edit(node)">-->
@@ -86,51 +88,24 @@
     <!--</div>-->
 </div>
 
-<template id="com-work-pan">
-    <div >
+<!--<template id="com-work-pan">-->
+    <!--<div >-->
 
-    </div>
-</template>
+    <!--</div>-->
+<!--</template>-->
 
-<script>
-    Vue.component('com-work-pan',{
-        template:'#com-work-pan',
-        data:function(){
+<!--<script>-->
+    <!--Vue.component('com-work-pan',{-->
+        <!--template:'#com-work-pan',-->
+        <!--data:function(){-->
 
-        }
+        <!--}-->
 
-    })
-</script>
+    <!--})-->
+<!--</script>-->
 
 <style>
 
 </style>
 
-<!--<template id="com-editor">-->
-    <!--<modal>-->
-        <!--<div class='field-panel'>-->
-            <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
-        <!--</div>-->
-    <!--</modal>-->
-
-
-<!--</template>-->
-<!--<script>-->
-    <!--Vue.component('com-editor',{-->
-        <!--data:function(){-->
-            <!--return {-->
-                <!--kw:{-->
-                    <!--heads:[{name:'short_desp',type:'linetext'},{name:'long_desp',type:'blocktext'}],-->
-                    <!--row:{}-->
-                <!--},-->
-                <!--is_show:false,-->
-            <!--}-->
-        <!--},-->
-        <!--methods:{-->
-            <!--edit:function(){-->
-                <!--this.is_show=true-->
-            <!--}-->
-        <!--}-->
-    <!--})-->
-<!--</script>-->
 {% endblock %}

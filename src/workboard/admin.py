@@ -150,6 +150,7 @@ class ClientPage(TablePage):
 
     class ClientTabel(ModelTable):
         model=BusClient
+        #exclude=['id']
  
   
     ClientTabel.sort=ClientSort
@@ -189,6 +190,7 @@ class WorkTemplatePage(TablePage):
     template='workboard/worktemplate.html'
     class WorkTemplateTable(ModelTable):
         model=WorkTemplate
+        exclude=['id']
         
     tableCls=WorkTemplateTable
 

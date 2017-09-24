@@ -13,7 +13,8 @@ var plan_board={
     //},
     data:function(){
         return {
-            gb:gb,
+            is_edit:false,
+            show_edit:false,
         }
     },
 
@@ -30,6 +31,9 @@ var plan_board={
                 self.row.nodes.push(node)
           })
       },
+        toggle_edit:function(){
+            this.is_edit= !this.is_edit
+        },
         edit:function(node){
             var tmp_node=ex.copy(node)
             node_editor.edit( tmp_node,function(rt_node){
@@ -50,8 +54,9 @@ var plan_board={
             return is_matched_node(node)
         }
     },
-    template:`<div class="flex plan">
-    <div :class="['item',{'matched':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)">
+    template:`<div class="flex plan" @mouseenter="show_edit=true" @mouseleave="show_edit=false">
+    <div v-show="show_edit" class="edit-btn" @click="toggle_edit()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></div>
+    <div :class="['item',{'matched':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)" >
         <div class="center-two text" >
             <span v-text="node.short_desp"></span>
         </div>
@@ -59,11 +64,11 @@ var plan_board={
             <span v-if="node.status=='finish'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>
             <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
         </div>
-        <div class="delete-icon" v-if="gb.node_edit_state" @click.stop="delete_node(node)">
+        <div class="delete-icon" v-if="is_edit" @click.stop="delete_node(node)">
             <span><i class="fa fa-trash" aria-hidden="true"></i></span>
         </div>
     </div>
-    <div class="item" @click="add_new()" v-if="gb.node_edit_state">
+    <div class="item" @click="add_new()" v-if="is_edit || row.nodes.length==0">
         <div class="center-two" >
             <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
         </div>

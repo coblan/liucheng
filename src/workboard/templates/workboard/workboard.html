@@ -32,12 +32,12 @@
             }
         },
         methods:{
-            toggle_node_edit:function(){
-                this.gb.node_edit_state = !this.gb.node_edit_state
-            },
+//            toggle_node_edit:function(){
+//                this.gb.node_edit_state = !this.gb.node_edit_state
+//            },
             select_muban:function(){
                 var self=this
-                ln.openFrame('/pc/workboard.worktemplate',function(uu){
+                ln.openFrame('/pc/workboard.worktemplate','选择工作流程模板',function(uu){
                     location=engine_url+'/workboard.workgroup.edit?muban='+uu.pk
 //                    sessionStorage.setItem('worknode_muban',JSON.stringify(uu))
 
@@ -45,7 +45,7 @@
 //                    ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
 //                        self.rows.splice(0,0,resp.create_worknode_from_temp)
 //                    })
-                })
+                },{width:'80em',height:'60em'})
             }
         }
     }
@@ -66,12 +66,29 @@
         <com-filter class="flex" :heads="row_filters" :search="search_args"
                     :search_tip='search_tip' @submit="search()"></com-filter>
         <div>
-            <button type="button" :class="['btn btn-sm',{'btn-default':!gb.node_edit_state,'btn-primary':gb.node_edit_state}]" @click="toggle_node_edit()">添加删除进度详情</button>
-            <button type="button" :class="['btn btn-sm','btn-default']" @click="select_muban()">从模板创建</button>
+            <!--<button type="button" :class="['btn btn-sm',{'btn-default':!gb.node_edit_state,'btn-primary':gb.node_edit_state}]" @click="toggle_node_edit()">添加删除进度详情</button>-->
+            <!--<button type="button" :class="['btn btn-sm','btn-default']" @click="select_muban()">从模板创建</button>-->
         </div>
 
-        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="min-width: 7em;">
-        </com-table-btn>
+        <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                新建 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" @click="add_new()">全新创建</a></li>
+                <li><a href="#" @click="select_muban()">从模板创建</a></li>
+                <!--<button type="button" :class="['btn btn-sm','btn-default']" @click="select_muban()">从模板创建</button>-->
+                <!--<li><a href="#">Something else here</a></li>-->
+                <!--<li role="separator" class="divider"></li>-->
+                <!--<li><a href="#">Separated link</a></li>-->
+            </ul>
+        </div>
+
+        <button type="button" class="btn btn-danger" @click="del_item()" :disabled="selected.length==0">删除</button>
+        <span style="min-width: 3em;"></span>
+
+        <!--<com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="min-width: 7em;">-->
+        <!--</com-table-btn>-->
 
     </div>
 
