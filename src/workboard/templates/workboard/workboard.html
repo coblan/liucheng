@@ -70,10 +70,11 @@
             <!--<button type="button" :class="['btn btn-sm','btn-default']" @click="select_muban()">从模板创建</button>-->
         </div>
 
-        <div class="btn-group">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="btn-group" style="width: 10em;flex-shrink: 0; align-self:flex-start;">
+            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 新建 <span class="caret"></span>
             </button>
+            <button type="button" class="btn btn-danger btn-sm" @click="del_item()" :disabled="selected.length==0">删除</button>
             <ul class="dropdown-menu">
                 <li><a href="#" @click="add_new()">全新创建</a></li>
                 <li><a href="#" @click="select_muban()">从模板创建</a></li>
@@ -84,7 +85,6 @@
             </ul>
         </div>
 
-        <button type="button" class="btn btn-danger" @click="del_item()" :disabled="selected.length==0">删除</button>
         <span style="min-width: 3em;"></span>
 
         <!--<com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" style="min-width: 7em;">-->
