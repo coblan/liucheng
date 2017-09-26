@@ -234,10 +234,10 @@ var ff = {
     back: function back(callback) {
         parent.back(callback);
     },
-    load: function load(url, name) {
+    load: function load(url, name, callback) {
         var name = name.replace(/\./g, '_');
         parent.show_load();
-        parent.load_iframe(url, name);
+        parent.load_iframe(url, name, callback);
     },
     load_vue_com: function load_vue_com(kw) {
         parent.load_vue_com(kw);

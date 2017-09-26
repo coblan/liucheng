@@ -84,7 +84,7 @@ class WorkGroupPage(TablePage):
     tableCls=WorkGroupTable
     def get_template(self, prefer=None):
         if prefer=='f7':
-            return 'f7/table.html'
+            return 'workboard/workgroup_f7.html'
         else:
             return 'workboard/workboard.html'
 
@@ -130,15 +130,27 @@ class WorkNodeFormPage(FormPage):
         class Meta:
             model=WorkNode
             exclude=[]
+        
+        def get_readonly_fields(self):
+            ls = super(self.__class__,self).get_readonly_fields()
+            if has_permit(self.crt_user,"workgroup.-only_self"):
+                emp=self.crt_user.employee_set.first()
+                if self.instance.owner!=emp:
+                    ls.append('status')
+                    ls.append('long_desp')
+                    #head['readonly']=True
+            return ls
+        
+        
         def dict_head(self, head):
             if head['name']=="start_time":
                 head['type']='date'
             elif head['name']=='work_group':
                 head['readonly']=True
-            if has_permit(self.crt_user,"workgroup.-only_self"):
-                emp=self.crt_user.employee_set.first()
-                if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
-                    head['readonly']=True
+            #if has_permit(self.crt_user,"workgroup.-only_self"):
+                #emp=self.crt_user.employee_set.first()
+                #if self.instance.owner!=emp and head['name'] in ['status','long_desp']:
+                    #head['readonly']=True
                 
             return head
     fieldsCls=WrokNodeForm
@@ -180,7 +192,7 @@ class ClientFormPage(FormPage):
 class WorkGroup_single_F7Page(FormPage):
     """
     """
-    template='workboard/workgroup_f7.html'
+    template='workboard/workgroup_node_f7.html'
     class MyForm(ModelFields):
         class Meta:
             model=WorkGroup
