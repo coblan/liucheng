@@ -21,11 +21,11 @@
 
   .edit-btn{
     position: absolute;
-    left: -5em;
+    left: -2em;
     color: #ffb23d;
     cursor: pointer;
 
-    padding: 2em;
+    padding: 0.3em 1em;
 
   }
 
@@ -42,8 +42,8 @@
 
   .delete-icon{
     position: absolute;
-    right: 0.2em;
-    top:0.2em;
+    right: 0;
+    top:-0.2em;
     color: red;
     padding: 0.1em 0.4em;
     border-radius: 2px;
@@ -54,18 +54,18 @@
   }
 }
 
-.center-two{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform:translate(-50%, -50%); 	/* IE 9 */
-  -moz-transform:translate(-50%, -50%); 	/* Firefox */
-  -webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
-  -o-transform:translate(-50%, -50%);
-  /*text-align: center;*/
-  /*z-index: 1000;*/
-}
+//.center-wh{
+//  position: absolute;
+//  top: 50%;
+//  left: 50%;
+//  transform: translate(-50%, -50%);
+//  -ms-transform:translate(-50%, -50%); 	/* IE 9 */
+//  -moz-transform:translate(-50%, -50%); 	/* Firefox */
+//  -webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
+//  -o-transform:translate(-50%, -50%);
+//  /*text-align: center;*/
+//  /*z-index: 1000;*/
+//}
 
 #id_long_desp{
   width: 40em;

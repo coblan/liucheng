@@ -462,7 +462,7 @@ var plan_board = {
             return is_matched_node(node);
         }
     },
-    template: '<div class="flex plan" @mouseenter="show_edit=true" @mouseleave="show_edit=false">\n    <div v-show="show_edit" class="edit-btn" @click="toggle_edit()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></div>\n    <div :class="[\'item\',{\'matched\':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)" >\n        <div class="center-two text" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n        <div class="delete-icon" v-if="is_edit" @click.stop="delete_node(node)">\n            <span><i class="fa fa-trash" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()" v-if="is_edit || row.nodes.length==0">\n        <div class="center-two" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
+    template: '<div class="flex plan" @mouseenter="show_edit=true" @mouseleave="show_edit=false">\n    <div v-show="show_edit" class="edit-btn" @click="toggle_edit()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></div>\n    <div :class="[\'item\',{\'matched\':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)" >\n        <div class="center-h text" >\n            <span v-text="node.short_desp"></span>\n        </div>\n        <div class="status-icon">\n            <span v-if="node.status==\'finish\'" style="color: #00dd00;"><i class="fa fa-check" aria-hidden="true"></i></span>\n            <span v-if="node.start_time"><i class="fa fa-clock-o" aria-hidden="true"></i></span>\n        </div>\n        <div class="delete-icon" v-if="is_edit" @click.stop="delete_node(node)">\n            <span><i class="fa fa-trash" aria-hidden="true"></i></span>\n        </div>\n    </div>\n    <div class="item" @click="add_new()" v-if="is_edit || row.nodes.length==0">\n        <div class="center-vh" >\n            <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n        </div>\n    </div>\n    </div>'
 };
 
 Vue.component('plan-board', plan_board);
@@ -611,7 +611,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -5em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 2em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
+exports.push([module.i, ".plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -2em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 0.3em 1em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0;\n    top: -0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
 
 // exports
 
@@ -696,13 +696,22 @@ var com_worktemplate_pan = {
     //
     //    }
     //},
-    template: '<div class="flex work-template-pan">\n        <div class="item" v-for="node in content" @click="edit(node)">\n            <span v-if="editable" class="delete-btn" @click.stop="del_node(node)">\n               <i class="fa fa-trash" aria-hidden="true"></i>\n            </span>\n            <div class="center-two" >\n                <span v-text="node.short_desp"></span>\n            </div>\n\n        </div>\n        <div v-if="editable" class="item" @click="add_new()">\n            <div class="center-two">\n                <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n            </div>\n        </div>\n    </div>',
+    template: '<div class="flex work-template-pan">\n        <div class="item" v-for="node in content" @click="edit(node)">\n\n            <div class="center-h item" >\n                <span v-text="node.short_desp"></span>\n            </div>\n\n            <span v-if="editable" class="delete-btn" @click.stop="del_node(node)">\n               <i class="fa fa-trash" aria-hidden="true"></i>\n            </span>\n\n        </div>\n        <div v-if="editable" class="item" @click="add_new()">\n            <div class="center-vh">\n                <i class="fa fa-plus fa-2x" aria-hidden="true"></i>\n            </div>\n        </div>\n    </div>',
+    data: function data() {
+        return {
+            count: 1
+        };
+    },
     methods: {
         add_new: function add_new() {
+
             var new_content = {
                 short_desp: '工作步骤',
-                long_desp: ''
+                long_desp: '',
+                count: this.count
             };
+            this.count += 1;
+
             this.content.push(new_content);
         },
         edit: function edit(node) {
@@ -755,7 +764,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".work-template-pan {\n  position: relative; }\n  .work-template-pan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    position: relative;\n    cursor: pointer; }\n  .work-template-pan .item:hover {\n    background-color: #fafff1; }\n  .work-template-pan .delete-btn {\n    position: absolute;\n    top: 0.2em;\n    right: 0.3em;\n    padding: 0.2em 0.4em;\n    border-radius: 2px;\n    color: red; }\n    .work-template-pan .delete-btn:hover {\n      background-color: #e8e8e8; }\n", ""]);
+exports.push([module.i, ".work-template-pan {\n  position: relative; }\n  .work-template-pan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    position: relative;\n    cursor: pointer; }\n  .work-template-pan .item:hover {\n    background-color: #fafff1; }\n  .work-template-pan .delete-btn {\n    position: absolute;\n    top: 0;\n    right: 0;\n    padding: 0.2em 0.4em;\n    border-radius: 2px;\n    color: red; }\n    .work-template-pan .delete-btn:hover {\n      background-color: #e8e8e8; }\n", ""]);
 
 // exports
 

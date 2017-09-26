@@ -72,26 +72,37 @@ var com_worktemplate_pan={
     //},
     template:`<div class="flex work-template-pan">
         <div class="item" v-for="node in content" @click="edit(node)">
-            <span v-if="editable" class="delete-btn" @click.stop="del_node(node)">
-               <i class="fa fa-trash" aria-hidden="true"></i>
-            </span>
-            <div class="center-two" >
+
+            <div class="center-h item" >
                 <span v-text="node.short_desp"></span>
             </div>
 
+            <span v-if="editable" class="delete-btn" @click.stop="del_node(node)">
+               <i class="fa fa-trash" aria-hidden="true"></i>
+            </span>
+
         </div>
         <div v-if="editable" class="item" @click="add_new()">
-            <div class="center-two">
+            <div class="center-vh">
                 <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
             </div>
         </div>
     </div>`,
+    data:function(){
+      return {
+          count:1
+      }
+    },
     methods:{
         add_new:function(){
+
             var new_content={
                 short_desp:'工作步骤',
-                long_desp:''
+                long_desp:'',
+                count:this.count
             }
+            this.count +=1
+            
             this.content.push(new_content)
         },
         edit:function(node){

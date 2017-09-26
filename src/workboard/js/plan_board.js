@@ -57,7 +57,7 @@ var plan_board={
     template:`<div class="flex plan" @mouseenter="show_edit=true" @mouseleave="show_edit=false">
     <div v-show="show_edit" class="edit-btn" @click="toggle_edit()"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></div>
     <div :class="['item',{'matched':is_match_search(node)}]" v-for="node in row.nodes" @click="edit(node)" >
-        <div class="center-two text" >
+        <div class="center-h text" >
             <span v-text="node.short_desp"></span>
         </div>
         <div class="status-icon">
@@ -69,7 +69,7 @@ var plan_board={
         </div>
     </div>
     <div class="item" @click="add_new()" v-if="is_edit || row.nodes.length==0">
-        <div class="center-two" >
+        <div class="center-vh" >
             <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
         </div>
     </div>
