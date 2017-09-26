@@ -144,6 +144,10 @@ class WorkNodeFormPage(FormPage):
     fieldsCls=WrokNodeForm
 
 class ClientPage(TablePage):
+    class ClientSearch(RowSearch):
+        names=['name']
+        model=BusClient
+    
     class ClientSort(RowSort):
         names=['name']
         chinese_words=['name']
@@ -152,9 +156,11 @@ class ClientPage(TablePage):
         model=BusClient
         #exclude=['id']
  
-  
     ClientTabel.sort=ClientSort
+    ClientTabel.search=ClientSearch
+    
     tableCls=ClientTabel
+    
     
     
 class ClientFormPage(FormPage):

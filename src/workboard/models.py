@@ -22,9 +22,9 @@ class WorkGroup(models.Model):
     """
     order=JsonField(verbose_name='进度详情',default=[],blank=True)
     
-    short_desp=models.CharField('简略描述',max_length=300)
+    short_desp=models.CharField('业务类型',max_length=300)
     long_desp=models.TextField('详细描述',blank=True)
-    client=models.ForeignKey('BusClient',verbose_name='客户',blank=True,null=True)
+    client=models.ForeignKey('BusClient',verbose_name='客户名称',blank=True,null=True)
     #kind=models.CharField('类型',max_length=30,choices=WORKGROUP_TYPE,default='workrecord')
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     
@@ -62,9 +62,9 @@ class BusClient(models.Model):
         verbose_name="客户信息表"
 
 class WorkTemplate(models.Model):
-    short_desp=models.CharField('简略描述',max_length=300)
+    short_desp=models.CharField('业务类型',max_length=300)
     long_desp=models.TextField('详细描述',blank=True)
-    content=JsonField(verbose_name='内容',blank=True,default=[])
+    content=JsonField(verbose_name='进度详情',blank=True,default=[])
     
     
     

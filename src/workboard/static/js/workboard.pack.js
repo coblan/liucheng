@@ -136,7 +136,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -592,8 +592,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./plan_board.scss", function() {
-			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./plan_board.scss");
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./plan_board.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./plan_board.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -611,7 +611,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 10em;\n    height: 6em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -5em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 2em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari �� Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n.plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 9em;\n    height: 4em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item:hover {\n      background-color: #f6fcf0; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -5em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 2em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0.2em;\n    top: 0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n.center-two {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
 
 // exports
 
@@ -736,8 +736,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worktemplate.scss", function() {
-			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worktemplate.scss");
+		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss", function() {
+			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -755,7 +755,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".work-template-pan {\n  position: relative; }\n  .work-template-pan .item {\n    width: 10em;\n    height: 5em;\n    border: 1px solid #a8a8a8;\n    position: relative;\n    cursor: pointer; }\n  .work-template-pan .item:hover {\n    background-color: #fafff1; }\n  .work-template-pan .delete-btn {\n    position: absolute;\n    top: 0.2em;\n    right: 0.3em;\n    padding: 0.2em 0.4em;\n    border-radius: 2px;\n    color: red; }\n    .work-template-pan .delete-btn:hover {\n      background-color: #e8e8e8; }\n", ""]);
+exports.push([module.i, ".work-template-pan {\n  position: relative; }\n  .work-template-pan .item {\n    width: 8em;\n    height: 4em;\n    border: 1px solid #a8a8a8;\n    position: relative;\n    cursor: pointer; }\n  .work-template-pan .item:hover {\n    background-color: #fafff1; }\n  .work-template-pan .delete-btn {\n    position: absolute;\n    top: 0.2em;\n    right: 0.3em;\n    padding: 0.2em 0.4em;\n    border-radius: 2px;\n    color: red; }\n    .work-template-pan .delete-btn:hover {\n      background-color: #e8e8e8; }\n", ""]);
 
 // exports
 
