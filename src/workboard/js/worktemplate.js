@@ -102,7 +102,7 @@ var com_worktemplate_pan={
                 count:this.count
             }
             this.count +=1
-            
+
             this.content.push(new_content)
         },
         edit:function(node){
