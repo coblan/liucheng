@@ -14,13 +14,16 @@
     cursor: pointer;
 
     &.finish{
-      //background-color: green;
-      background: linear-gradient(-90deg,green, #c1ff0f);
-      color: #fffdfe;
+      background-color: #d8e4bc;
+      //background: linear-gradient(-90deg,green, #c1ff0f);
+
+      color: black;
     }
     &:hover{
-      background: linear-gradient(-90deg, #00b600, #f4ff11);
-      color: #ffeefe;
+      background-color: lighten(#d8e4bc, 10%);;
+      color: black;
+      //background: linear-gradient(-90deg, #00b600, #f4ff11);
+      //color: #ffeefe;
       //background-color: lighten(green, 10%);
       //background-color: #f6fcf0;
     }

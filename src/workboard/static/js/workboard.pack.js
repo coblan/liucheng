@@ -136,7 +136,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -592,8 +592,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./plan_board.scss", function() {
-			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./plan_board.scss");
+		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./plan_board.scss", function() {
+			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./plan_board.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -611,7 +611,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item.finish {\n      background: linear-gradient(-90deg, green, #c1ff0f);\n      color: #fffdfe; }\n    .plan .item:hover {\n      background: linear-gradient(-90deg, #00b600, #f4ff11);\n      color: #ffeefe; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n    .plan .item .text {\n      padding: 0 0.2em; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -3em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 0.3em 1em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0;\n    top: -0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
+exports.push([module.i, ".plan {\n  flex-wrap: wrap;\n  position: relative; }\n  .plan .item {\n    width: 7em;\n    height: 3em;\n    border: 1px solid #a8a8a8;\n    text-align: center;\n    position: relative;\n    cursor: pointer; }\n    .plan .item.finish {\n      background-color: #d8e4bc;\n      color: black; }\n    .plan .item:hover {\n      background-color: #edf3e0;\n      color: black; }\n    .plan .item.matched {\n      border: 2px dashed red; }\n    .plan .item .text {\n      padding: 0 0.2em; }\n  .plan .edit-btn {\n    position: absolute;\n    left: -3em;\n    color: #ffb23d;\n    cursor: pointer;\n    padding: 0.3em 1em; }\n  .plan .text {\n    width: 7em; }\n  .plan .status-icon {\n    position: absolute;\n    right: 0.2em;\n    bottom: 0.2em; }\n  .plan .delete-icon {\n    position: absolute;\n    right: 0;\n    top: -0.2em;\n    color: red;\n    padding: 0.1em 0.4em;\n    border-radius: 2px; }\n    .plan .delete-icon:hover {\n      background-color: #cecece; }\n\n#id_long_desp {\n  width: 40em;\n  height: 26em; }\n", ""]);
 
 // exports
 
@@ -745,8 +745,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss", function() {
-			var newContent = require("!!../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./worktemplate.scss");
+		module.hot.accept("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worktemplate.scss", function() {
+			var newContent = require("!!./../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./worktemplate.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
