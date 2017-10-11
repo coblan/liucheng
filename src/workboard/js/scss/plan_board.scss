@@ -1,4 +1,5 @@
 
+
 .plan{
   flex-wrap: wrap;
   position: relative;
@@ -11,12 +12,26 @@
 
     position: relative;
     cursor: pointer;
+
+    &.finish{
+      //background-color: green;
+      background: linear-gradient(-90deg,green, #c1ff0f);
+      color: #fffdfe;
+    }
     &:hover{
-      background-color: #f6fcf0;
+      background: linear-gradient(-90deg, #00b600, #f4ff11);
+      color: #ffeefe;
+      //background-color: lighten(green, 10%);
+      //background-color: #f6fcf0;
     }
     &.matched{
       border: 2px dashed red;
     }
+
+    .text{
+      padding: 0 0.2em;
+    }
+
   }
 
   .edit-btn{
@@ -61,7 +76,7 @@
 //  transform: translate(-50%, -50%);
 //  -ms-transform:translate(-50%, -50%); 	/* IE 9 */
 //  -moz-transform:translate(-50%, -50%); 	/* Firefox */
-//  -webkit-transform:translate(-50%, -50%); /* Safari å’? Chrome */
+//  -webkit-transform:translate(-50%, -50%); /* Safari ï¿½? Chrome */
 //  -o-transform:translate(-50%, -50%);
 //  /*text-align: center;*/
 //  /*z-index: 1000;*/
@@ -71,3 +86,4 @@
   width: 40em;
   height: 26em;
 }
+
