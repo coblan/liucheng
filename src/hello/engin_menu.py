@@ -63,7 +63,8 @@ class F7Engine(BaseEngine):
     
     menu=[
         #{'name':'liucheng','label':'工作流程','url':page('liucheng.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x')},
-        {'name':'liucheng','label':'工作流程','url':page('workboard.workgroup.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x')}
+        {'name':'liucheng','label':'工作流程','url':page('workboard.workgroup.f7',append=lambda user:'?node_status=waiting&owner=%s'%user.employee_set.first().pk),'icon':fa('fa-map fa-2x'),
+         'visible':lambda user:user.employee_set.first()}
     
     ]
     
