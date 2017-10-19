@@ -158,7 +158,11 @@ var _table_time_group = __webpack_require__(5);
 
 var _popup = __webpack_require__(0);
 
-var _try = __webpack_require__(6);
+var _mb_jianrong = __webpack_require__(6);
+
+var mb_jianrong = _interopRequireWildcard(_mb_jianrong);
+
+var _try = __webpack_require__(7);
 
 var try01 = _interopRequireWildcard(_try);
 
@@ -726,6 +730,44 @@ var table_time_group = exports.table_time_group = {
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var overscroll = function overscroll(el) {
+    el.addEventListener('touchstart', function () {
+        var top = el.scrollTop,
+            totalScroll = el.scrollHeight,
+            currentScroll = top + el.offsetHeight;
+        //If we're at the top or the bottom of the containers
+        //scroll, push up or down one pixel.
+        //
+        //this prevents the scroll from "passing through" to
+        //the body.
+        if (top === 0) {
+            el.scrollTop = 1;
+        } else if (currentScroll === totalScroll) {
+            el.scrollTop = top - 1;
+        }
+    });
+    el.addEventListener('touchmove', function (evt) {
+        //if the content is actually scrollable, i.e. the content is long enough
+        //that scrolling can occur
+        if (el.offsetHeight < el.scrollHeight) evt._isScroller = true;
+    });
+};
+overscroll(document.querySelector('.scroll'));
+document.body.addEventListener('touchmove', function (evt) {
+    //In this case, the default behavior is scrolling the body, which
+    //would result in an overflow.  Since we don't want that, we preventDefault.
+    if (!evt._isScroller) {
+        evt.preventDefault();
+    }
+});
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
