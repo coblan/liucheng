@@ -158,8 +158,6 @@ var _table_time_group = __webpack_require__(5);
 
 var _popup = __webpack_require__(0);
 
-var _mb_jianrong = __webpack_require__(6);
-
 var _try = __webpack_require__(7);
 
 var try01 = _interopRequireWildcard(_try);
@@ -167,15 +165,18 @@ var try01 = _interopRequireWildcard(_try);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 window.base = base;
+
+//import  {stop_error_Drop} from  './mb_jianrong.js'
+
 window.filter_win = filter_win;
 window.table_time_group = _table_time_group.table_time_group;
 window.popup_page = _popup.popup_page;
 
 window.ff = f7.ff;
 
-$(function () {
-    (0, _mb_jianrong.stop_error_Drop)();
-});
+//$(function(){
+//    stop_error_Drop()
+//})
 
 /***/ }),
 /* 2 */
@@ -731,37 +732,7 @@ var table_time_group = exports.table_time_group = {
 };
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.stop_error_Drop = stop_error_Drop;
-/**
- * 禁止浏览器下拉回弹
- */
-function stop_error_Drop() {
-    var lastY; //最后一次y坐标点
-    $(document.body).on('touchstart', function (event) {
-        lastY = event.originalEvent.changedTouches[0].clientY; //点击屏幕时记录最后一次Y度坐标。
-    });
-    $(document.body).on('touchmove', function (event) {
-        var y = event.originalEvent.changedTouches[0].clientY;
-        var st = $(this).scrollTop(); //滚动条高度
-        if (y >= lastY && st <= 10) {
-            //如果滚动条高度小于0，可以理解为到顶了，且是下拉情况下，阻止touchmove事件。
-            lastY = y;
-            event.preventDefault();
-        }
-        lastY = y;
-    });
-}
-
-/***/ }),
+/* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
