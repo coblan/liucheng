@@ -160,8 +160,6 @@ var _popup = __webpack_require__(0);
 
 var _mb_jianrong = __webpack_require__(6);
 
-var mb_jianrong = _interopRequireWildcard(_mb_jianrong);
-
 var _try = __webpack_require__(7);
 
 var try01 = _interopRequireWildcard(_try);
@@ -174,6 +172,10 @@ window.table_time_group = _table_time_group.table_time_group;
 window.popup_page = _popup.popup_page;
 
 window.ff = f7.ff;
+
+$(function () {
+    (0, _mb_jianrong.stop_error_Drop)();
+});
 
 /***/ }),
 /* 2 */
@@ -735,36 +737,29 @@ var table_time_group = exports.table_time_group = {
 "use strict";
 
 
-var overscroll = function overscroll(el) {
-    el.addEventListener('touchstart', function () {
-        var top = el.scrollTop,
-            totalScroll = el.scrollHeight,
-            currentScroll = top + el.offsetHeight;
-        //If we're at the top or the bottom of the containers
-        //scroll, push up or down one pixel.
-        //
-        //this prevents the scroll from "passing through" to
-        //the body.
-        if (top === 0) {
-            el.scrollTop = 1;
-        } else if (currentScroll === totalScroll) {
-            el.scrollTop = top - 1;
-        }
-    });
-    el.addEventListener('touchmove', function (evt) {
-        //if the content is actually scrollable, i.e. the content is long enough
-        //that scrolling can occur
-        if (el.offsetHeight < el.scrollHeight) evt._isScroller = true;
-    });
-};
-overscroll(document.querySelector('.scroll'));
-document.body.addEventListener('touchmove', function (evt) {
-    //In this case, the default behavior is scrolling the body, which
-    //would result in an overflow.  Since we don't want that, we preventDefault.
-    if (!evt._isScroller) {
-        evt.preventDefault();
-    }
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
+exports.stop_error_Drop = stop_error_Drop;
+/**
+ * 禁止浏览器下拉回弹
+ */
+function stop_error_Drop() {
+    var lastY; //最后一次y坐标点
+    $(document.body).on('touchstart', function (event) {
+        lastY = event.originalEvent.changedTouches[0].clientY; //点击屏幕时记录最后一次Y度坐标。
+    });
+    $(document.body).on('touchmove', function (event) {
+        var y = event.originalEvent.changedTouches[0].clientY;
+        var st = $(this).scrollTop(); //滚动条高度
+        if (y >= lastY && st <= 10) {
+            //如果滚动条高度小于0，可以理解为到顶了，且是下拉情况下，阻止touchmove事件。
+            lastY = y;
+            event.preventDefault();
+        }
+        lastY = y;
+    });
+}
 
 /***/ }),
 /* 7 */
