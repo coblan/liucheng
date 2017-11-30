@@ -158,7 +158,7 @@ var _table_time_group = __webpack_require__(5);
 
 var _popup = __webpack_require__(0);
 
-var _try = __webpack_require__(7);
+var _try = __webpack_require__(6);
 
 var try01 = _interopRequireWildcard(_try);
 
@@ -230,7 +230,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ff = {
+var ff = exports.ff = {
+    // ��iframeҳ�����øö��󷽷���
+
     app: parent.myApp,
     push: function push(obj) {
         parent.state_stack.push(obj);
@@ -239,9 +241,17 @@ var ff = {
         parent.state_stack.pop();
     },
     back: function back(callback) {
-        parent.back(callback);
+        // ����frame�е��øú�����������һ��frameע�롰�޸Ĵ��롱��
+        if (callback) {
+            var last_win = $(parent.mainView.activePage.fromPage.container).find('.iframe_wraper')[0].contentWindow;
+            callback(last_win);
+        }
+        parent.mainView.router.back();
+
+        //parent.back(callback)
     },
     load: function load(url, name, callback) {
+        // ����iframe������ҳ�档@url�ǵ�ַ��@name framework7ҳ������
         var name = name.replace(/\./g, '_');
         parent.show_load();
         parent.load_iframe(url, name, callback);
@@ -265,7 +275,7 @@ var ff = {
     init_page: function init_page(str) {
         ff.hide_load(200);
         var str = str || page_label;
-        parent.init_page();
+        //parent.init_page()
         parent.set_title(str);
     },
     show_nav: function show_nav() {
@@ -278,12 +288,15 @@ var ff = {
         parent.add_nav(str);
     },
     alert: function alert(str) {
+        // ������
         parent.myApp.alert(str);
     },
     confirm: function confirm(info, callback) {
+        // ��������ȷ�Ͽ�
         parent.myApp.confirm(info, callback);
     },
     open_image: function open_image(str) {
+        // ����������ʾͼƬ
         var myPhotoBrowser = parent.myApp.photoBrowser({
             zoom: 400,
             photos: [str]
@@ -294,9 +307,8 @@ var ff = {
         });
     }
 
-};
-
-if (!parent.myApp) {
+    // ��ҳ�治��framework7��iframe��ʱ���Զ��л�Ϊ�����ĺ��������磬��������ĳ��ҳ��ʱ��
+};if (!parent.myApp) {
     exports.ff = ff = {
         app: {
             actions: function actions() {}
@@ -349,7 +361,7 @@ if (!parent.myApp) {
     };
 }
 
-var ff = exports.ff = ff;
+// ��������������û���ù�������Ӧ�ô����ǣ���wrap.html�еĺ�����ȥ���������ڸ����С�
 
 var F7Manager = exports.F7Manager = function () {
     function F7Manager(app, mainView) {
@@ -487,131 +499,6 @@ var F7Manager = exports.F7Manager = function () {
     return F7Manager;
 }();
 
-//
-//var load_timer=null
-//
-//function show_load(timeout){
-//    var timeout= timeout || 10*1000
-//    $('.general-loader').removeClass('hide')
-//
-//    if(load_timer){
-//        clearTimeout(load_timer)
-//    }
-//    load_timer =setTimeout(function(){
-//        myApp.alert('��������������', '���س�ʱ');
-//        hide_load()
-//    },timeout)
-//}
-//function hide_load(time){
-//    if(load_timer){
-//        clearTimeout(load_timer)
-//        load_timer=null
-//    }
-//    var time= time || 20
-//    setTimeout(function(){
-//        $('.general-loader').addClass('hide')
-//    },time)
-//}
-//
-//
-//
-//function pop_menu(callback){
-//    $('.view .navbar .navbar-inner:last-child .pop-menu').css('visibility','visible')
-//    if(callback){
-//        $('.view .navbar .navbar-inner').last().find('.pop-menu')[0].onclick=callback
-////            $('.view .navbar-custom').last().find('.pop-menu')[0].onclick=callback
-//    }
-////        $('.navbar-on-center .pop-menu').css('visibility','visible')
-////        if(callback){
-////            $('.navbar-on-center .pop-menu')[0].onclick=callback
-////        }
-//}
-//function back(callback){
-//    if(callback){
-//        var last_win= $(mainView.activePage.fromPage.container).find('.iframe_wraper')[0].contentWindow
-//        callback(last_win)
-//    }
-//    mainView.router.back()
-//}
-//function iframe_full_screen(value,second){
-//    var second= second || 300
-//    if(value){
-//        $('.page-on-center .iframe_wraper').addClass('full-screen')
-//        $('.toolbar').hide()
-//        setTimeout(function(){
-//            $('.navbar').hide()
-//        },second)
-//
-//    }else{
-//        $('.page-on-center .iframe_wraper').removeClass('full-screen')
-//        $('.page-on-center .page-content').addClass('_no_bottom')
-//        $('.navbar').show()
-//        setTimeout(function(){
-//            $('.toolbar').show()
-//            $('.page-on-center .page-content').removeClass('_no_bottom')
-//        },second)
-//    }
-//}
-//
-//function show_toolbar(){
-//    $('.page-content').removeClass('_no_bottom')
-//    $('.toolbar').show()
-//}
-//function hide_toolbar(){
-//    $('.toolbar').hide()
-//    $('.page-content').addClass('_no_bottom')
-//
-//}
-//function show_nav(){
-//    mainView.showNavbar()
-//    $('.pages .page-content').last().removeClass('_no_top')
-//}
-//function hide_nav(){
-//    mainView.hideNavbar()
-//    $('.pages .page-content').last().addClass('_no_top')
-//}
-//
-//function call_iframe(callback_name){
-//    var args=Array.prototype.slice.call(arguments)
-//    $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
-//}
-//function add_nav(str){
-//    $('.view .navbar .navbar-inner').last().after(str)
-//}
-//function remove_nav(){
-//    $('.view .navbar .navbar-inner').last().remove()
-//}
-//
-//function init_page(){
-//    state_stack=[]
-//    add_history()
-//}
-//
-//function add_history(){
-//    for(var i=0;i<3;i++){
-//        history.pushState({count:i},'')
-//    }
-//}
-//
-//add_history()
-//
-//window.addEventListener('popstate', function (e) {
-//    var state= e.state
-//    if(state.count<1){
-//        add_history()
-//    }
-//    if(state_stack.length<=0){
-//        mainView.router.back()
-//    }else{
-//        var real_state= state_stack.pop()
-//        if(typeof(real_state) === 'function'){
-//            real_state()
-//        }
-//    }
-//    hide_load()
-//
-//}, false);
-
 /***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -732,8 +619,7 @@ var table_time_group = exports.table_time_group = {
 };
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
